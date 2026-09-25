@@ -1,0 +1,131 @@
+# FQ Source — co-branded program page (AWS, The Female Quotient, SaaSNova).
+# Content migrated from legacy fq-source.html (Sept 18, 2026 version).
+kind: cobranded
+path: /fq-source
+title: "FQ Source: AWS, The Female Quotient and SaaSNova"
+description: "FQ Source is a joint initiative by AWS, The Female Quotient and SaaSNova that gets women-owned technology companies listed, co-selling and selling to enterprise and government buyers through AWS Marketplace."
+campaignId: fq-source-2026
+contactEmail: marketing@saasnova.ai
+cobrand:
+  awsLogo: true
+  awsApprovalRef: "FQ Source joint initiative with AWS; AWS logo carried over from the live legacy page. Confirm written approval is on file (docs/OPEN-ITEMS.md)."
+  logos:
+    - { src: /campaigns/fq-source/aws-logo.png, alt: Amazon Web Services, height: 36 }
+    - { src: /campaigns/fq-source/fq-logo.png, alt: The Female Quotient, height: 44 }
+    - { src: /campaigns/fq-source/saasnova-logo.png, alt: SaaSNova, height: 38 }
+hero:
+  kicker: FQ Source
+  heading: "Enterprise and government buyers already have budget committed to AWS. FQ Source puts your product where they can spend it."
+  body: "Built and delivered by AWS, The Female Quotient and SaaSNova. Registration is open. Launch is November 9 at the B20 USA Summit."
+  badge: true
+  secondary: { label: "Already listed? See the storefront", href: "https://thefemalequotient.storefront.marketplace.aws.com/" }
+form:
+  hubspotFormId: 23f93682-eb5a-4e14-a2bc-61813dae92ed
+  heading: Register for FQ Source
+  intro: "Most companies join with no listing and no AWS Partner status. That is what gets built for you."
+  submitLabel: Register for FQ Source
+  success: "You are registered. Look for a confirmation email; we will confirm fit and set up your working session within 48 hours."
+  notice: "We use your details to process your FQ Source registration. See our privacy policy."
+  gaEvent: fq_source_registration
+  fields:
+    - { name: firstname, label: First name, autocomplete: given-name, half: true }
+    - { name: lastname, label: Last name, autocomplete: family-name, half: true }
+    - { name: company, label: Company, autocomplete: organization, half: true }
+    - { name: email, label: Work email, type: email, autocomplete: email, half: true }
+    - name: aws_partner_status
+      label: AWS Partner status
+      type: select
+      options:
+        - { value: "Not an AWS Partner", label: "Not an AWS Partner yet" }
+        - { value: "Registered AWS Partner", label: "Registered AWS Partner" }
+        - { value: "Validated or Differentiated Tier", label: "Validated or Differentiated tier AWS Partner" }
+    - name: aws_marketplace_status
+      label: AWS Marketplace status
+      type: select
+      options:
+        - { value: "Not Listed", label: "No listing yet" }
+        - { value: "In Progress", label: "Listing in progress" }
+        - { value: "Listed", label: "Listed" }
+        - { value: "Listed but Underperforming", label: "Listed but not selling" }
+sections:
+  - type: stats
+    items:
+      - { n: "273+", l: "women-owned businesses on the Women-Owned Cloud Innovation Storefront, and growing" }
+      - { n: "Nov 9", l: "launch at the B20 USA Summit, Washington, D.C." }
+      - { n: "48 hrs", l: "from registration to a working session with the SaaSNova build team" }
+      - { n: "<1%", l: "of procurement spend by large corporations and governments reaches women-owned and women-led businesses globally" }
+  - type: quote
+    quote: "That's not just a gap, it's an enormous economic opportunity. McKinsey estimates that advancing women's economic participation could add as much as $28 trillion to annual global GDP."
+    name: Shelley Zalis
+    role: "Founder and CEO, The Female Quotient. U.S. Chair, G20 E*M Power"
+    dark: true
+  - type: text
+    kicker: What FQ Source is
+    heading: A joint initiative by AWS, The Female Quotient and SaaSNova.
+    body:
+      - "FQ Source gets women-owned technology companies ready to sell to enterprise and government buyers, and puts them in front of those buyers through AWS Marketplace. SaaSNova does the execution with you. You are not handed a playbook and left to run it."
+  - type: points
+    heading: Three things FQ Source fixes
+    items:
+      - { title: Get listed and get found, body: "Your product goes live on AWS Marketplace, packaged and priced, with your own branded storefront page." }
+      - { title: Turn presence into pipeline, body: "Campaigns, partner motions and co-selling with AWS sellers, so the listing produces deals instead of sitting there." }
+      - { title: Sell the way buyers buy, body: "Enterprise and government buyers purchase through AWS Marketplace using budget already committed to AWS. We set you up to sell into it." }
+  - type: text
+    kicker: Who it's for
+    heading: Women-owned and women-led technology companies.
+    body:
+      - "Wherever you are with AWS today is a valid place to start. Most companies join with no listing and no AWS Partner registration, and that is exactly what the program is built to fix."
+      - "It is built for software, cloud, services and innovation suppliers that want enterprise and government buyers and are ready to scale through AWS Marketplace. Eligibility criteria are confirmed with you during onboarding."
+  - type: image
+    src: /campaigns/fq-source/summit-reception.webp
+    alt: Founders and AWS leaders at the AWS and Female Quotient Partner Summit reception in New York
+    caption: "AWS and The Female Quotient Partner Summit reception, Hudson Yards, New York."
+    width: 800
+    height: 1066
+  - type: points
+    heading: Four things you walk away owning.
+    intro: "SaaSNova builds and deploys all four with you, as the execution partner between AWS and participating companies."
+    numbered: true
+    items:
+      - { title: Your Marketplace listing, body: "We package your product, set your pricing, prepare the terms buyers have to agree to, and take the listing through AWS review until it is live and buyable.", result: A live AWS Marketplace listing }
+      - { title: Your own storefront, body: "A branded page on AWS Marketplace where buyers see everything you sell in one place. You are also placed in the Women-Owned Cloud Innovation Storefront alongside the companies already there.", result: "A deployed, branded storefront" }
+      - { title: Co-selling with AWS, body: "Co-selling means AWS sellers can bring your product into their own customer conversations. We register your deals in ACE, the system those sellers work from, and build the campaigns behind it.", result: Deals registered with AWS sellers }
+      - { title: A route into procurement, body: "A private offer lets you sell to one buyer at a price and terms you negotiate. Because it runs through AWS Marketplace, the buyer can pay using budget already committed to AWS.", result: Private offers ready to send }
+  - type: quote
+    quote: "Women-owned technology companies are building some of the most innovative solutions in the market, but many are still navigating procurement systems that make it difficult to get discovered and scale. The goal is simple: help more women-owned technology companies scale, compete and win."
+    name: Jen Dawson
+    role: Founder and CEO, SaaSNova
+  - type: steps
+    heading: From registration to revenue.
+    intro: Five phases. Each one ends with something built, not something discussed.
+    items:
+      - { title: Register and onboard, body: "You register on this page. We confirm fit inside 48 hours and send your onboarding details, program materials and session dates.", when: "Open now" }
+      - { title: We assess where you stand, body: "We look at your AWS Partner status, whether you already have a listing, and if you do, why it is not producing revenue. That assessment sets your scope of work.", when: "At onboarding" }
+      - { title: Build and deploy, body: "Listing built and published, storefront deployed, co-sell registered and private offers configured. SaaSNova executes each step with your team.", when: "Ahead of launch" }
+      - { title: Launch, body: "FQ Source launches at the B20 USA Summit in Washington, D.C., alongside leaders from business, government and technology.", when: "Nov 9, 2026" }
+      - { title: Keep going, body: "FQ Source continues virtually and in person at AWS Partner Summits and selected conferences and events.", when: "Q4 2026 on" }
+  - type: partners
+    heading: Three partners, one pathway.
+    intro: AWS opens the channel. The Female Quotient brings the community. SaaSNova does the build.
+    items:
+      - { name: Amazon Web Services, logo: /campaigns/fq-source/aws-logo.png, body: "Global cloud reach, AWS Marketplace, and the co-sell and procurement channels enterprise buyers already use.", quote: "FQ Source is designed to remove barriers and create new pathways for these companies to scale.", quoteBy: "Ruba Borno, VP, Specialists and Partners, AWS" }
+      - { name: The Female Quotient, logo: /campaigns/fq-source/fq-logo.png, body: "A global media and experience company reaching more than 8.5 million professionals across 30 industries.", quote: "FQ Source is about turning opportunity into action, helping more women-owned technology companies become enterprise-ready and get discovered by buyers.", quoteBy: "Shelley Zalis, Founder and CEO, The Female Quotient" }
+      - { name: SaaSNova, logo: /campaigns/fq-source/saasnova-logo.png, body: "A women-owned business and the operator-led go-to-market execution partner for technology companies scaling revenue through AWS.", quote: "FQ Source combines AWS's global reach, The Female Quotient's community and influence, and SaaSNova's cloud go-to-market execution.", quoteBy: "Jen Dawson, Founder and CEO, SaaSNova" }
+  - type: image
+    src: /campaigns/fq-source/women-owned-storefront.webp
+    alt: The Women-Owned Cloud Innovation Storefront on AWS Marketplace, showing solutions from women-owned technology companies
+    caption: Where your listing ends up. The Women-Owned Cloud Innovation Storefront on AWS Marketplace.
+    width: 1262
+    height: 429
+  - type: steps
+    heading: You are not waiting until November.
+    intro: "Work starts as soon as you register. By the time FQ Source launches at the B20 Summit, your listing is already being built."
+    items:
+      - { title: Straight away, body: "A confirmation email lands with what to expect and who you will be working with." }
+      - { title: Within 48 hours, body: "A working session with SaaSNova, who runs delivery for FQ Source. We go through your product, your AWS status and what is blocking you, then agree the scope of work." }
+      - { title: Before November 9, body: "Your onboarding pack, your session dates, and the first build work under way on your listing." }
+  - type: cta
+    heading: Registration is open.
+    body: "Companies registering now are already in build. Launch day is a milestone, not a start line."
+    label: Register for FQ Source
+    href: "#register"

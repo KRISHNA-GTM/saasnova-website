@@ -1,0 +1,140 @@
+---
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource-variable/inter/opsz-italic.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Assistant from '../components/Assistant.astro';
+import { site, integrations } from '../data/site';
+
+export interface Props {
+  title: string;                // Page title without brand suffix
+  description: string;
+  image?: string;               // Absolute or root-relative OG image
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  published?: string;           // ISO date for articles
+  modified?: string;
+  brandSuffix?: boolean;
+  bodyClass?: string;
+  hideAssistant?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/og/saasnova-default.png',
+  type = 'website',
+  noindex = false,
+  jsonLd = [],
+  published,
+  modified,
+  brandSuffix = true,
+  bodyClass,
+  hideAssistant = false,
+} = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path, site.url).href.replace(/\/$/, path === '/' ? '/' : '');
+const fullTitle = brandSuffix && !title.includes('SaaSNova') ? `${title} | SaaSNova` : title;
+const ogImage = new URL(image, site.url).href;
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#organization`,
+  name: 'SaaSNova',
+  url: site.url,
+  logo: `${site.url}/og/saasnova-logo.png`,
+  description: site.description,
+  email: site.emails.general,
+  founder: { '@type': 'Person', name: 'Jen Dawson', jobTitle: 'Founder and CEO' },
+  sameAs: [site.social.linkedin, site.social.youtube, site.awsSellerProfile],
+  areaServed: 'Worldwide',
+  knowsAbout: [
+    'AWS Marketplace', 'AWS co-sell', 'AWS Partner Central', 'AWS ACE', 'Private offers', 'CPPO',
+    'AWS ISV Accelerate', 'AWS Partner Revenue Measurement', 'AWS BOX', 'Cloud go-to-market',
+  ],
+};
+const graph = [organization, ...jsonLd];
+---
+<!doctype html>
+<html lang="en" data-hs-portal={integrations.hubspot.portalId}>
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js")</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {(noindex || import.meta.env.PUBLIC_STAGING === 'true') && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="google-site-verification" content="LwLN-rte3Gr-8_iFc-B2XCoqCsiEHGN2MoECtAgx2C8" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="SaaSNova Insights" href="/insights/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content="SaaSNova" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={site.locale} />
+    {published && <meta property="article:published_time" content={published} />}
+    {modified && <meta property="article:modified_time" content={modified} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph.length === 1 ? graph[0] : { '@context': 'https://schema.org', '@graph': graph.map(({ ['@context']: _c, ...rest }) => rest) })} />
+
+    {integrations.ga4 && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${integrations.ga4}`}></script>
+        <script is:inline define:vars={{ id: integrations.ga4 }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', id, { anonymize_ip: true });
+        </script>
+      </>
+    )}
+    {integrations.hubspot.tracking && (
+      <script is:inline async defer id="hs-script-loader" src={`https://js.hs-scripts.com/${integrations.hubspot.portalId}.js`}></script>
+    )}
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    {!hideAssistant && <Assistant />}
+    <script>
+      import '../scripts/hubspot-forms.ts';
+      // Outbound CTA tracking: any element with data-track sends a GA4 event.
+      document.addEventListener('click', (e) => {
+        const el = (e.target as HTMLElement).closest<HTMLElement>('[data-track]');
+        if (el) window.gtag?.('event', el.dataset.track!, { link_url: (el as HTMLAnchorElement).href || '' });
+      });
+      // Scroll reveal: elements with .reveal fade up once as they enter the viewport.
+      const io = 'IntersectionObserver' in window
+        ? new IntersectionObserver((entries) => entries.forEach((en) => {
+            if (en.isIntersecting) { en.target.classList.add('in'); io?.unobserve(en.target); }
+          }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 })
+        : null;
+      document.querySelectorAll('.reveal').forEach((el) => (io ? io.observe(el) : el.classList.add('in')));
+    </script>
+  </body>
+</html>

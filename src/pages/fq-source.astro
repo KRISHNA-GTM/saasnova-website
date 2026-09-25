@@ -1,0 +1,6 @@
+---
+import { getEntry } from 'astro:content';
+import CampaignPage from '../components/CampaignPage.astro';
+const entry = (await getEntry('campaigns', 'fq-source'))!;
+---
+<CampaignPage entry={entry} />

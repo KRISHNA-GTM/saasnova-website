@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { categories, offerings, offeringPath } from '../../data/offerings';
+
+const groups = categories.map((c) => ({ ...c, items: offerings.filter((o) => o.category === c.id) }));
+---
+<Base
+  title="Solutions: cloud marketplace, co-sell and partner program execution"
+  description="SaaSNova solutions: flagship programs Ignite, SuperNova and NovaX, plus embedded execution for co-sell, co-marketing, alliance leadership, marketplace listings, storefronts, BOX funding, GenAI Competency, PRM and Partner Central."
+>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Solutions' }]} />
+      <p class="kicker">Solutions</p>
+      <h1>The partner roles you need, <span class="grad">run by operators.</span></h1>
+      <p class="lead">
+        Start with a flagship program (Ignite, SuperNova or NovaX), or add a single execution solution where your team has a gap.
+        Combine them into one engagement with one accountable team.
+      </p>
+      <nav class="jump" aria-label="Service categories">
+        {groups.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  {groups.map((g, i) => (
+    <section class:list={['section', { 'bg-mist': i % 2 === 1 }]} id={g.id} aria-labelledby={`${g.id}-h`}>
+      <div class="container cat">
+        <div class="cat-head">
+          <h2 id={`${g.id}-h`}>{g.title}</h2>
+          <p>{g.blurb}</p>
+        </div>
+        <div class="index-list">
+          {g.items.map((o) => (
+            <a class="index-row" href={offeringPath(o)}>
+              <h3>{o.name}{o.noCost && <span class="tag tag-ok nc">No cost for eligible partners</span>}</h3>
+              <p>{o.summary}</p>
+              <span class="go">{o.kind === 'program' ? 'View program' : 'View solution'}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <CtaBand
+    title="Not sure which service you need?"
+    body="Tell us what is stuck. On a 30-minute call we scope the smallest program that fixes it."
+    secondaryLabel="Find your program"
+    secondaryHref="/#program-finder"
+  />
+</Base>
+
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .jump a {
+    padding: 0.5rem 0.9rem; border: 1px solid var(--line-strong); border-radius: 999px; text-decoration: none;
+    color: var(--ink); font-weight: 550; font-size: 0.9375rem; background: #fff;
+  }
+  .jump a:hover { border-color: var(--blue); color: var(--blue); }
+  .cat { display: grid; gap: 2rem; }
+  @media (min-width: 64rem) { .cat { grid-template-columns: 20rem 1fr; gap: 4rem; } }
+  .cat-head p { margin-top: 0.75rem; color: var(--muted); }
+  .cat .index-row { grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .cat .index-row { grid-template-columns: 1fr auto; } .cat .index-row p { grid-column: 1; } .cat .index-row .go { grid-row: 1; grid-column: 2; } }
+  .nc { margin-left: 0.6rem; vertical-align: 0.15em; }
+</style>

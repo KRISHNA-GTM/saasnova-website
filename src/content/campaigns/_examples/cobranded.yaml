@@ -1,0 +1,37 @@
+# EXAMPLE — co-branded campaign page with AWS messaging.
+# AWS logos require written AWS approval: set awsApprovalRef or the build fails.
+kind: cobranded
+draft: true
+title: "<ISV or program> and AWS: <solution>"
+description: "<One sentence.>"
+campaignId: cobrand-<partner>-<yyyy-mm>
+cobrand:
+  awsLogo: true
+  awsApprovalRef: "<AWS approval email or ticket reference, date>"
+  logos:
+    - { src: /campaigns/<slug>/saasnova-logo.png, alt: SaaSNova, height: 38 }   # your logo first
+    - { src: /campaigns/<slug>/aws-logo.png, alt: Amazon Web Services, height: 32 }
+hero:
+  kicker: "<Program name>"
+  heading: "<Better Together headline approved with AWS>"
+  body: "<Two sentences.>"
+  badge: true
+form:
+  hubspotFormId: <dedicated-form-guid>
+  heading: Talk to us
+  submitLabel: Request a consultation
+  success: "Thanks. We will reply within one business day."
+  notice: "We use your details to respond to your request. See our privacy policy."
+  fields:
+    - { name: firstname, label: First name, half: true }
+    - { name: lastname, label: Last name, half: true }
+    - { name: email, label: Work email, type: email, half: true }
+    - { name: company, label: Company, half: true }
+sections:
+  - type: text
+    heading: Why this, why now
+    body: ["<Paragraph.>"]
+  - type: points
+    heading: What you get
+    items:
+      - { title: "<Deliverable>", body: "<Sentence.>" }

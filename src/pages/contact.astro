@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { integrations, primaryCta, site } from '../data/site';
+import { offerings } from '../data/offerings';
+
+// Visible choice → valid HubSpot enumeration value (primary_service_of_interest), verified Sept 2026.
+const hsService: Record<string, string> = {
+  ignite: 'Ignite (1-Month Sprint)',
+  supernova: 'SuperNova (4-Month Sprint)',
+  novax: 'NovaX (6-Month Sprint)',
+  'co-sell-execution': 'PDMaaS (Partner Development)',
+  'co-marketing': 'PMMaaS (Partner Marketing)',
+  'alliance-leadership': 'PALaaS (Alliance Leadership)',
+};
+const notSure = 'Not Sure / Need Guidance';
+const f = integrations.hubspot.forms;
+---
+<Base title="Contact SaaSNova" description="Talk to SaaSNova about AWS Marketplace listings, co-sell, private offers, partner programs or a partnership. Book a strategy session or send a message; we reply within one business day.">
+  <section class="page-hero">
+    <div class="container split">
+      <div>
+        <Breadcrumbs items={[{ label: 'Contact' }]} />
+        <h1>Talk to the team that runs the work.</h1>
+        <p class="lead">
+          The fastest route is a strategy session with our founder-led team. If you would rather write first, send a message and we
+          will reply within one business day.
+        </p>
+        <div class="btn-row">
+          <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_contact">{primaryCta.label}</a>
+        </div>
+        <dl class="direct">
+          <div><dt>General and sales</dt><dd><a href={`mailto:${site.emails.general}`}>{site.emails.general}</a></dd></div>
+          <div><dt>Existing customers</dt><dd><a href={`mailto:${site.emails.support}`}>{site.emails.support}</a> or the <a href="/support">support page</a></dd></div>
+          <div><dt>Press and marketing</dt><dd><a href={`mailto:${site.emails.marketing}`}>{site.emails.marketing}</a></dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+12017555369">+1 (201) 755-5369</a></dd></div>
+        </dl>
+      </div>
+
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="Type of inquiry">
+          <button type="button" role="tab" id="tab-svc" aria-controls="form-svc" aria-selected="true" data-tab="svc">Work with SaaSNova</button>
+          <button type="button" role="tab" id="tab-ptn" aria-controls="form-ptn" aria-selected="false" tabindex="-1" data-tab="ptn">Partner with SaaSNova</button>
+        </div>
+
+        <form id="form-svc" role="tabpanel" aria-labelledby="tab-svc" class="form-grid two" data-hs-form={f.serviceInquiry} data-form-name="contact_service"
+          data-compose="what_is_your_biggest_cloud_gtm_challenge_"
+          data-success="Thanks. Your message is with our team, and we will reply within one business day. To move faster, book a strategy session." novalidate>
+          <div class="field"><label for="s-fn">First name <span class="req" aria-hidden="true">*</span></label><input id="s-fn" name="firstname" required autocomplete="given-name" data-label="First name" /></div>
+          <div class="field"><label for="s-ln">Last name <span class="req" aria-hidden="true">*</span></label><input id="s-ln" name="lastname" required autocomplete="family-name" data-label="Last name" /></div>
+          <div class="field"><label for="s-em">Work email <span class="req" aria-hidden="true">*</span></label><input id="s-em" name="email" type="email" required autocomplete="email" data-label="Work email" /></div>
+          <div class="field"><label for="s-co">Company <span class="req" aria-hidden="true">*</span></label><input id="s-co" name="company" required autocomplete="organization" data-label="Company" /></div>
+          <div class="field full">
+            <label for="s-cloud">Which cloud marketplace are you focused on? <span class="req" aria-hidden="true">*</span></label>
+            <select id="s-cloud" name="target_cloud_marketplace_s_" required data-label="Cloud marketplace">
+              <option value="">Select one</option>
+              <option value="AWS Marketplace">AWS Marketplace</option>
+              <option value="Multi-Cloud (2 or more)">AWS plus other clouds</option>
+              <option value="Azure Marketplace">Microsoft Azure Marketplace</option>
+              <option value="GCP Marketplace">Google Cloud Marketplace</option>
+              <option value="Not Yet Decided">Not decided yet</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="s-mp">Where are you with your listing? <span class="req" aria-hidden="true">*</span></label>
+            <select id="s-mp" name="marketplace_detail" required data-label="Listing status" data-map-to="current_marketplace_status" data-compose-label="Listing status">
+              <option value="">Select one</option>
+              <option value="Not listed yet" data-hs="Not Yet Listed">Not listed yet</option>
+              <option value="Listing in progress" data-hs="Listing in Progress">Listing in progress</option>
+              <option value="Listed on one cloud marketplace" data-hs="">Listed on one cloud marketplace</option>
+              <option value="Listed on multiple cloud marketplaces" data-hs="Listed on Multiple Clouds">Listed on more than one</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="s-svc">What do you need help with? <span class="req" aria-hidden="true">*</span></label>
+            <select id="s-svc" name="service_detail" required data-label="This answer" data-map-to="primary_service_of_interest" data-compose-label="Interested in">
+              <option value="">Select one</option>
+              {offerings.map((o) => <option value={o.name} data-hs={hsService[o.slug] ?? notSure}>{o.name}</option>)}
+              <option value="Not sure yet" data-hs={notSure}>Not sure yet, I need guidance</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="s-msg">What is your biggest cloud GTM challenge right now? <span class="muted">(optional)</span></label>
+            <textarea id="s-msg" name="what_is_your_biggest_cloud_gtm_challenge_" rows="4" maxlength="2000"></textarea>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="s-web">Website</label><input id="s-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+          <p class="full small muted">We use your details to respond to your inquiry. See our <a href="/privacy">privacy policy</a>.</p>
+          <div class="full"><button type="submit" class="btn">Send message</button></div>
+          <p class="form-status full" data-status role="status" tabindex="-1"></p>
+        </form>
+
+        <form id="form-ptn" role="tabpanel" aria-labelledby="tab-ptn" class="form-grid two" hidden data-hs-form={f.partnership} data-form-name="contact_partnership"
+          data-success="Thanks. Our partnerships team has your message and will reply within one business day." novalidate>
+          <div class="field"><label for="p-fn">First name <span class="req" aria-hidden="true">*</span></label><input id="p-fn" name="firstname" required autocomplete="given-name" data-label="First name" /></div>
+          <div class="field"><label for="p-ln">Last name <span class="req" aria-hidden="true">*</span></label><input id="p-ln" name="lastname" required autocomplete="family-name" data-label="Last name" /></div>
+          <div class="field"><label for="p-em">Work email <span class="req" aria-hidden="true">*</span></label><input id="p-em" name="email" type="email" required autocomplete="email" data-label="Work email" /></div>
+          <div class="field"><label for="p-co">Company <span class="req" aria-hidden="true">*</span></label><input id="p-co" name="company_name" required autocomplete="organization" data-label="Company" /></div>
+          <div class="field full">
+            <label for="p-msg">What would you like to explore together? <span class="req" aria-hidden="true">*</span></label>
+            <p class="hint" id="p-msg-hint">For example: distribution, co-selling with your ISV customers, marketplace platform integration, or SI delivery.</p>
+            <textarea id="p-msg" name="tell_us_what_you_re_looking_to_explore_together_" rows="5" required minlength="10" maxlength="2000" aria-describedby="p-msg-hint" data-label="Your message"></textarea>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="p-web">Website</label><input id="p-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+          <p class="full small muted">We use your details to respond to your inquiry. See our <a href="/privacy">privacy policy</a>.</p>
+          <div class="full"><button type="submit" class="btn">Send message</button></div>
+          <p class="form-status full" data-status role="status" tabindex="-1"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-hero h1 { max-width: 16ch; }
+  .direct { display: grid; gap: 1rem; margin-top: 2.5rem; }
+  .direct dt { font-size: 0.875rem; font-weight: 650; color: var(--subtle); }
+  .direct dd { margin: 0.1rem 0 0; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; padding: 0.25rem; background: var(--mist); border-radius: var(--r-md); margin-bottom: 1.5rem; }
+  .tabs button { border: 0; background: transparent; padding: 0.7rem 0.5rem; border-radius: 6px; font-weight: 600; color: var(--muted); }
+  .tabs button[aria-selected='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(11,26,58,.12); }
+</style>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+  const select = (t: HTMLButtonElement, focus = false) => {
+    tabs.forEach((b) => {
+      const on = b === t;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      document.getElementById(b.getAttribute('aria-controls')!)!.hidden = !on;
+    });
+    if (focus) t.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') select(tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length], true);
+    });
+  });
+  if (new URLSearchParams(location.search).get('type') === 'partnership') select(tabs[1]);
+</script>

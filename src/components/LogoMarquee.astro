@@ -1,0 +1,19 @@
+---
+// Endless, pausable logo strip. Logos come from src/data/logos.ts.
+import { Image } from 'astro:assets';
+import type { Logo } from '../data/logos';
+
+interface Props { logos: Logo[]; reverse?: boolean; duration?: number; height?: number; label: string; color?: boolean }
+const { logos, reverse = false, duration = 60, height = 34, label, color = false } = Astro.props;
+---
+<div class:list={['marquee', { reverse, color }]} style={`--dur:${duration}s;--logo-h:${height}px`} role="region" aria-label={label}>
+  <ul class="marquee-track" role="list">
+    {logos.map((l) => <li><Image src={l.src} alt={l.name} height={Math.round(height * 2 * l.scale)} loading="lazy" style={`height:${Math.round(height * l.scale)}px;max-width:${Math.round(160 * Math.min(l.scale, 1.3))}px`} /></li>)}
+    {logos.map((l) => <li aria-hidden="true"><Image src={l.src} alt="" height={Math.round(height * 2 * l.scale)} loading="lazy" style={`height:${Math.round(height * l.scale)}px;max-width:${Math.round(160 * Math.min(l.scale, 1.3))}px`} /></li>)}
+  </ul>
+</div>
+
+<style>
+  li { flex: none; display: grid; place-items: center; }
+  .color :global(img) { filter: none; opacity: 1; }
+</style>

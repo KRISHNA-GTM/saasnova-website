@@ -1,0 +1,48 @@
+# EXAMPLE — webinar registration. Copy to ../<slug>.yaml, replace every value, set draft: false.
+kind: event
+draft: true
+noindex: false
+title: "Webinar: <topic>"
+description: "<One sentence: what attendees learn and who it is for.>"
+campaignId: webinar-<yyyy-mm>-<topic>
+expires: 2026-12-01T19:00:00Z          # form closes after the session starts
+closedMessage: "This session has taken place. The recording will be posted on our events page."
+contactEmail: marketing@saasnova.ai
+event:
+  start: 2026-12-01T18:00:00Z
+  end: 2026-12-01T19:00:00Z
+  location: Online
+  online: true
+hero:
+  kicker: Live webinar
+  heading: "<Headline that names the outcome>"
+  body: "<Two sentences on what you will cover and who should attend.>"
+form:
+  hubspotFormId: <create-a-dedicated-hubspot-form-and-paste-its-guid>
+  heading: Save your seat
+  submitLabel: Register
+  success: "You are registered. The calendar invite and joining link are on their way to your inbox."
+  notice: "We use your details to manage your registration. See our privacy policy."
+  gaEvent: webinar_registration
+  fields:
+    - { name: firstname, label: First name, autocomplete: given-name, half: true }
+    - { name: lastname, label: Last name, autocomplete: family-name, half: true }
+    - { name: email, label: Work email, type: email, autocomplete: email, half: true }
+    - { name: company, label: Company, autocomplete: organization, half: true }
+    - { name: jobtitle, label: Job title, autocomplete: organization-title }
+sections:
+  - type: points
+    heading: What you will learn
+    items:
+      - { title: "<Point one>", body: "<One sentence.>" }
+      - { title: "<Point two>", body: "<One sentence.>" }
+      - { title: "<Point three>", body: "<One sentence.>" }
+  - type: agenda
+    heading: Agenda
+    items:
+      - { time: "10:00 PT", title: "<Segment>", speaker: "Jen Dawson, SaaSNova" }
+      - { time: "10:40 PT", title: "Q&A" }
+  - type: speakers
+    heading: Speakers
+    items:
+      - { name: Jen Dawson, role: "Founder and CEO, SaaSNova" }

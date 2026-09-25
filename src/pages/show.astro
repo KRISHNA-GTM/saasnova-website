@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import YouTube from '../components/YouTube.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { episodes } from '../data/videos';
+import { site } from '../data/site';
+const [feature, ...rest] = episodes;
+---
+<Base title="The Jen GTM Show" description="The Jen GTM Show: Jen Dawson and guests on AWS co-sell, Marketplace listings that produce pipeline, and what AWS field teams respond to.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Resources', href: '/insights' }, { label: 'The Jen GTM Show' }]} />
+      <h1>The Jen GTM Show</h1>
+      <p class="lead">Short episodes on the parts of cloud GTM that decide whether a listing produces pipeline: co-sell hygiene, field engagement and what AWS teams respond to.</p>
+      <div class="btn-row"><a class="btn btn-secondary" href={site.social.youtube} target="_blank" rel="noopener">Subscribe on YouTube</a></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="feature">
+        <YouTube id={feature.id} title={feature.title} />
+        <div><p class="kicker">Featured episode</p><h2>{feature.title}</h2></div>
+      </div>
+      <ul role="list" class="eps">
+        {rest.map((e) => (
+          <li><YouTube id={e.id} title={e.title} /><h3>{e.title}</h3>{e.guest && <p class="muted">With {e.guest}</p>}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .feature { display: grid; gap: 2rem; align-items: center; margin-bottom: 4rem; }
+  @media (min-width: 60rem) { .feature { grid-template-columns: 3fr 2fr; gap: 3rem; } }
+  .eps { display: grid; gap: 2.5rem 2rem; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+  .eps li { display: grid; gap: 0.75rem; align-content: start; }
+  .eps h3 { font-size: 1.0625rem; }
+</style>

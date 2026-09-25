@@ -1,0 +1,120 @@
+---
+// Registration for hyperscaler employees (AWS, Microsoft, Google Cloud) who want invitations to
+// SaaSNova speaking, expert panel and enablement events. Legacy: /partner-{aws,azure,gcp}-gtm.
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { integrations } from '../../data/site';
+
+export function getStaticPaths() {
+  const f = integrations.hubspot.forms;
+  return [
+    { params: { cloud: 'aws' }, props: { name: 'AWS', people: 'Amazonians', division: 'aws_division', divisionLabel: 'AWS division or org', office: 'Primary AWS office location', formId: f.partnerAws, compose: false } },
+    { params: { cloud: 'azure' }, props: { name: 'Microsoft Azure', people: 'Microsoft partner and field teams', division: 'azure_division__org', divisionLabel: 'Microsoft division or org', office: 'Primary Microsoft office location', formId: f.partnerAzure, compose: false } },
+    // No dedicated HubSpot form exists for Google Cloud yet; answers are folded into `message`
+    // on the service inquiry form, as on the legacy site. See docs/OPEN-ITEMS.md.
+    { params: { cloud: 'gcp' }, props: { name: 'Google Cloud', people: 'Google Cloud partner and field teams', division: 'gcp_division', divisionLabel: 'Google Cloud division or org', office: 'Primary Google office location', formId: f.serviceInquiry, compose: true } },
+  ];
+}
+const { name, people, division, divisionLabel, office, formId, compose } = Astro.props;
+const cloud = Astro.params.cloud;
+// Option values must match the HubSpot contact property options exactly
+// (i_want_to_receive_invitations_for, how_did_you_hear_about_saasnova), verified Sept 2026.
+const baseInvites = ['GTM Speaking Opportunities', 'ISV Expert Panels', 'Co-Sell Enablement Sessions', 'Marketplace Activation Workshops', 'Networking & Ecosystem Events', 'Founder Roundtables'];
+const invites = cloud === 'aws' ? [...baseInvites, 'Special AWS Ecosystem Events'] : baseInvites;
+const sources = [
+  { v: 'LinkedIn', l: 'LinkedIn' },
+  ...(cloud === 'aws' ? [{ v: 'AWS Colleague', l: 'An AWS colleague' }] : []),
+  { v: 'Referral', l: 'A referral' }, { v: 'SaaSNova Event', l: 'A SaaSNova event' },
+  { v: 'SaaSNova Website', l: 'The SaaSNova website' }, { v: 'Other', l: 'Other' },
+];
+const c = (label: string) => (compose ? { 'data-compose-label': label } : {});
+---
+<Base title={`${name} community registration`} description={`${people}: register for SaaSNova invitations to GTM speaking opportunities, ISV expert panels, co-sell enablement sessions and ecosystem events.`}>
+  <section class="page-hero">
+    <div class="container split">
+      <div>
+        <Breadcrumbs items={[{ label: 'Partners', href: '/partners' }, { label: `${name} community` }]} />
+        <h1>{name} leaders: join our ISV GTM sessions.</h1>
+        <p class="lead">
+          We invite {people} to speak, advise ISVs and take part in co-sell enablement and ecosystem events. Register and we will
+          send invitations that match your role and interests.
+        </p>
+        <ul role="list" class="checks invites">
+          <li>GTM speaking opportunities and founder roundtables</li>
+          <li>ISV expert panels</li>
+          <li>Co-sell enablement sessions and Marketplace activation workshops</li>
+          <li>Networking and ecosystem events</li>
+        </ul>
+        <p class="also">Also on another cloud?
+          {cloud !== 'aws' && <a href="/community/aws">AWS</a>}
+          {cloud !== 'azure' && <a href="/community/azure">Microsoft Azure</a>}
+          {cloud !== 'gcp' && <a href="/community/gcp">Google Cloud</a>}
+        </p>
+      </div>
+
+      <form class="panel form-grid two" data-hs-form={formId} data-form-name={`community_${cloud}`} data-compose={compose ? 'message' : undefined}
+        data-success="Registration received. Jen Dawson reviews every registration, and we will be in touch with relevant invitations." novalidate>
+        <h2 class="full form-title">Register for invitations</h2>
+        <div class="field"><label for="c-fn">First name <span class="req" aria-hidden="true">*</span></label><input id="c-fn" name="firstname" required autocomplete="given-name" data-label="First name" /></div>
+        <div class="field"><label for="c-ln">Last name <span class="req" aria-hidden="true">*</span></label><input id="c-ln" name="lastname" required autocomplete="family-name" data-label="Last name" /></div>
+        <div class="field full"><label for="c-em">Work email <span class="req" aria-hidden="true">*</span></label><input id="c-em" name="email" type="email" required autocomplete="email" data-label="Work email" /></div>
+        <div class="field"><label for="c-jt">Job title <span class="req" aria-hidden="true">*</span></label><input id="c-jt" name="jobtitle" required autocomplete="organization-title" data-label="Job title" {...c('Job title')} /></div>
+        <div class="field"><label for="c-dv">{divisionLabel} <span class="req" aria-hidden="true">*</span></label><input id="c-dv" name={division} required data-label={divisionLabel} {...c('Division')} /></div>
+        <div class="field full"><label for="c-of">{office} <span class="req" aria-hidden="true">*</span></label><input id="c-of" name="primary_office_location" required data-label="Office location" {...c('Office location')} /></div>
+        <div class="field"><label for="c-ci">City <span class="req" aria-hidden="true">*</span></label><input id="c-ci" name="city" required autocomplete="address-level2" data-label="City" {...c('City')} /></div>
+        <div class="field"><label for="c-st">State or province <span class="req" aria-hidden="true">*</span></label><input id="c-st" name="state" required autocomplete="address-level1" data-label="State or province" {...c('State')} /></div>
+        <div class="field full"><label for="c-co">Country <span class="req" aria-hidden="true">*</span></label><input id="c-co" name="country" required autocomplete="country-name" data-label="Country" {...c('Country')} /></div>
+        <fieldset class="field full group">
+          <legend>Send me invitations for <span class="req" aria-hidden="true">*</span></legend>
+          <p class="hint" id="inv-hint">Choose at least one.</p>
+          <div class="opts">
+            {invites.map((v, i) => (
+              <label class="opt"><input type="checkbox" name="i_want_to_receive_invitations_for" value={v} id={`c-inv-${i}`} data-group-required {...c('Invitations')} /> {v}</label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="field full">
+          <label for="c-src">How did you hear about SaaSNova? <span class="req" aria-hidden="true">*</span></label>
+          <select id="c-src" name="how_did_you_hear_about_saasnova" required data-label="This answer" {...c('Heard about SaaSNova via')}>
+            <option value="">Select one</option>
+            {sources.map((s) => <option value={s.v}>{s.l}</option>)}
+          </select>
+        </div>
+        <div class="field full"><label for="c-msg">Anything else we should know? <span class="muted">(optional)</span></label><textarea id="c-msg" name="message" rows="3"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="c-web">Website</label><input id="c-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+        <label class="consent full" for="c-consent">
+          <input type="checkbox" id="c-consent" name="_consent" required data-consent data-label="Consent" />
+          <span>I agree to receive event invitations and GTM program updates from SaaSNova, and to the <a href="/privacy">privacy policy</a>.</span>
+        </label>
+        <div class="full"><button type="submit" class="btn">Register</button></div>
+        <p class="form-status full" data-status role="status" tabindex="-1"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-hero h1 { max-width: 18ch; }
+  .invites { margin-top: 2rem; }
+  .also { margin-top: 2rem; color: var(--muted); display: flex; gap: 1rem; flex-wrap: wrap; }
+  .form-title { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 650; letter-spacing: 0; }
+  .group { border: 0; padding: 0; margin: 0; }
+  .opts { display: grid; gap: 0.5rem; margin-top: 0.5rem; }
+  @media (min-width: 40rem) { .opts { grid-template-columns: 1fr 1fr; } }
+  .opt { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.9375rem; }
+  .opt input { width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; accent-color: var(--blue); }
+</style>
+
+<script>
+  // "Choose at least one" for the invitation checkbox group.
+  document.querySelectorAll<HTMLFormElement>('form[data-hs-form]').forEach((form) => {
+    const boxes = Array.from(form.querySelectorAll<HTMLInputElement>('[data-group-required]'));
+    if (!boxes.length) return;
+    const sync = () => {
+      const ok = boxes.some((b) => b.checked);
+      boxes[0].setCustomValidity(ok ? '' : 'Choose at least one invitation type.');
+    };
+    boxes.forEach((b) => b.addEventListener('change', sync));
+    sync();
+  });
+</script>

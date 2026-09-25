@@ -1,0 +1,11 @@
+---
+import { getCollection } from 'astro:content';
+import CampaignPage from '../../components/CampaignPage.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('campaigns', ({ data }) => !data.draft && !data.path && data.kind !== 'event');
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<CampaignPage entry={entry} />

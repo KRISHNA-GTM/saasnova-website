@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import YouTube from '../../components/YouTube.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { sessions } from '../../data/videos';
+
+// Upcoming items are evaluated at build time; rebuild after an event date passes (see docs/HOSTING-AND-DEPLOYMENT.md).
+const now = Date.now();
+const events = (await getCollection('campaigns', ({ data }) => !data.draft && data.kind === 'event'))
+  .filter((e) => e.data.event && e.data.event.start.valueOf() > now)
+  .sort((a, b) => a.data.event!.start.valueOf() - b.data.event!.start.valueOf());
+const fq = {
+  title: 'FQ Source launch at the B20 USA Summit',
+  when: 'November 9, 2026',
+  where: 'Washington, D.C.',
+  href: '/fq-source',
+  body: 'The joint AWS, The Female Quotient and SaaSNova program for women-owned technology companies launches at the B20 USA Summit.',
+};
+const showFq = Date.parse('2026-11-10T00:00:00Z') > now;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title="Events and webinars" description="Upcoming SaaSNova events and on-demand sessions on AWS co-sell, Marketplace GTM and multi-cloud partner programs.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Resources', href: '/insights' }, { label: 'Events and webinars' }]} />
+      <h1>Events and webinars</h1>
+      <p class="lead">Live sessions and on-demand recordings on AWS co-sell, Marketplace GTM and partner programs.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="up-h">
+    <div class="container">
+      <div class="section-head"><h2 id="up-h">Upcoming</h2></div>
+      {(events.length > 0 || showFq) ? (
+        <div class="index-list">
+          {showFq && (
+            <a class="index-row" href={fq.href}><h3>{fq.title}</h3><p>{fq.when}, {fq.where}. {fq.body}</p><span class="go">Register</span></a>
+          )}
+          {events.map((e) => (
+            <a class="index-row" href={`/events/${e.id}`}><h3>{e.data.title}</h3><p>{fmt(e.data.event!.start)}, {e.data.event!.location}. {e.data.description}</p><span class="go">Register</span></a>
+          ))}
+        </div>
+      ) : (
+        <p class="muted">No sessions are scheduled right now. <a href="/newsletter">Subscribe to The Nova Brief</a> to hear about the next one.</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="od-h">
+    <div class="container">
+      <div class="section-head"><h2 id="od-h">On demand</h2></div>
+      <ul role="list" class="vids">
+        {sessions.map((s) => <li><YouTube id={s.id} title={s.title} /><h3>{s.title}</h3></li>)}
+      </ul>
+      <p class="more"><a class="link-arrow" href="/show">More on The Jen GTM Show</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="hc-h">
+    <div class="container split">
+      <div><h2 id="hc-h">Speak or advise at a session</h2></div>
+      <div class="prose">
+        <p>Hyperscaler leaders and partner teams can register for invitations to speak, join ISV expert panels or take part in co-sell enablement.</p>
+        <p class="btn-row"><a class="btn btn-secondary" href="/community/aws">AWS</a><a class="btn btn-secondary" href="/community/azure">Microsoft Azure</a><a class="btn btn-secondary" href="/community/gcp">Google Cloud</a></p>
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .vids { display: grid; gap: 2.5rem 2rem; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+  .vids li { display: grid; gap: 0.75rem; align-content: start; }
+  .vids h3 { font-size: 1.0625rem; }
+  .more { margin-top: 2rem; }
+</style>

@@ -1,0 +1,31 @@
+# EXAMPLE — gated content syndication. After a successful submit the visitor is sent to asset.url.
+# Host the file at public/campaigns/<slug>/<file>.pdf (or an external URL you control).
+kind: syndication
+draft: true
+noindex: true
+title: "Guide: <title>"
+description: "<One sentence.>"
+campaignId: synd-<asset>-<yyyy-mm>
+asset:
+  title: "<Asset title>"
+  url: /campaigns/<slug>/<file>.pdf
+  format: PDF guide
+hero:
+  heading: "<What the reader will be able to do>"
+  body: "<Two sentences.>"
+form:
+  hubspotFormId: <dedicated-form-guid>
+  heading: Get the guide
+  submitLabel: Download the guide
+  success: "Your download is starting."
+  consent: "I agree that SaaSNova may send me related content. I can unsubscribe at any time."
+  fields:
+    - { name: firstname, label: First name, half: true }
+    - { name: lastname, label: Last name, half: true }
+    - { name: email, label: Work email, type: email }
+    - { name: company, label: Company }
+sections:
+  - type: points
+    heading: Inside the guide
+    items:
+      - { title: "<Chapter>", body: "<Sentence.>" }

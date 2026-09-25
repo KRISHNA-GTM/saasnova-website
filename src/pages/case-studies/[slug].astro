@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Testimonial from '../../components/Testimonial.astro';
+import { trackRecord } from '../../data/track-record';
+import { quotesFor, type Page } from '../../data/testimonials';
+import { getOffering, offeringPath } from '../../data/offerings';
+
+export function getStaticPaths() {
+  return trackRecord.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+}
+const { t } = Astro.props;
+const quotes = quotesFor(t.slug as Page);
+const novax = getOffering('novax');
+const other = trackRecord.find((x) => x.slug !== t.slug)!;
+---
+<Base title={`${t.company} case study`} description={t.summary} type="article">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Customer stories', href: '/customers' }, { label: t.company }]} />
+      <div class="logo"><Image src={t.logo} alt={`${t.company} logo`} height={44} /></div>
+      <p class="kicker orange">Case study</p>
+      <h1>{t.title}</h1>
+      <p class="lead">{t.summary}</p>
+    </div>
+  </section>
+
+  <section class="section-tight results-sec">
+    <div class="container">
+      <ul role="list" class="results">
+        {t.results.map((r) => <li class="reveal"><strong class="num">{r.n}</strong><span>{r.l}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <aside class="side">
+        <dl class="facts">
+          {t.facts.map((f) => <div><dt>{f.k}</dt><dd>{f.v}</dd></div>)}
+        </dl>
+        <div class="side-cta">
+          <p>This operating model now runs inside <a href={offeringPath(novax)}>{novax.short}</a>, our global multi-cloud program.</p>
+        </div>
+      </aside>
+      <article class="prose">
+        <h2>The challenge</h2>
+        {t.challenge.map((p) => <p>{p}</p>)}
+        <h2>How we executed</h2>
+        {t.approach.map((p) => <p>{p}</p>)}
+        <h2>The outcome</h2>
+        {t.outcome.map((p) => <p>{p}</p>)}
+      </article>
+    </div>
+  </section>
+
+  {quotes.length > 0 && (
+    <section class="section bg-mist" aria-labelledby="q-h">
+      <div class="container">
+        <div class="section-head"><p class="kicker pink">In their words</p><h2 id="q-h">What {t.company} and AWS said</h2></div>
+        <div class="quotes">{quotes.map((q, i) => <div class="reveal"><Testimonial q={q} variant={i === 0 ? 'featured' : 'standard'} /></div>)}</div>
+      </div>
+    </section>
+  )}
+
+  <section class="section-tight">
+    <div class="container next">
+      <p class="muted">Next case study</p>
+      <a class="next-link" href={`/case-studies/${other.slug}`}><Image src={other.logo} alt="" height={32} /><span>{other.title}</span><span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <CtaBand title="Put the same operating model to work on your cloud motion." />
+</Base>
+
+<style>
+  .logo { margin-bottom: 1.25rem; }
+  .logo :global(img) { height: 44px; width: auto; }
+  .page-hero h1 { max-width: 30ch; }
+  .results-sec { background: var(--night); }
+  .results { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  .results li { display: grid; gap: 0.4rem; padding: 1.5rem; border-radius: var(--r-lg); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--on-ink-line); }
+  .results strong { font-size: clamp(2.2rem, 1.6rem + 1.8vw, 3.1rem); font-weight: 850; letter-spacing: -0.04em; line-height: 1; background: linear-gradient(95deg, #3fa9ff, #ff4fb5); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .results span { color: var(--on-ink-muted); font-size: 0.9688rem; }
+  .side { display: grid; gap: 1.25rem; align-content: start; }
+  .facts { display: grid; gap: 1.1rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; box-shadow: var(--shadow-sm); }
+  .facts dt { font-size: 0.75rem; font-weight: 750; letter-spacing: 0.06em; text-transform: uppercase; color: var(--subtle); }
+  .facts dd { margin: 0.2rem 0 0; color: var(--ink); font-weight: 550; }
+  .side-cta { padding: 1.25rem 1.5rem; border-radius: var(--r-lg); background: linear-gradient(160deg, var(--blue-50), var(--pink-50)); font-size: 0.9688rem; }
+  .prose h2:first-child { margin-top: 0; }
+  .quotes { display: grid; gap: 1.25rem; }
+  @media (min-width: 60rem) { .quotes { grid-template-columns: 1fr 1fr; } .quotes > :first-child { grid-column: 1 / -1; } }
+  .next { display: grid; gap: 0.5rem; }
+  .next-link { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; border-radius: var(--r-lg); border: 1px solid var(--line); text-decoration: none; color: var(--ink); font-weight: 700; font-size: 1.125rem; transition: border-color 200ms, box-shadow 200ms; }
+  .next-link:hover { border-color: var(--blue); box-shadow: var(--shadow); }
+  .next-link :global(img) { height: 32px; width: auto; flex: none; }
+  .next-link span:last-child { margin-left: auto; color: var(--blue-ink); }
+</style>

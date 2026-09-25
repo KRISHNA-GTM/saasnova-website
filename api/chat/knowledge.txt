@@ -1,0 +1,186 @@
+# SaaSNova
+
+SaaSNova is an operator-led Cloud GTM execution partner for ISVs and channel partners scaling revenue through AWS. We run Marketplace listings, storefronts, co-sell, private offers and AWS program readiness.
+
+## Buying
+All offers are priced by AWS Marketplace private offer after an initial strategy session. No list prices are published.
+
+## GTM programs
+Custom, staged programs that take a listed ISV from activation to a repeatable AWS revenue motion.
+
+### SaaSNova Ignite
+URL: https://www.saasnova.ai/programs/ignite
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-tt24ttcbu2wh2
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-6d3ntp6qmppcg&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-tt24ttcbu2wh2
+Duration: 3 to 4 weeks
+A focused 3 to 4 week activation sprint for ISVs already on AWS Marketplace with limited or no traction. We correct and optimize the listing, align Partner Central workflows and start early co-sell motions.
+For: SaaS ISVs that are listed on AWS Marketplace but have limited or no traction.
+Includes:
+- Listing validation and cleanup: We validate the listing, correct configuration issues and fix the Marketplace hygiene that stops buyers and AWS reviewers from taking it seriously.
+- Partner Central alignment: Required Partner Central workflows set up and owned, with the right operational and GTM owners identified on your side.
+- Early co-sell activation: Working sessions, opportunity structure cleanup and foundational Better Together messaging so you can engage AWS field teams with confidence.
+- ISV Accelerate groundwork: Correct ISVA mapping, clean opportunity structure and the baseline alignment AWS expects before an ISV progresses toward ISV Accelerate.
+Not included: Ignite starts once you are listed on AWS Marketplace. Listing creation is a separate service.
+
+### SaaSNova SuperNova
+URL: https://www.saasnova.ai/programs/supernova
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-tf2hvg57dyfca
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-qyepxwnxwmpho&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-tf2hvg57dyfca
+Duration: 8 to 10 weeks
+An 8 to 10 week expansion program for ISVs post-Ignite, built around U.S. market entry. It delivers a documented U.S. entry roadmap, AWS-reviewed Better Together messaging and enablement for AWS field sellers.
+For: SaaS ISVs that have early pipeline traction on AWS and are expanding into the U.S. market.
+Includes:
+- U.S. market entry roadmap: A documented roadmap reviewed with AWS Partner Development Managers and aligned to the steps required in Partner Central, with milestones you can report against.
+- Better Together messaging: A joint messaging framework finalized with AWS, so field sellers understand where your solution fits alongside AWS services.
+- AWS field enablement: At least one enablement session delivered to AWS field sellers to build confidence in your solution and your growth plan.
+- Optional paid media management: Add-on placement of your offers in publications, newsletters and community channels to drive high-intent traffic. Results scale with media investment.
+
+### SaaSNova NovaX
+URL: https://www.saasnova.ai/programs/novax
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-sadu3ew4pklkk
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-s7fyf4ln4hgqy&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-sadu3ew4pklkk
+Duration: 6 months
+Our premium 6-month program for ISVs already on AWS Marketplace. Full-lifecycle execution with founder-led onboarding, quarterly executive reviews and measurable KPIs from ACE submissions to field enablement.
+For: SaaS ISVs already listed on AWS Marketplace that want sustained, full-lifecycle AWS GTM execution.
+Includes:
+- Pipeline acceleration: Structured reviews that progress AWS co-sell opportunities, with KPIs tracked across ACE submissions and WinWires.
+- Enablement orchestration: Partner readiness activities and AWS field enablement sessions scheduled and run for joint execution.
+- AWS-aligned GTM assets: Reviewer-ready assets deployed across your AWS Marketplace listing, Partner Central and ACE entries, where AWS teams actually look.
+- Quarterly executive reviews: Progress benchmarked against AWS KPIs every quarter, with direct collaboration with AWS Partner Development Managers.
+- Optional sustainable pipeline creation: Add-on paid-demand management: channel selection, placement planning, pacing, publisher coordination and optimization.
+
+## Marketplace launch and storefronts
+Get the listing built, approved and positioned, and put Marketplace buying inside your own website.
+
+### AWS Marketplace Listing and GTM Launch
+URL: https://www.saasnova.ai/services/aws-marketplace-listing
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-ideb2o75lc4uy
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-ny7k7j7hrjct4&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-ideb2o75lc4uy
+We build your AWS Marketplace listing, design your storefront, prepare your team for co-sell and support private offer strategy, with no engineering lift on your side.
+For: AWS partners launching on AWS Marketplace for the first time, or relaunching a listing that is not performing.
+Includes:
+- Full listing lifecycle: Product configuration, pricing strategy, entitlement mapping, documentation, compliance and submission management through to approval.
+- Storefront design and activation: Messaging, visuals, buyer-ready content and AWS-aligned positioning that improve discoverability once the listing is approved.
+- GTM foundation: ICP, segmentation, positioning, Better Together messaging and AWS field plays.
+- Co-sell and private offer readiness: ACE workflows aligned, opportunities created, regional AWS field teams engaged, and private offer packaging and buyer messaging for CPPO and MPPO deals.
+
+### Storefront as a Service
+URL: https://www.saasnova.ai/services/storefront
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-bjfxrzq7x2yyq
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-z5uxvhxmgvpjq&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-bjfxrzq7x2yyq
+We build and operate an AWS Marketplace storefront inside your website, surfacing listings, pricing and private offers, and keep it current with quarterly refresh cycles.
+For: ISVs, channel partners and cloud-native SaaS companies that want Marketplace buying inside their own digital properties.
+Includes:
+- Embedded Marketplace experience: Listings, pricing and private offers surfaced on your website so customers can browse, compare and start a purchase without leaving.
+- End-to-end build: Storefront design, listing and private offer integration, and workflows aligned with AWS Marketplace operations.
+- Continuous management: Quarterly refresh cycles, listing updates, pricing alignment and private offer workflows maintained for you.
+- Co-sell asset: A field-ready storefront AWS sellers can use in customer conversations across regions and industries.
+
+## Co-sell and partner execution
+The partner development, alliance and partner marketing roles, run by operators instead of new hires.
+
+### PDMaaS: AWS Co-Sell Execution
+URL: https://www.saasnova.ai/services/co-sell-execution
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-jyyylhd7krsyy
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-5iokalkrsku5o&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-jyyylhd7krsyy
+Partner Development Manager as a Service. We run a real AWS co-sell motion without you hiring a PDM: weekly field engagement, ACE pipeline progression, funding workflows and Marketplace readiness.
+For: ISVs activating an AWS partnership for the first time, or scaling a co-sell motion that has stalled.
+Includes:
+- Dedicated operator-led PDM: Your AWS-facing execution lead, driving weekly field engagement and progressing opportunities through ACE.
+- ISV Accelerate signals: ACE hygiene, funding readiness and consistent field engagement that build the traction ISV Accelerate participation requires.
+- FTR preparation: Documentation, architectural clarity and operational readiness for the AWS Foundational Technical Review.
+- Marketplace and APN readiness: Private offer workflows, Marketplace transaction readiness and the operational steps to keep partner program hygiene as you grow.
+
+### PALaaS: AWS Alliance Leadership
+URL: https://www.saasnova.ai/services/alliance-leadership
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-ebowtxpoqxwb2
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-4zdn2j5fj42uw&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-ebowtxpoqxwb2
+Partner Alliance Lead as a Service. Senior alliance leadership without a full-time hire: AWS field coordination, program navigation, QBR preparation and executive alignment, with supporting motions across Azure and Google Cloud.
+For: ISVs that need consistent, senior alliance leadership with AWS and a coordinated multi-cloud rhythm.
+Includes:
+- AWS alliance leadership: Field relationships, co-sell alignment and weekly engagement rhythms managed by a dedicated operator.
+- Program and designation management: APN requirements, co-sell program expectations and funding workflows tracked and documented.
+- QBRs and executive alignment: Your leadership arrives at AWS QBRs and executive reviews with clear narratives, metrics and follow-through.
+- Azure and Google Cloud coordination: Supporting alliance motions on other hyperscalers, coordinated without diluting an AWS-first strategy.
+
+### PMMaaS: AWS Co-Marketing Execution
+URL: https://www.saasnova.ai/services/co-marketing
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-ecfhdfpwyxhho
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-6o773jkhk72ny&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-ecfhdfpwyxhho
+Partner Marketing Manager as a Service. Partner-ready messaging, co-sell content, field enablement kits and demand generation campaigns that AWS teams can actually use.
+For: ISVs that need continuous partner marketing for AWS without hiring a Partner Marketing Manager.
+Includes:
+- Cloud-aligned messaging: Product capabilities translated into differentiated, partner-ready positioning aligned to AWS programs and industry narratives.
+- Co-sell content engine: Pitch decks, solution briefs, one-pagers, talk tracks and co-branded assets calibrated for AWS field conversations.
+- Field readiness kit: Battlecards, objection handling and talk tracks for AWS sellers and your own team.
+- Demand generation and Marketplace optimization: Repeatable campaigns across AWS customers, plus listing copy, customer evidence and competitive positioning that improve conversion.
+
+## AWS programs and funding
+Structured readiness for AWS programs that unlock funding, incentives and field priority.
+
+### BOXaaS: AWS BOX Funding Readiness
+URL: https://www.saasnova.ai/services/box-funding-readiness
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-wcrtjs6xsa7cu
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-u5x2fwpaav6eo&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-wcrtjs6xsa7cu
+We run the AWS Business Outcomes Xcelerator (BOX) Milestone 1 and Milestone 2 motion end to end: Feasibility Study, Joint Business Plan, ACE opportunity submission and APFP funding workflows.
+For: AWS partners with an existing joint solution, or preparing to build one within 12 months, that want to unlock BOX milestone incentives.
+Includes:
+- Milestone 1 and 2 execution: Feasibility Study development, Joint Business Plan creation and ACE opportunity preparation aligned to AWS expectations.
+- Outcomes, financials and GTM strategy: Business outcomes, partner roles, financial models and GTM plans written in the format BOX reviewers and field teams need.
+- Eligibility built into the cadence: Bi-weekly ACE hygiene, 72-hour response to AWS-sourced opportunities, Marketplace listing within 12 months of Feasibility Study submission and ongoing AWS collaboration.
+
+### GenAI Competency Readiness
+URL: https://www.saasnova.ai/services/genai-competency-readiness
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-u3fylho2ivkyo
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-dymomyo5jv6x4&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-u3fylho2ivkyo
+Operator-led preparation for the AWS Generative AI Competency (which AWS has expanded into the AWS AI Competency): architecture review of Amazon Bedrock or Amazon SageMaker workloads, responsible AI validation, customer evidence and a competency-ready documentation package.
+For: ISVs building on Amazon Bedrock, Amazon SageMaker or AWS-aligned GenAI architectures.
+Includes:
+- GenAI architecture validation: Model orchestration, inference patterns, data flows, security posture and responsible AI controls assessed against AWS best practices, with remediation guidance.
+- Customer evidence development: Customer references identified and packaged with narratives, outcomes and validation criteria aligned to competency requirements.
+- Competency-ready documentation: Architecture diagrams, solution brief, validation checklist and customer evidence in one readiness package.
+- Program and field alignment: Structured cadences and coordination with AWS Partner Development Managers and Solutions Architects.
+
+## AWS partner compliance
+Time-bound engagements that keep you eligible as AWS changes how partners are measured and managed.
+
+### PRMaaS: AWS Partner Revenue Measurement
+URL: https://www.saasnova.ai/services/partner-revenue-measurement
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-4xnnpwg7ok4he
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-g6myzix2u2oja&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-4xnnpwg7ok4he
+Cost: no cost for eligible partners
+A no-cost, end-to-end AWS Partner Revenue Measurement (PRM) implementation for eligible partners: resource tagging, IaC integration, attribution validation and compliance automation.
+For: Eligible AWS partners and ISVs operating on AWS Marketplace and co-sell that must meet AWS PRM requirements.
+Includes:
+- Architecture assessment and discovery: Resource discovery across accounts and regions for Partner, Customer and Hybrid deployment patterns.
+- Tagging strategy and IaC integration: aws-apn-id tagging designed and built into your infrastructure as code, with cross-account IAM coordination.
+- Attribution validation: Attribution checked against Partner Central reporting so AWS can measure partner-driven revenue reliably.
+- Continuous compliance: Automation that keeps tagging accurate as your environment changes.
+Not included: Ongoing Partner Central operations, co-sell execution, Marketplace optimization, funding strategy, CRM integration and broader advisory services are not included and can be scoped separately.
+
+### PCMaaS: Partner Central Migration Readiness
+URL: https://www.saasnova.ai/services/partner-central-migration
+AWS Marketplace listing: https://aws.amazon.com/marketplace/pp/prodview-rkujxyr752dqm
+Request a private offer: https://aws.amazon.com/marketplace/professionalservices/procurement?productId=prod-2ikc6hw7x6rhg&redirectUrl=https%3A%2F%2Faws.amazon.com%2Fmarketplace%2Fpp%2Fprodview-rkujxyr752dqm
+Cost: no cost for eligible partners
+A no-cost readiness engagement for eligible partners moving to, or newly operating in, AWS Partner Central in the AWS Management Console. We prepare Alliance, Sales, Operations and Leadership teams for IAM-based access, SSO, account linking and the new workflows.
+For: Eligible ISVs, consulting partners and distributors adopting the unified AWS Partner Central experience.
+Includes:
+- Status and account validation: Partner status, account structure and organizational alignment validated before migration activities, avoiding duplicate registration errors.
+- IAM, SSO and account linking readiness: Teams prepared for IAM-based authentication, permission structures, AWS account linking and one-click migration outcomes.
+- Workflow alignment: Opportunity routing, co-sell initiation, approvals and reporting workflows mapped to the new console.
+- Role and ownership clarity: Clear ownership of Partner Central workflows across GTM, operations and partner management.
+Not included: This engagement prepares your organization; it does not perform technical execution. Ongoing Partner Central operations, co-sell execution, Marketplace optimization, funding strategy and CRM integration are scoped separately.
+
+## Customer testimonials (verbatim)
+"For a small business with limited capacity, success with a large channel partner like AWS can be a challenge. SaaSNova has been a force multiplier in accelerating our AWS strategy, helping us launch more listings on AWS Marketplace, unlock over $40K in credits and funding, and bring clarity to how we engage AWS through their Ignite GTM program. Their guidance enabled us to move faster with clarity. I would recommend SaaSNova’s GTM services to any startup looking to accelerate their AWS strategy and implementation." (Eric, CEO, Simplesense)
+"SaaSNova helped us launch our first SaaS listing on AWS Marketplace in just one week, after nearly two years of trying to navigate the process on our own. Their expertise, clarity, and hands-on guidance made an otherwise complex transition to the new AWS Partner Central experience feel simple. SaaSNova didn’t just help us get listed; they helped us finally establish our presence on AWS and move our product to market with confidence." (Kelly Ryan, CCO, GuardDog)
+
+## Company
+- What SaaSNova does: SaaSNova is an operator-led Cloud GTM execution partner for ISVs and channel partners scaling revenue through AWS. We launch AWS Marketplace listings and storefronts, run co-sell through Partner Central and ACE, support private offers, and prepare partners for AWS programs such as ISV Accelerate, BOX and the GenAI Competency. SaaSNova is founded and operated by former AWS GTM and technical leaders and is a women-owned business.
+- Pricing and how to buy: We do not publish prices. Every program and service is scoped to your requirements in an initial strategy session, then procured through an AWS Marketplace private offer. Buying through AWS Marketplace keeps procurement on your existing AWS billing. PRMaaS and PCMaaS are delivered at no cost for eligible partners.
+- Talk to the team: The fastest route is a strategy session with our founder-led team. You can also send a message through the contact page, or email operations@saasnova.ai.
+- Which program fits: Ignite is a 3 to 4 week activation sprint for ISVs already listed on AWS Marketplace with little or no traction. SuperNova is an 8 to 10 week expansion program post-Ignite, focused on U.S. market entry. NovaX is a premium 6-month full-lifecycle program. If you are not listed yet, start with AWS Marketplace Listing and GTM Launch.
+- AWS partner status: SaaSNova is an AWS Advanced Tier Services Partner (announced September 5, 2026) and was selected as a launch partner for AWS Marketplace Storefront (June 16, 2026). All SaaSNova services are listed on AWS Marketplace.
+- Support for existing customers: Existing customers can reach support at support@saasnova.ai or through the support page. Standard response time is 24 hours on business days.
+- Channel partners and distributors: SaaSNova works with ISVs and with channel partners, SIs and distributors. Our partners include Carahsoft, SaaSify, WorkSpan and Pronix. Storefront as a Service and Partner Central Migration Readiness are also built for channel partners and distributors.

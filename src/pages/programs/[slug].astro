@@ -1,0 +1,9 @@
+---
+import OfferingPage from '../../components/OfferingPage.astro';
+import { programs } from '../../data/offerings';
+export function getStaticPaths() {
+  return programs.map((o) => ({ params: { slug: o.slug }, props: { offering: o } }));
+}
+const { offering } = Astro.props;
+---
+<OfferingPage offering={offering} />

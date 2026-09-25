@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { primaryCta } from '../data/site';
+---
+<Base title="Page not found" description="The page you were looking for is not on saasnova.ai." noindex>
+  <section class="page-hero nf">
+    <div class="container">
+      <h1>That page is not here.</h1>
+      <p class="lead">The link may be out of date, or the page has moved as part of our new site. These are the most visited places:</p>
+      <ul role="list" class="go">
+        <li><a href="/programs">Programs: Ignite, SuperNova, NovaX</a></li>
+        <li><a href="/solutions">All services</a></li>
+        <li><a href="/insights">Insights</a></li>
+        <li><a href="/contact">Contact the team</a></li>
+      </ul>
+      <div class="btn-row"><a class="btn" href="/">Go to the homepage</a><a class="btn btn-secondary" href={primaryCta.href} target="_blank" rel="noopener">{primaryCta.label}</a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 60vh; }
+  .go { display: grid; gap: 0.6rem; margin-top: 1.5rem; font-weight: 600; }
+</style>

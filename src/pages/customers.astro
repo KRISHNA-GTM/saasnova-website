@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { trackRecord } from '../data/track-record';
+import { voicesFor, g2ReviewUrl } from '../data/testimonials';
+import { customerLogos, storefrontLogos } from '../data/logos';
+
+// Outcome highlights only. The full quotes live on the homepage testimonial wall (no repeats).
+const highlights = voicesFor('home').filter((v) => v.highlight && v.id !== 'aws');
+---
+<Base
+  title="Customer stories"
+  description="Results SaaSNova has delivered for SaaS ISVs on AWS, Microsoft Azure and Google Cloud marketplaces: Arctic Wolf, Dataminr, Simplesense, GuardDog, SAFE Security, PharmacoEvidence, Nexla and more."
+>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Customer stories' }]} />
+      <p class="kicker pink">Customer stories</p>
+      <h1>Results that show up <span class="grad">in the pipeline report.</span></h1>
+      <p class="lead">Trusted by 100+ SaaS ISVs scaling with hyperscalers. Here is what changed once our operators started executing.</p>
+      <dl class="hero-stats">
+        <div><dt class="num">100+</dt><dd>ISVs activated</dd></div>
+        <div><dt class="num">2K+</dt><dd>PSQLs for Arctic Wolf</dd></div>
+        <div><dt class="num">9X</dt><dd>ROI, validated by AWS</dd></div>
+        <div><dt class="num">$300K</dt><dd>MDF secured for Dataminr</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cs-h">
+    <div class="container">
+      <div class="section-head"><p class="kicker orange">Case studies</p><h2 id="cs-h">Two security ISVs, from unmanaged to field priority</h2></div>
+      <div class="cases">
+        {trackRecord.map((t) => (
+          <a class="case reveal" href={`/case-studies/${t.slug}`}>
+            <Image src={t.logo} alt={`${t.company} logo`} height={38} />
+            <h3>{t.title}</h3>
+            <p>{t.summary}</p>
+            <ul role="list" class="nums">
+              {t.results.slice(0, 3).map((r) => <li><strong>{r.n}</strong><span>{r.l}</span></li>)}
+            </ul>
+            <span class="link-arrow">Read the {t.company} story</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="hl-h">
+    <div class="container">
+      <div class="section-head"><p class="kicker">Outcomes</p><h2 id="hl-h">What ISVs got done with SaaSNova</h2><p>Read each leader’s own words on the <a href="/#customers">homepage testimonial wall</a>.</p></div>
+      <ul role="list" class="hl">
+        {highlights.map((v) => (
+          <li class="reveal">
+            <span class="hl-logo"><Image src={v.logo} alt={`${v.company} logo`} height={32} /></span>
+            <p class="hl-t">{v.highlight}</p>
+            <p class="hl-by">{v.quotes[0].name}, {v.quotes[0].title}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="lw-h">
+    <div class="container">
+      <div class="section-head center"><h2 id="lw-h">Trusted by 100+ SaaS ISVs</h2></div>
+      <ul role="list" class="wall">
+        {customerLogos.map((l) => <li><Image src={l.src} alt={l.name} height={Math.round(64 * l.scale)} style={`height:${Math.round(32 * l.scale)}px`} /></li>)}
+      </ul>
+      <h3 class="wall-h">On AWS Marketplace Storefront with SaaSNova</h3>
+      <ul role="list" class="wall small">
+        {storefrontLogos.map((l) => <li><Image src={l.src} alt={l.name} height={Math.round(56 * l.scale)} style={`height:${Math.round(28 * l.scale)}px`} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="g2">
+        <div class="stars" aria-hidden="true">★★★★★</div>
+        <div><h2>Worked with SaaSNova?</h2><p>Share your experience on G2. Your review helps other ISVs choose an execution partner with confidence.</p></div>
+        <a class="btn" href={g2ReviewUrl} target="_blank" rel="noopener" data-track="g2_review_customers">Write a G2 review</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Be our next customer story." />
+</Base>
+
+<style>
+  .hero-stats { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin-top: 2.25rem; }
+  .hero-stats dt { font-size: clamp(2rem, 1.5rem + 1.5vw, 2.75rem); font-weight: 850; letter-spacing: -0.04em; line-height: 1; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-stats dd { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.9375rem; }
+  .cases { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+  .case { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+  .case :global(img) { max-width: 100%; justify-self: start; }
+  @media (max-width: 40rem) { .case .nums { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 56rem) { .cases { grid-template-columns: 1fr 1fr; } }
+  .case { display: grid; gap: 1rem; align-content: start; padding: 2rem; border: 1px solid var(--line); border-radius: var(--r-xl); text-decoration: none; color: inherit; background: #fff; box-shadow: var(--shadow); transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+  .case:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .case :global(img) { height: 38px; width: auto; }
+  .case h3 { font-size: 1.3rem; }
+  .case > p { color: var(--muted); }
+  .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .nums li { display: grid; gap: 0.2rem; padding: 0.9rem; border-radius: var(--r-md); background: var(--mist); }
+  .nums strong { font-size: 1.5rem; font-weight: 850; letter-spacing: -0.03em; line-height: 1.1; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .nums span { font-size: 0.8125rem; color: var(--muted); line-height: 1.35; }
+  .hl { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+  .hl li { display: grid; gap: 0.75rem; align-content: start; padding: 1.5rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); }
+  .hl-logo :global(img) { height: 32px; width: auto; max-width: 150px; object-fit: contain; }
+  .hl-t { font-size: 1.125rem; font-weight: 750; color: var(--ink); letter-spacing: -0.015em; line-height: 1.35; }
+  .hl-by { font-size: 0.875rem; color: var(--muted); }
+  .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: 1rem; }
+  .wall li { display: grid; place-items: center; height: 5.5rem; padding: 1rem; border-radius: var(--r-md); border: 1px solid var(--line); background: #fff; }
+  .wall :global(img) { width: auto; max-width: 100%; object-fit: contain; }
+  .wall.small li { height: 4.75rem; }
+  .wall-h { text-align: center; margin: 3rem 0 1.5rem; font-size: 1.25rem; }
+  .g2 { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; padding: 2rem; border-radius: var(--r-xl); background: linear-gradient(135deg, var(--blue-50), var(--pink-50)); }
+  .g2 .stars { font-size: 1.75rem; color: var(--orange); letter-spacing: 0.1em; }
+  .g2 > div:nth-child(2) { flex: 1; min-width: 16rem; }
+  .g2 h2 { font-size: 1.6rem; }
+  .g2 p { color: var(--muted); margin-top: 0.35rem; }
+</style>

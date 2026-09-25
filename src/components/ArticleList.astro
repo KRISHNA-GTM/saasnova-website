@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  entries: CollectionEntry<'insights'>[] | CollectionEntry<'news'>[];
+  collection: 'insights' | 'news';
+  layout?: 'grid' | 'list';
+}
+const { entries, collection, layout = 'grid' } = Astro.props;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+<ul class:list={['articles', layout]} role="list">
+  {entries.map((e) => (
+    <li>
+      <a href={`/${collection}/${e.id}`}>
+        {e.data.heroImage && layout === 'grid' && (
+          <img src={e.data.heroImage} alt="" width="800" height="450" loading="lazy" decoding="async" />
+        )}
+        <span class="meta"><time datetime={e.data.date.toISOString().slice(0, 10)}>{fmt(e.data.date)}</time>{e.data.readingTime && <span>{e.data.readingTime} min read</span>}</span>
+        <span class="t">{e.data.title}</span>
+        {layout === 'list' && <span class="d">{e.data.description}</span>}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .articles.grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+  .articles a { display: grid; gap: 0.6rem; text-decoration: none; color: inherit; }
+  .grid a { height: 100%; align-content: start; padding-bottom: 1.4rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); overflow: hidden; transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+  .grid a:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .grid a > :not(img) { padding-inline: 1.35rem; }
+  .grid img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--mist-2); margin-bottom: 0.5rem; }
+  .meta { display: flex; gap: 1rem; font-size: 0.875rem; color: var(--subtle); }
+  .t { font-size: 1.2rem; line-height: 1.35; color: var(--ink); font-weight: 750; letter-spacing: -0.015em; }
+  .d { color: var(--muted); }
+  a:hover .t { color: var(--blue-ink); }
+  .articles.list { border-top: 1px solid var(--line); }
+  .list li { border-bottom: 1px solid var(--line); }
+  .list a { padding-block: 1.5rem; }
+</style>

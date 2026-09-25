@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { integrations, site } from '../data/site';
+
+// Values match the HubSpot `category` contact property exactly (verified Sept 2026).
+const categories = [
+  'Partner Development (PDM) & Co-Sell',
+  'Partner Marketing (PMM) & Content',
+  'Alliance Leadership (PAL) & Strategy',
+  'Billing & Account Management',
+  'General Support & Inquiries',
+];
+---
+<Base title="Customer support" description="Support for SaaSNova customers. Submit a request or email support@saasnova.ai. Standard requests receive a response within 24 business hours.">
+  <section class="page-hero">
+    <div class="container split">
+      <div>
+        <Breadcrumbs items={[{ label: 'Support' }]} />
+        <h1>Customer support</h1>
+        <p class="lead">For customers with an active SaaSNova engagement. Send a request and our team responds within 24 business hours.</p>
+        <dl class="commit">
+          <div><dt>Response time</dt><dd>24 hours on business days for standard requests. Priority tiers are defined in your engagement.</dd></div>
+          <div><dt>Your engagement lead</dt><dd>Active engagements have a named point of contact who knows your AWS motion.</dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.emails.support}`}>{site.emails.support}</a></dd></div>
+        </dl>
+        <p class="small muted">Not a customer yet? <a href="/contact">Contact our team</a> instead.</p>
+      </div>
+      <form class="panel form-grid two" data-hs-form={integrations.hubspot.forms.support} data-form-name="support"
+        data-success="Request received. Our team will respond within 24 business hours." data-fallback-email={site.emails.support} novalidate>
+        <h2 class="full ft">Submit a request</h2>
+        <div class="field"><label for="u-fn">First name <span class="req" aria-hidden="true">*</span></label><input id="u-fn" name="firstname" required autocomplete="given-name" data-label="First name" /></div>
+        <div class="field"><label for="u-ln">Last name <span class="req" aria-hidden="true">*</span></label><input id="u-ln" name="lastname" required autocomplete="family-name" data-label="Last name" /></div>
+        <div class="field"><label for="u-em">Work email <span class="req" aria-hidden="true">*</span></label><input id="u-em" name="email" type="email" required autocomplete="email" data-label="Work email" /></div>
+        <div class="field"><label for="u-co">Company <span class="req" aria-hidden="true">*</span></label><input id="u-co" name="company" required autocomplete="organization" data-label="Company" /></div>
+        <div class="field full">
+          <label for="u-cat">Category <span class="req" aria-hidden="true">*</span></label>
+          <select id="u-cat" name="category" required data-label="Category">
+            <option value="">Select a category</option>
+            {categories.map((c) => <option value={c}>{c}</option>)}
+          </select>
+        </div>
+        <div class="field full">
+          <label for="u-msg">Describe the issue <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="u-msg" name="issue_description" rows="6" required minlength="10" maxlength="4000" data-label="Issue description"></textarea>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="u-web">Website</label><input id="u-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+        <div class="full"><button type="submit" class="btn">Submit request</button></div>
+        <p class="form-status full" data-status role="status" tabindex="-1"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .commit { display: grid; gap: 1.25rem; margin-block: 2.5rem 1.5rem; }
+  .commit dt { font-weight: 650; color: var(--ink); }
+  .commit dd { margin: 0.2rem 0 0; color: var(--muted); }
+  .ft { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 650; letter-spacing: 0; }
+</style>

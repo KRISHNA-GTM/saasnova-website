@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import body from '../content/legal/privacy.html?raw';
+---
+<Base title="Privacy Policy" description="SaaSNova Privacy Policy." noindex>
+  <section class="page-hero">
+    <div class="container-narrow">
+      <Breadcrumbs items={[{ label: 'Privacy Policy' }]} />
+      <h1>Privacy Policy</h1>
+      <p class="muted updated">Last updated: March 2026</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container-narrow prose legal" set:html={body} />
+  </section>
+</Base>
+<style>
+  .updated { margin-top: 0.75rem; }
+  .legal :global(h2) { font-size: 1.5rem; }
+</style>

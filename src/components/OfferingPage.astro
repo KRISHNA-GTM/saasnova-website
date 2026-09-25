@@ -1,0 +1,250 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ProgramCards from './ProgramCards.astro';
+import CtaBand from './CtaBand.astro';
+import Faq from './Faq.astro';
+import {
+  type Offering, categories, getOffering, offeringPath, listingUrl,
+} from '../data/offerings';
+import { primaryCta, site } from '../data/site';
+
+interface Props { offering: Offering }
+const { offering: o } = Astro.props;
+const cat = categories.find((c) => c.id === o.category)!;
+const isProgram = o.kind === 'program';
+const parent = isProgram ? { label: 'Programs', href: '/programs' } : { label: 'Solutions', href: '/solutions' };
+const f = o.flagship;
+
+// Proof points (results, not repeated quotes; the full quotes live on the homepage).
+const proofFor: Record<string, { n: string; l: string }[]> = {
+  ignite: [{ n: '$40K+', l: 'credits and funding unlocked by Simplesense through Ignite' }, { n: '1 week', l: 'for GuardDog to launch its first AWS Marketplace listing' }],
+  'aws-marketplace-listing': [{ n: '1 week', l: 'for GuardDog to launch its first SaaS listing, after two years of trying' }],
+  'partner-central-migration': [{ n: '1 week', l: 'for GuardDog to list and move to the new Partner Central experience' }],
+  supernova: [{ n: '2K+', l: 'PSQLs generated for Arctic Wolf' }, { n: '300%+', l: 'of pipeline goal met' }],
+  novax: [{ n: '9X', l: 'ROI validated by AWS for Arctic Wolf' }, { n: '$300K', l: 'MDF secured for Dataminr' }],
+  'genai-competency-readiness': [{ n: 'Weeks', l: 'not months, for PharmacoEvidence’s path to the AWS GenAI Competency' }],
+  'box-funding-readiness': [{ n: '$40K+', l: 'credits and funding unlocked for Simplesense' }],
+};
+const proof = proofFor[o.slug];
+
+const faqs = [
+  ...(o.faq ?? []),
+  o.noCost
+    ? { q: `Is ${o.short} really free?`, a: `${o.short} is delivered at no cost for eligible AWS partners. We confirm eligibility with you in the first session. Work outside the stated scope is quoted separately.` }
+    : { q: `How much does ${o.short} cost?`, a: `${o.short} is custom. On a 30-minute scoping call we look at your listing, your clouds and your targets, then send a proposal with the scope, timeline and investment.` },
+  { q: `How do we buy ${o.short}?`, a: `After the scoping call you receive a proposal. You can contract with SaaSNova directly, or procure through AWS Marketplace, where ${o.name} is available as "${o.listingTitle}".` },
+  ...(o.duration && !(o.faq ?? []).some((f) => /long/i.test(f.q))
+    ? [{ q: `How long does ${o.short} take?`, a: `${o.name} runs for ${o.duration}. Your start date and working cadence are agreed during scoping.` }]
+    : []),
+];
+
+const related = o.related.map(getOffering);
+const url = `${site.url}${offeringPath(o)}`;
+const jsonLd = [
+  {
+    '@type': 'Service',
+    '@id': `${url}#service`,
+    name: o.name,
+    serviceType: cat.title,
+    description: o.summary,
+    url,
+    provider: { '@id': `${site.url}/#organization` },
+    areaServed: 'Worldwide',
+    audience: { '@type': 'BusinessAudience', audienceType: o.forWho },
+    offers: {
+      '@type': 'Offer',
+      url: listingUrl(o),
+      seller: { '@id': `${site.url}/#organization` },
+      ...(o.noCost ? { price: '0', priceCurrency: 'USD', eligibleCustomerType: 'Eligible AWS partners' } : {}),
+    },
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={`${o.name}${isProgram ? ': ' + (o.listingTitle.split(': ')[1] ?? '') : ''}`} description={o.summary} jsonLd={jsonLd}>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[parent, { label: o.short }]} />
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">
+            {isProgram ? `Flagship program · ${f?.tagline} · ${o.duration}` : cat.title}
+          </p>
+          <h1>{isProgram ? <><span class="grad">{o.short}</span><span class="h1-sub">{f?.tagline}</span></> : o.name}</h1>
+          <p class="lead">{o.summary}</p>
+          <div class="btn-row">
+            <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_${o.slug}`}>{primaryCta.label}</a>
+            <a class="btn btn-secondary" href="#included">{isProgram ? 'What you get' : 'What we do'}</a>
+          </div>
+        </div>
+        <aside class="facts" aria-label="At a glance">
+          <dl>
+            <div><dt>Best for</dt><dd>{o.forWho}</dd></div>
+            {o.duration && <div><dt>Duration</dt><dd>{o.duration}</dd></div>}
+            {f && <div><dt>Clouds</dt><dd>{f.clouds}</dd></div>}
+            <div><dt>Investment</dt><dd>{o.noCost ? 'No cost for eligible partners' : 'Custom, scoped on a 30-minute call'}</dd></div>
+            <div><dt>Procurement</dt><dd>Direct contract, or through AWS Marketplace</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  {f && (
+    <section class="section flagship" id="included" aria-labelledby="fg-h">
+      <div class="container">
+        <div class="section-head"><p class="kicker pink">{o.short} at a glance</p><h2 id="fg-h">What you get, and the impact it drives.</h2></div>
+        <div class="fg">
+          <div class="fg-card reveal"><p class="label">What you get</p><ul role="list" class="checks">{f.whatYouGet.map((x) => <li>{x}</li>)}</ul></div>
+          <div class="fg-card impact reveal"><p class="label">Impact</p><ul role="list">{f.impact.map((x) => <li>{x}</li>)}</ul></div>
+          <div class="fg-card ideal reveal"><p class="label">Ideal stage</p><p class="stage">{f.stageRange}</p><p>{f.idealStage}</p><a class="btn btn-sm" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_fit_${o.slug}`}>Ask Jen if {o.short} fits</a></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {proof && (
+    <section class="proof-strip" aria-label="Results">
+      <div class="container proof-row">
+        {proof.map((p) => <div class="pr"><span class="pn">{p.n}</span><span class="pl">{p.l}</span></div>)}
+        <a class="link-arrow" href="/#customers">Read what customers say</a>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <p class="kicker orange">The situation</p>
+        <h2>Why ISVs come to us for {o.short}</h2>
+      </div>
+      <p class="lead problem">{o.problem}</p>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="inc-h" id={f ? undefined : 'included'}>
+    <div class="container">
+      <div class="section-head"><p class="kicker">How we execute</p><h2 id="inc-h">What our operators do</h2></div>
+      <dl class="includes">
+        {o.includes.map((i) => (
+          <div><dt>{i.title}</dt><dd>{i.body}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="out-h">
+    <div class="container split">
+      <div>
+        <h2 id="out-h">What you have at the end</h2>
+      </div>
+      <div>
+        <ul role="list" class="checks outcomes">
+          {o.outcomes.map((x) => <li>{x}</li>)}
+        </ul>
+        {o.notIncluded && (
+          <div class="scope">
+            <h3>Scope</h3>
+            <p>{o.notIncluded}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {isProgram && (
+    <section class="section on-ink" aria-labelledby="all-h">
+      <div class="container">
+        <div class="section-head center"><p class="kicker pink">Compare the flagship programs</p><h2 id="all-h">Ignite, SuperNova and NovaX, <span class="grad">side by side.</span></h2></div>
+        <ProgramCards />
+      </div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="sup-h">
+    <div class="container split">
+      <div><h2 id="sup-h">Support and working model</h2></div>
+      <div class="prose">
+        <p>{o.support}</p>
+        <p>
+          Existing customers can reach the team at <a href={`mailto:${site.emails.support}`}>{site.emails.support}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="faq-h">
+    <div class="container split">
+      <div><h2 id="faq-h">Questions buyers ask</h2></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="rel-h">
+    <div class="container">
+      <div class="section-head"><h2 id="rel-h">Often paired with</h2></div>
+      <div class="index-list">
+        {related.map((r) => (
+          <a class="index-row" href={offeringPath(r)}>
+            <h3>{r.name}</h3>
+            <p>{r.summary}</p>
+            <span class="go">View</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title={o.noCost ? `Check your eligibility for ${o.short}.` : `Scope ${o.short} for your team.`}
+    body={o.noCost
+      ? 'Book a 30-minute session and we will confirm eligibility, timing and what we need from your side.'
+      : 'Book a 30-minute session. Jen looks at where your cloud motion is today and scopes a custom program around your targets.'}
+    secondaryLabel={isProgram ? 'Find your program' : 'See all solutions'}
+    secondaryHref={isProgram ? '/#program-finder' : '/solutions'}
+    track={`cta_strategy_band_${o.slug}`}
+  />
+</Base>
+
+<style>
+  .hero-grid { display: grid; gap: 2.5rem; margin-top: 1.5rem; }
+  @media (min-width: 64rem) { .hero-grid { grid-template-columns: 1fr 22rem; gap: 4rem; align-items: start; } }
+  .hero-grid h1 { margin-top: 0.25rem; }
+  .h1-sub { display: block; font-size: 0.42em; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); margin-top: 0.5rem; }
+  .fg { display: grid; gap: 1.25rem; }
+  @media (min-width: 60rem) { .fg { grid-template-columns: 1.1fr 1fr 1fr; } }
+  .fg-card { padding: 1.75rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: 0.9rem; align-content: start; }
+  .label { font-size: 0.75rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); }
+  .impact { background: var(--night); border-color: transparent; color: #fff; }
+  .impact .label { color: #ff9fd6; }
+  .impact ul { display: grid; gap: 0.85rem; }
+  .impact li { font-size: 1.125rem; font-weight: 750; letter-spacing: -0.01em; padding-left: 1.4rem; position: relative; }
+  .impact li::before { content: ''; position: absolute; left: 0; top: 0.45em; width: 0.65rem; height: 0.65rem; border-radius: 3px; background: var(--nova); transform: rotate(45deg); }
+  .ideal { background: linear-gradient(160deg, var(--blue-50), var(--pink-50)); }
+  .ideal .stage { font-size: 1.5rem; font-weight: 850; letter-spacing: -0.03em; color: var(--ink); }
+  .ideal .btn { justify-self: start; margin-top: 0.5rem; }
+  .proof-strip { background: var(--mist); border-block: 1px solid var(--line); }
+  .proof-row { display: flex; flex-wrap: wrap; gap: 1.25rem 3rem; align-items: center; padding-block: 1.75rem; }
+  .pr { display: flex; align-items: baseline; gap: 0.75rem; max-width: 26rem; }
+  .pn { font-size: 2rem; font-weight: 850; letter-spacing: -0.04em; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+  .pl { color: var(--muted); font-size: 0.95rem; line-height: 1.4; }
+  .proof-row .link-arrow { margin-left: auto; }
+  .facts { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; background: #fff; }
+  .facts dl { display: grid; gap: 1.1rem; }
+  .facts dt { font-size: 0.8438rem; font-weight: 650; color: var(--subtle); }
+  .facts dd { margin: 0.15rem 0 0; color: var(--ink); font-size: 0.9688rem; }
+  .problem { color: var(--text); max-width: 44rem; }
+  .includes { display: grid; gap: 2.25rem 3rem; }
+  @media (min-width: 48rem) { .includes { grid-template-columns: 1fr 1fr; } }
+  .includes div { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; border-top: 4px solid var(--blue); }
+  .includes dt { font-weight: 650; color: var(--ink); font-size: 1.125rem; margin-bottom: 0.4rem; }
+  .includes dd { margin: 0; color: var(--muted); }
+  .outcomes { font-size: 1.125rem; gap: 1rem; }
+  .scope { margin-top: 2.5rem; padding: 1.25rem 1.5rem; border-radius: var(--r-md); background: var(--mist); }
+  .scope h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+  .scope p { color: var(--muted); font-size: 0.9688rem; }
+</style>

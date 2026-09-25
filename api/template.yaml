@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SaaSNova website assistant API (Claude on Amazon Bedrock, streamed through CloudFront at /api/chat).
+
+# Deploy:
+#   cd website/api && cp ../dist/llms-full.txt chat/knowledge.txt
+#   sam build && sam deploy --guided
+# Then add the function URL as a CloudFront origin with Origin Access Control and route /api/* to it
+# (docs/AI-ASSISTANT.md). Finally rebuild the site with PUBLIC_CHAT_ENDPOINT=/api/chat.
+
+Parameters:
+  ModelId:
+    Type: String
+    Default: anthropic.claude-opus-5
+    Description: Claude model ID on Amazon Bedrock (Messages-API endpoint, anthropic. prefix).
+  Effort:
+    Type: String
+    Default: low
+    AllowedValues: [low, medium, high]
+  AllowedOrigins:
+    Type: String
+    Default: https://www.saasnova.ai
+  MaxConcurrency:
+    Type: Number
+    Default: 10
+    Description: Reserved concurrency; hard ceiling on simultaneous conversations (and therefore spend).
+
+Resources:
+  ChatFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: saasnova-website-chat
+      CodeUri: chat/
+      Handler: index.handler
+      Runtime: nodejs22.x
+      Architectures: [arm64]
+      MemorySize: 512
+      Timeout: 60
+      ReservedConcurrentExecutions: !Ref MaxConcurrency
+      Environment:
+        Variables:
+          MODEL_ID: !Ref ModelId
+          EFFORT: !Ref Effort
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+          MAX_TOKENS: '4096'
+          PER_IP_PER_MINUTE: '8'
+      FunctionUrlConfig:
+        AuthType: AWS_IAM          # only CloudFront (via Origin Access Control) can invoke
+        InvokeMode: RESPONSE_STREAM
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: bedrock-mantle:CreateInference
+              Resource: '*'        # scope to the model ARN(s) once confirmed in your account
+      LoggingConfig:
+        LogGroup: !Ref ChatLogs
+
+  ChatLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/saasnova-website-chat
+      RetentionInDays: 30
+
+Outputs:
+  FunctionUrl:
+    Description: Add as a CloudFront origin (Lambda function URL origin with OAC).
+    Value: !GetAtt ChatFunctionUrl.FunctionUrl
+  FunctionArn:
+    Value: !GetAtt ChatFunction.Arn

@@ -1,0 +1,35 @@
+# EXAMPLE — single-campaign landing page (paid social, email, event follow-up).
+# For a multi-section microsite around one AWS solution area, use the same shape with kind: microsite
+# and add more sections (stats, points, steps, quote, faq, cta).
+kind: campaign
+draft: true
+noindex: true
+title: "<Offer> for <audience>"
+description: "<One sentence.>"
+campaignId: <channel>-<offer>-<yyyy-mm>
+expires: 2026-12-31T23:59:00Z
+closedMessage: "This offer has ended. Book a strategy session to talk about your AWS motion."
+hero:
+  kicker: "<Campaign label>"
+  heading: "<Headline>"
+  body: "<Two sentences.>"
+form:
+  hubspotFormId: <dedicated-form-guid>
+  heading: "<Form heading>"
+  submitLabel: "<Verb + object, e.g. Book my assessment>"
+  success: "Thanks. We will reply within one business day."
+  notice: "We use your details to respond to your request. See our privacy policy."
+  fields:
+    - { name: firstname, label: First name, half: true }
+    - { name: lastname, label: Last name, half: true }
+    - { name: email, label: Work email, type: email, half: true }
+    - { name: company, label: Company, half: true }
+sections:
+  - type: points
+    heading: "<Why>"
+    items:
+      - { title: "<Point>", body: "<Sentence.>" }
+  - type: faq
+    heading: Questions
+    items:
+      - { q: "<Question>", a: "<Answer>" }

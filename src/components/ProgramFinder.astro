@@ -1,0 +1,147 @@
+---
+// "Which program fits?" Four quick questions, then a recommendation with the next step.
+// Scoring lives in the script below; edit `questions` to change wording.
+import { programs, offeringPath } from '../data/offerings';
+import { primaryCta } from '../data/site';
+
+const questions = [
+  {
+    q: 'Where is your cloud marketplace listing today?',
+    options: [
+      { label: 'Not listed yet', s: { ignite: 3 } },
+      { label: 'Listed, little or no traction', s: { ignite: 3, supernova: 1 } },
+      { label: 'Listed, with early pipeline', s: { supernova: 2, novax: 2 } },
+    ],
+  },
+  {
+    q: 'What stage is your company?',
+    options: [
+      { label: 'Pre-Series A', s: { ignite: 3 } },
+      { label: 'Series A', s: { ignite: 1, supernova: 2, novax: 1 } },
+      { label: 'Series B', s: { supernova: 2, novax: 2 } },
+      { label: 'Series C and beyond', s: { novax: 3 } },
+    ],
+  },
+  {
+    q: 'Which hyperscalers are in your plan?',
+    options: [
+      { label: 'One cloud for now', s: { ignite: 2, supernova: 1 } },
+      { label: 'Two or all three', s: { novax: 3, supernova: 1 } },
+    ],
+  },
+  {
+    q: 'What matters most in the next two quarters?',
+    options: [
+      { label: 'Activate co-sell and get noticed', s: { ignite: 3 } },
+      { label: 'Break into the US market', s: { supernova: 4 } },
+      { label: 'Scale repeatable global revenue', s: { novax: 4 } },
+    ],
+  },
+];
+const results = programs.map((p) => ({
+  slug: p.slug, name: p.short, tagline: p.flagship!.tagline, duration: p.duration!, href: offeringPath(p),
+  range: p.flagship!.stageRange, why: p.flagship!.idealStage, first: p.flagship!.whatYouGet.slice(0, 3),
+}));
+---
+<div class="finder" data-finder>
+  <div class="head">
+    <p class="step" aria-live="polite"><span data-step>1</span> of {questions.length}</p>
+    <div class="progress" aria-hidden="true"><span data-progress></span></div>
+  </div>
+
+  {questions.map((q, i) => (
+    <fieldset class="q" data-q={i} hidden={i !== 0}>
+      <legend>{q.q}</legend>
+      <div class="opts">
+        {q.options.map((o) => (
+          <button type="button" class="opt" data-score={JSON.stringify(o.s)}>
+            <span>{o.label}</span><span class="go" aria-hidden="true">→</span>
+          </button>
+        ))}
+      </div>
+      {i > 0 && <button type="button" class="back" data-back>← Back</button>}
+    </fieldset>
+  ))}
+
+  {results.map((r) => (
+    <div class="result" data-result={r.slug} hidden>
+      <p class="kicker pink">Your best fit</p>
+      <h3><span class="grad">{r.name}</span> · {r.tagline}</h3>
+      <p class="meta">{r.duration} · {r.range}</p>
+      <p>{r.why}</p>
+      <ul role="list" class="checks">{r.first.map((x) => <li>{x}</li>)}</ul>
+      <div class="btn-row">
+        <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_finder_${r.slug}`}>Confirm the fit with Jen</a>
+        <a class="link-arrow" href={r.href}>See what {r.name} includes</a>
+      </div>
+      <button type="button" class="back restart" data-restart>Start over</button>
+    </div>
+  ))}
+</div>
+
+<style>
+  .finder { background: #fff; border-radius: var(--r-xl); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); box-shadow: var(--shadow-lg); border: 1px solid var(--line); min-height: 25rem; }
+  .head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .step { font-size: 0.875rem; font-weight: 650; color: var(--subtle); white-space: nowrap; }
+  .progress { flex: 1; height: 6px; border-radius: 999px; background: var(--mist-2); overflow: hidden; }
+  .progress span { display: block; height: 100%; width: 25%; background: var(--nova); border-radius: 999px; transition: width 400ms var(--ease); }
+  fieldset { border: 0; padding: 0; margin: 0; animation: in 380ms var(--ease); }
+  @keyframes in { from { opacity: 0; transform: translateX(14px); } }
+  legend { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.65rem); font-weight: 800; letter-spacing: -0.025em; color: var(--ink); line-height: 1.25; margin-bottom: 1.25rem; padding: 0; }
+  .opts { display: grid; gap: 0.65rem; }
+  .opt {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem; text-align: left;
+    padding: 1rem 1.15rem; border-radius: var(--r-md); border: 1.5px solid var(--line); background: var(--mist);
+    font-weight: 600; font-size: 1.0125rem; color: var(--ink); transition: border-color 160ms, background 160ms, transform 160ms;
+  }
+  .opt:hover, .opt:focus-visible { border-color: var(--blue); background: #fff; transform: translateX(3px); }
+  .opt .go { color: var(--blue-ink); font-weight: 700; }
+  .back { margin-top: 1rem; background: none; border: 0; padding: 0.4rem 0; color: var(--muted); font-weight: 600; font-size: 0.9375rem; }
+  .back:hover { color: var(--ink); }
+  .result { display: grid; gap: 0.85rem; animation: in 420ms var(--ease); }
+  .result .kicker { justify-self: start; margin: 0; }
+  .result h3 { font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem); font-weight: 850; letter-spacing: -0.035em; }
+  .meta { font-weight: 650; color: var(--pink-ink); }
+  .result > p:not(.kicker):not(.meta) { color: var(--muted); }
+  .result .btn-row { margin-top: 0.5rem; }
+  .restart { justify-self: start; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-finder]').forEach((root) => {
+    const qs = Array.from(root.querySelectorAll<HTMLElement>('[data-q]'));
+    const step = root.querySelector<HTMLElement>('[data-step]')!;
+    const bar = root.querySelector<HTMLElement>('[data-progress]')!;
+    const head = root.querySelector<HTMLElement>('.head')!;
+    let answers: Record<string, number>[] = [];
+    const show = (i: number) => {
+      qs.forEach((q, k) => (q.hidden = k !== i));
+      root.querySelectorAll<HTMLElement>('[data-result]').forEach((r) => (r.hidden = true));
+      head.hidden = false;
+      step.textContent = String(i + 1);
+      bar.style.width = `${((i + 1) / qs.length) * 100}%`;
+      qs[i].querySelector<HTMLButtonElement>('.opt')?.focus({ preventScroll: true });
+    };
+    const finish = () => {
+      const total: Record<string, number> = { ignite: 0, supernova: 0, novax: 0 };
+      answers.forEach((a) => Object.entries(a).forEach(([k, v]) => (total[k] += v)));
+      const best = Object.entries(total).sort((a, b) => b[1] - a[1])[0][0];
+      qs.forEach((q) => (q.hidden = true));
+      head.hidden = true;
+      const r = root.querySelector<HTMLElement>(`[data-result="${best}"]`)!;
+      r.hidden = false;
+      r.querySelector<HTMLElement>('h3')?.setAttribute('tabindex', '-1');
+      r.querySelector<HTMLElement>('h3')?.focus({ preventScroll: true });
+      window.gtag?.('event', 'program_finder_result', { program: best });
+    };
+    qs.forEach((q, i) => {
+      q.querySelectorAll<HTMLButtonElement>('.opt').forEach((b) => b.addEventListener('click', () => {
+        answers[i] = JSON.parse(b.dataset.score || '{}');
+        answers = answers.slice(0, i + 1);
+        if (i + 1 < qs.length) show(i + 1); else finish();
+      }));
+      q.querySelector('[data-back]')?.addEventListener('click', () => show(i - 1));
+    });
+    root.querySelectorAll('[data-restart]').forEach((b) => b.addEventListener('click', () => { answers = []; show(0); }));
+  });
+</script>

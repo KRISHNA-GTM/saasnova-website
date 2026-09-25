@@ -1,0 +1,326 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import badge from '../assets/images/SaaSNova-AWS-Advanced-Tier-badge.png';
+import { site } from '../data/site';
+
+interface Props { entry: CollectionEntry<'campaigns'> }
+const { entry } = Astro.props;
+const c = entry.data;
+
+if (c.cobrand?.awsLogo && !c.cobrand.awsApprovalRef) {
+  throw new Error(`Campaign "${entry.id}" shows AWS logos without cobrand.awsApprovalRef. AWS co-branding requires written approval.`);
+}
+
+const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const fmtTime = (d: Date) => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' });
+const closed = c.expires ? c.expires.valueOf() < Date.now() : false;
+const fid = (n: string) => `cf-${entry.id}-${n}`;
+
+const jsonLd: Record<string, unknown>[] = [];
+if (c.kind === 'event' && c.event) {
+  jsonLd.push({
+    '@type': 'Event',
+    name: c.title,
+    description: c.description,
+    startDate: c.event.start.toISOString(),
+    ...(c.event.end ? { endDate: c.event.end.toISOString() } : {}),
+    eventAttendanceMode: c.event.online ? 'https://schema.org/OnlineEventAttendanceMode' : 'https://schema.org/OfflineEventAttendanceMode',
+    location: c.event.online ? { '@type': 'VirtualLocation', url: c.event.url ?? `${site.url}${Astro.url.pathname}` } : { '@type': 'Place', name: c.event.location },
+    organizer: { '@id': `${site.url}/#organization` },
+  });
+}
+---
+<Base title={c.title} description={c.description} noindex={c.noindex} jsonLd={jsonLd}>
+  {c.cobrand && c.cobrand.logos.length > 0 && (
+    <div class="cobrand">
+      <div class="container cobrand-row">
+        {c.cobrand.logos.map((l) => <img src={l.src} alt={l.alt} style={`height:${l.height}px`} loading="eager" />)}
+      </div>
+    </div>
+  )}
+
+  <section class="c-hero">
+    <div class="container c-grid">
+      <div>
+        {c.hero.kicker && <p class="kicker">{c.hero.kicker}</p>}
+        <h1>{c.hero.heading}</h1>
+        <p class="lead">{c.hero.body}</p>
+        {c.event && (
+          <dl class="when">
+            <div><dt>Date</dt><dd><time datetime={c.event.start.toISOString()}>{fmtDate(c.event.start)}, {fmtTime(c.event.start)}</time></dd></div>
+            <div><dt>Where</dt><dd>{c.event.location}</dd></div>
+          </dl>
+        )}
+        {c.asset && <p class="asset">Get the {c.asset.format}: <strong>{c.asset.title}</strong></p>}
+        <div class="btn-row">
+          {c.hero.secondary && <a class="btn btn-secondary" href={c.hero.secondary.href} target={c.hero.secondary.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{c.hero.secondary.label}</a>}
+        </div>
+        {c.hero.badge && (
+          <div class="badge-row">
+            <Image src={badge} alt="AWS Partner, Advanced Tier Services" width={120} height={120} />
+            <p><strong>Delivered by SaaSNova</strong><br />AWS Advanced Tier Services Partner</p>
+          </div>
+        )}
+      </div>
+
+      <div class="form-wrap" id="register">
+        {closed ? (
+          <div class="panel"><h2 class="ft">Registration has closed</h2><p>{c.closedMessage ?? 'This page is no longer accepting registrations.'} <a href="/events">See upcoming events</a>.</p></div>
+        ) : (
+          <form class="panel form-grid two" data-hs-form={c.form.hubspotFormId} data-form-name={`campaign_${c.campaignId}`}
+            data-success={c.form.success} data-event={c.form.gaEvent} data-fallback-email={c.contactEmail}
+            data-redirect={c.asset ? c.asset.url : undefined} novalidate>
+            <h2 class="full ft">{c.form.heading}</h2>
+            {c.form.intro && <p class="full muted small">{c.form.intro}</p>}
+            {c.form.fields.map((f) => (
+              <div class:list={['field', { full: !f.half }]}>
+                {f.type === 'checkboxes' ? (
+                  <fieldset class="group">
+                    <legend>{f.label}{f.required && <span class="req" aria-hidden="true"> *</span>}</legend>
+                    {f.options?.map((o, i) => (
+                      <label class="opt"><input type="checkbox" name={f.name} value={o.value} id={fid(`${f.name}-${i}`)} /> {o.label}</label>
+                    ))}
+                  </fieldset>
+                ) : (
+                  <>
+                    <label for={fid(f.name)}>{f.label}{f.required ? <span class="req" aria-hidden="true"> *</span> : <span class="muted"> (optional)</span>}</label>
+                    {f.hint && <p class="hint" id={fid(`${f.name}-hint`)}>{f.hint}</p>}
+                    {f.type === 'select' ? (
+                      <select id={fid(f.name)} name={f.name} required={f.required} data-label={f.label} aria-describedby={f.hint ? fid(`${f.name}-hint`) : undefined}>
+                        <option value="">Select one</option>
+                        {f.options?.map((o) => <option value={o.value}>{o.label}</option>)}
+                      </select>
+                    ) : f.type === 'textarea' ? (
+                      <textarea id={fid(f.name)} name={f.name} rows="4" required={f.required} data-label={f.label} maxlength="3000"></textarea>
+                    ) : (
+                      <input id={fid(f.name)} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} data-label={f.label} />
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+            <div class="hp" aria-hidden="true"><label for={fid('web')}>Website</label><input id={fid('web')} name="website_url" tabindex="-1" autocomplete="off" /></div>
+            {c.form.consent && (
+              <label class="consent full" for={fid('consent')}>
+                <input type="checkbox" id={fid('consent')} name="_consent" required data-consent data-label="Consent" />
+                <span>{c.form.consent}</span>
+              </label>
+            )}
+            {c.form.notice && <p class="full small muted">{c.form.notice.replace('privacy policy.', '')}<a href="/privacy">privacy policy</a>.</p>}
+            <div class="full"><button type="submit" class="btn">{c.form.submitLabel}</button></div>
+            <p class="form-status full" data-status role="status" tabindex="-1"></p>
+          </form>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {c.sections.map((s, i) => {
+    const alt = i % 2 === 0 ? 'bg-mist' : '';
+    switch (s.type) {
+      case 'stats':
+        return (
+          <section class="section-tight stats-band">
+            <div class="container"><ul role="list" class="stats">{s.items.map((x) => <li><strong>{x.n}</strong><span>{x.l}</span></li>)}</ul></div>
+          </section>
+        );
+      case 'text':
+        return (
+          <section class:list={['section', s.dark ? 'on-ink' : alt]}>
+            <div class="container split">
+              <div>{s.kicker && <p class="kicker">{s.kicker}</p>}<h2>{s.heading}</h2></div>
+              <div class="prose">{s.body.map((p) => <p>{p}</p>)}</div>
+            </div>
+          </section>
+        );
+      case 'points':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container">
+              <div class="section-head"><h2>{s.heading}</h2>{s.intro && <p>{s.intro}</p>}</div>
+              <ol class:list={['pts', { numbered: s.numbered }]} role="list">
+                {s.items.map((x, n) => (
+                  <li>
+                    {s.numbered && <span class="n" aria-hidden="true">{n + 1}</span>}
+                    <h3>{x.title}</h3>
+                    <p>{x.body}</p>
+                    {x.result && <p class="res"><span>You walk away with</span> {x.result}</p>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+        );
+      case 'steps':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container split">
+              <div><h2>{s.heading}</h2>{s.intro && <p class="muted intro">{s.intro}</p>}</div>
+              <ol class="timeline" role="list">
+                {s.items.map((x, n) => (
+                  <li><span class="n" aria-hidden="true">{n + 1}</span><div><h3>{x.title}</h3>{x.when && <p class="when-tag">{x.when}</p>}<p>{x.body}</p></div></li>
+                ))}
+              </ol>
+            </div>
+          </section>
+        );
+      case 'quote':
+        return (
+          <section class:list={['section', s.dark ? 'on-ink' : alt]}>
+            <div class="container"><blockquote class="cq"><p>“{s.quote}”</p><footer><strong>{s.name}</strong>{s.role && <span>{s.role}</span>}</footer></blockquote></div>
+          </section>
+        );
+      case 'partners':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container">
+              <div class="section-head"><h2>{s.heading}</h2>{s.intro && <p>{s.intro}</p>}</div>
+              <ul role="list" class="partners">
+                {s.items.map((p) => (
+                  <li>
+                    <img src={p.logo} alt={p.name} loading="lazy" />
+                    <p>{p.body}</p>
+                    {p.quote && <blockquote><p>“{p.quote}”</p><footer>{p.quoteBy}</footer></blockquote>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        );
+      case 'image':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container"><figure class="fig"><img src={s.src} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />{s.caption && <figcaption>{s.caption}</figcaption>}</figure></div>
+          </section>
+        );
+      case 'agenda':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container split">
+              <div><h2>{s.heading}</h2></div>
+              <ol class="agenda" role="list">{s.items.map((x) => <li><span class="t">{x.time}</span><span><strong>{x.title}</strong>{x.speaker && <em>{x.speaker}</em>}</span></li>)}</ol>
+            </div>
+          </section>
+        );
+      case 'speakers':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container">
+              <div class="section-head"><h2>{s.heading}</h2></div>
+              <ul role="list" class="speakers">{s.items.map((x) => <li><p class="nm">{x.name}</p><p class="rl">{x.role}</p>{x.bio && <p class="bd">{x.bio}</p>}</li>)}</ul>
+            </div>
+          </section>
+        );
+      case 'faq':
+        return (
+          <section class:list={['section', alt]}>
+            <div class="container split">
+              <div><h2>{s.heading}</h2></div>
+              <div class="faq">{s.items.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+            </div>
+          </section>
+        );
+      case 'cta':
+        return (
+          <section class="section on-ink c-cta">
+            <div class="container split">
+              <div><h2>{s.heading}</h2>{s.body && <p class="lead">{s.body}</p>}</div>
+              <div class="btn-row end"><a class="btn btn-light" href={s.href}>{s.label}</a></div>
+            </div>
+          </section>
+        );
+    }
+  })}
+
+  {c.contactEmail && (
+    <section class="section-tight">
+      <div class="container"><p class="muted">Questions? Email <a href={`mailto:${c.contactEmail}?subject=${encodeURIComponent(c.title)}`}>{c.contactEmail}</a>.</p></div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .cobrand { border-bottom: 1px solid var(--line); background: #fff; }
+  .cobrand-row { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem; align-items: center; padding-block: 1rem; }
+  .cobrand-row img { width: auto; }
+  .c-hero { padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem); }
+  .c-grid { display: grid; gap: 3rem; }
+  @media (min-width: 64rem) { .c-grid { grid-template-columns: 1.15fr 1fr; gap: 4rem; align-items: start; } }
+  .c-hero h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.9rem); line-height: 1.1; }
+  .c-hero .lead { margin-top: 1.25rem; }
+  .c-hero .btn-row { margin-top: 1.75rem; }
+  .when { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
+  .when dt { font-size: 0.8438rem; font-weight: 650; color: var(--subtle); }
+  .when dd { margin: 0; font-weight: 600; color: var(--ink); }
+  .asset { margin-top: 1.25rem; }
+  .badge-row { display: flex; gap: 1.25rem; align-items: center; margin-top: 2rem; }
+  .badge-row :global(img) { width: 120px; height: 120px; }
+  .badge-row p { font-size: 0.9688rem; color: var(--muted); }
+  .badge-row strong { color: var(--ink); }
+  .ft { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 650; letter-spacing: 0; }
+  .group { border: 0; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+  .opt { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.9375rem; font-weight: 400 !important; }
+  .opt input { width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; accent-color: var(--blue); }
+
+  .stats-band { border-block: 1px solid var(--line); }
+  .stats { display: grid; gap: 1.5rem 2rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  .stats li { display: grid; gap: 0.35rem; border-left: 3px solid var(--violet); padding-left: 1rem; }
+  .stats strong { font-family: var(--font-display); font-size: clamp(2rem, 1.6rem + 1.2vw, 2.75rem); font-weight: 850; letter-spacing: -0.04em; line-height: 1; color: var(--ink); }
+  .stats span { color: var(--muted); font-size: 0.9375rem; }
+
+  .pts { display: grid; gap: 2rem 3rem; }
+  @media (min-width: 48rem) { .pts { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); } }
+  .pts li { display: grid; gap: 0.5rem; align-content: start; border-top: 2px solid var(--ink); padding-top: 1rem; }
+  .pts .n { font-weight: 700; color: var(--blue); }
+  .pts h3 { font-size: 1.1875rem; }
+  .pts p { color: var(--muted); }
+  .pts .res { color: var(--ink); font-weight: 600; margin-top: 0.4rem; }
+  .pts .res span { display: block; font-weight: 500; font-size: 0.8438rem; color: var(--subtle); }
+
+  .intro { margin-top: 0.75rem; }
+  .timeline { display: grid; gap: 1.75rem; position: relative; }
+  .timeline li { display: grid; grid-template-columns: 2.25rem 1fr; gap: 1rem; }
+  .timeline .n { width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--blue); color: var(--blue); font-weight: 700; background: #fff; }
+  .timeline h3 { font-size: 1.125rem; }
+  .timeline p { color: var(--muted); }
+  .when-tag { font-size: 0.8438rem; font-weight: 650; color: var(--violet) !important; margin-block: 0.15rem 0.3rem; }
+
+  .cq { max-width: 60rem; }
+  .cq p { font-family: var(--font-display); font-size: clamp(1.35rem, 1.05rem + 1.1vw, 1.9rem); line-height: 1.42; color: var(--ink); }
+  .on-ink .cq p { color: #fff; }
+  .cq footer { margin-top: 1.25rem; display: grid; gap: 0.15rem; }
+  .cq footer strong { color: var(--ink); }
+  .on-ink .cq footer strong { color: #fff; }
+  .cq footer span { color: var(--muted); font-size: 0.9375rem; }
+  .on-ink .cq footer span { color: var(--on-ink-muted); }
+
+  .partners { display: grid; gap: 2rem; }
+  @media (min-width: 56rem) { .partners { grid-template-columns: repeat(3, 1fr); } }
+  .partners li { display: grid; gap: 1rem; align-content: start; padding: 1.75rem; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; }
+  .partners img { height: 40px; width: auto; }
+  .partners p { color: var(--muted); }
+  .partners blockquote p { font-family: var(--font-display); font-size: 1.125rem; color: var(--ink); line-height: 1.45; }
+  .partners blockquote footer { margin-top: 0.5rem; font-size: 0.875rem; color: var(--muted); }
+
+  .fig { margin: 0; max-width: 62rem; }
+  .fig img { width: 100%; height: auto; max-height: 38rem; object-fit: cover; border-radius: var(--r-lg); }
+  .fig figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.9375rem; }
+
+  .agenda { display: grid; border-top: 1px solid var(--line); }
+  .agenda li { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
+  .agenda .t { font-weight: 650; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .agenda em { display: block; font-style: normal; color: var(--muted); font-size: 0.9375rem; }
+  .speakers { display: grid; gap: 1.5rem 2rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .speakers .nm { font-weight: 650; color: var(--ink); }
+  .speakers .rl { color: var(--blue-600); font-size: 0.9375rem; }
+  .speakers .bd { color: var(--muted); font-size: 0.9375rem; margin-top: 0.3rem; }
+  .faq details { border-bottom: 1px solid var(--line); padding-block: 1rem; }
+  .faq summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+  .faq details p { margin-top: 0.6rem; color: var(--muted); }
+  .end { justify-content: flex-end; align-self: end; }
+  .c-cta { position: relative; }
+  .c-cta::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--nova); }
+</style>
+

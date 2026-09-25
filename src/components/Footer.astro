@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/images/logo-white.png';
+import advancedBadge from '../assets/images/SaaSNova-AWS-Advanced-Tier-badge.png';
+import aiBadge from '../assets/images/SaaSNova-AWS-AI-Service-Competency-partner-badge.png';
+import { programs, offeringPath } from '../data/offerings';
+import { site, integrations, primaryCta } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer on-ink">
+  <div class="container">
+    <div class="top">
+      <div class="about">
+        <a href="/" aria-label="SaaSNova home"><Image src={logoWhite} alt="SaaSNova, women-owned business" width={180} height={53} loading="eager" /></a>
+        <p>The first operator-led GTM execution engine. We turn AWS, Microsoft Azure and Google Cloud marketplaces into a predictable revenue channel for SaaS ISVs and channel partners.</p>
+        <div class="badges">
+          <Image src={advancedBadge} alt="AWS Partner, Advanced Tier Services" width={64} height={64} />
+          <Image src={aiBadge} alt="AWS Partner, AI Services Competency" width={64} height={64} />
+        </div>
+        <a class="btn btn-sm book" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_footer">{primaryCta.label}</a>
+      </div>
+
+      <nav class="cols" aria-label="Footer">
+        <div>
+          <p class="h">Flagship programs</p>
+          <ul role="list">
+            {programs.map((p) => <li><a href={offeringPath(p)}>{p.short} <span class="d">{p.flagship?.tagline}</span></a></li>)}
+            <li><a href="/#program-finder">Which program fits?</a></li>
+          </ul>
+          <p class="h spaced">Solutions</p>
+          <ul role="list">
+            <li><a href="/solutions">All solutions</a></li>
+            <li><a href="/storefront">AWS Marketplace Storefront</a></li>
+            <li><a href="/solutions/channel-partners">For channel partners</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="h">Company</p>
+          <ul role="list">
+            <li><a href="/about">About</a></li>
+            <li><a href="/customers">Customer stories</a></li>
+            <li><a href="/partners">Partners</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/support">Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="h">Resources</p>
+          <ul role="list">
+            <li><a href="/insights">Insights</a></li>
+            <li><a href="/show">The Jen GTM Show</a></li>
+            <li><a href="/events">Events and webinars</a></li>
+            <li><a href="/news">News</a></li>
+            <li><a href="/community/aws">Hyperscaler community</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="signup">
+        <p class="h">The Nova Brief</p>
+        <p class="small">AWS Marketplace and co-sell changes that affect your revenue, explained by operators.</p>
+        <form data-hs-form={integrations.hubspot.forms.newsletter} data-form-name="newsletter_footer" data-success="You are subscribed. The next issue will arrive in your inbox." class="nl" novalidate>
+          <div class="field">
+            <label for="ft-email" class="visually-hidden">Work email</label>
+            <input id="ft-email" name="email" type="email" required autocomplete="email" placeholder="Work email" data-label="Work email" />
+          </div>
+          <div class="hp" aria-hidden="true"><label for="ft-web">Website</label><input id="ft-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+          <button class="btn btn-light" type="submit">Subscribe</button>
+          <p class="form-status" data-status role="status" tabindex="-1"></p>
+        </form>
+        <p class="contact small">
+          <a href={`mailto:${site.emails.general}`}>{site.emails.general}</a><br />
+          <a href={`mailto:${site.emails.support}`}>{site.emails.support}</a>
+        </p>
+        <ul class="social" role="list">
+          <li><a href={site.social.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href={site.social.youtube} target="_blank" rel="noopener">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <p>© {year} SaaSNova. All rights reserved. AWS, AWS Marketplace and related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+      <ul role="list">
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/sitemap-index.xml">Sitemap</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: clamp(3.5rem, 3rem + 3vw, 5.5rem) 2rem; font-size: 0.9688rem; }
+  .top { display: grid; gap: 3rem; }
+  @media (min-width: 64rem) { .top { grid-template-columns: 1.1fr 2.2fr 1.2fr; gap: 3.5rem; } }
+  .about p { margin-top: 1.25rem; max-width: 22rem; color: var(--on-ink-muted); }
+  .about :global(img) { width: 170px; }
+  .badges { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .badges :global(img) { width: 64px; height: 64px; background: #fff; border-radius: 10px; padding: 4px; }
+  .about .book { margin-top: 1.5rem; white-space: normal; text-align: center; }
+  .about a.book, .about a.book:hover { color: #fff !important; text-decoration: none; }
+  .d { display: block; font-size: 0.8125rem; opacity: 1; color: #8793b3; }
+  .cols { display: grid; gap: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 48rem) { .cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h { color: #fff; font-weight: 650; margin-bottom: 0.75rem; font-size: 0.9375rem; }
+  .h.spaced { margin-top: 1.75rem; }
+  ul { display: grid; gap: 0.5rem; }
+  a { color: var(--on-ink-muted) !important; text-decoration: none; }
+  a:hover { color: #fff !important; text-decoration: underline; }
+  .signup .small { color: var(--on-ink-muted); }
+  .nl { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; margin-top: 1rem; }
+  .nl .field input { background: var(--night-2); border-color: rgba(255,255,255,.22); color: #fff; }
+  .nl .field input::placeholder { color: #8c98b8; }
+  .nl .form-status { grid-column: 1 / -1; }
+  .nl .form-status[data-state='ok'] { background: rgba(17,122,75,.2); color: #b9f0d2; }
+  .nl .form-status[data-state='error'] { background: rgba(180,35,24,.2); color: #ffd1cc; }
+  .nl :global(.error) { color: #ffb4ab; }
+  .contact { margin-top: 1.5rem; line-height: 1.9; }
+  .social { display: flex; gap: 1.25rem; margin-top: 0.75rem; }
+  .bottom {
+    display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--on-ink-line);
+    font-size: 0.8438rem; color: var(--on-ink-muted);
+  }
+  .bottom p { color: var(--on-ink-muted); max-width: 48rem; }
+  .bottom ul { display: flex; gap: 1.25rem; }
+</style>

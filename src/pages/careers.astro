@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+
+// Role values match the HubSpot `role` contact property exactly (verified Sept 2026).
+const roles = [
+  {
+    id: 'GTM-PPE-2026-US', title: 'Partner Pipeline Executive', location: 'United States, remote', type: 'Independent contractor',
+    hs: 'Partner Pipeline Executive - US (GTM-PPE-2026-US)', linkedin: 'https://www.linkedin.com/jobs/view/4403664796/',
+    summary: 'Activate SaaSNova’s ISV pipeline across the U.S. and global markets. Research, engage and qualify SaaS companies for AWS, Azure and Google Cloud GTM programs. Early-career GTM talent is encouraged to apply.',
+  },
+  {
+    id: 'GTM-PPE-2026-EU', title: 'Partner Pipeline Executive', location: 'London, UK, remote', type: 'Independent contractor',
+    hs: 'Partner Pipeline Executive (London) - GTM-PPE-2026-EU', linkedin: 'https://www.linkedin.com/jobs/view/4411782354/',
+    summary: 'Activate SaaSNova’s ISV pipeline across the UK, Europe and global markets. Research, engage and qualify SaaS companies that fit our AWS, Azure and Google Cloud GTM programs.',
+  },
+  {
+    id: 'GTM-HUB-OPS-2026-IN', title: 'HubSpot Associate, GTM Operations', location: 'Chennai, India, remote-first', type: 'Remote-first (Chennai, Bangalore, Hyderabad or Mumbai)',
+    hs: 'HubSpot Associate - India (GTM-HUB-OPS-2026-IN)', linkedin: 'https://www.linkedin.com/jobs/view/4404492789/',
+    summary: 'Keep SaaSNova’s GTM engine clean and execution-ready: CRM hygiene, ISV research, outreach workflows and pipeline clarity. Requires 1 to 2 years of HubSpot CRM experience.',
+  },
+  {
+    id: 'TEC-ENG-2026-IN', title: 'Cloud Engineer', location: 'Chennai or Bangalore, India', type: 'Remote or flexible',
+    hs: 'Cloud Engineer - India (TEC-ENG-2026-IN)', linkedin: 'https://www.linkedin.com/jobs/view/4404474964/',
+    summary: 'Own the technical backbone behind SaaSNova’s GTM, Marketplace and product operations: AWS workflows, SaaS product development support and technical systems.',
+  },
+];
+
+---
+<Base title="Careers" description="Open roles at SaaSNova: Partner Pipeline Executives (US and London), HubSpot Associate for GTM operations, and Cloud Engineer. Remote-first operator roles in cloud GTM.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Careers' }]} />
+      <h1>Build the GTM work that produces real pipeline.</h1>
+      <p class="lead">We operate. We execute. Join a remote-first team running co-sell and Marketplace motions with AWS, Microsoft and Google Cloud partner teams.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <h2>Open roles</h2>
+        <p class="muted intro">Apply here, or through the role’s LinkedIn posting for the full description.</p>
+      </div>
+      <ul role="list" class="roles">
+        {roles.map((r) => (
+          <li>
+            <div class="rh">
+              <h3>{r.title}</h3>
+              <span class="tag tag-neutral">{r.id}</span>
+            </div>
+            <p class="where">{r.location}. {r.type}</p>
+            <p>{r.summary}</p>
+            <p class="acts">
+              <a class="btn btn-sm" href={`#apply`} data-role={r.hs}>Apply</a>
+              <a class="link-arrow" href={r.linkedin} target="_blank" rel="noopener">Full description on LinkedIn</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-mist" id="apply" aria-labelledby="apply-h">
+    <div class="container split">
+      <div>
+        <h2 id="apply-h">Apply</h2>
+        <p class="muted intro">Don’t see the right role? Choose “Open application” and tell us what you would own.</p>
+      </div>
+      <form class="panel form-grid two" data-hs-form="094ad5f6-008f-4614-9d45-ce72e96744d2" data-form-name="careers"
+        data-success="Application received. We review every application and will contact you if there is a fit." data-fallback-email={site.emails.general} novalidate>
+        <div class="field"><label for="a-fn">First name <span class="req" aria-hidden="true">*</span></label><input id="a-fn" name="firstname" required autocomplete="given-name" data-label="First name" /></div>
+        <div class="field"><label for="a-ln">Last name <span class="req" aria-hidden="true">*</span></label><input id="a-ln" name="lastname" required autocomplete="family-name" data-label="Last name" /></div>
+        <div class="field"><label for="a-em">Email <span class="req" aria-hidden="true">*</span></label><input id="a-em" name="email" type="email" required autocomplete="email" data-label="Email" /></div>
+        <div class="field"><label for="a-ci">City <span class="req" aria-hidden="true">*</span></label><input id="a-ci" name="city" required autocomplete="address-level2" data-label="City" /></div>
+        <div class="field full"><label for="a-li">LinkedIn profile URL <span class="req" aria-hidden="true">*</span></label><input id="a-li" name="hs_linkedin_url" type="url" required placeholder="https://www.linkedin.com/in/…" data-label="LinkedIn URL" /></div>
+        <div class="field full">
+          <label for="a-role">Role <span class="req" aria-hidden="true">*</span></label>
+          <select id="a-role" name="role" required data-label="Role">
+            <option value="">Select a role</option>
+            {roles.map((r) => <option value={r.hs}>{r.title}, {r.location}</option>)}
+            <option value="Open Application">Open application</option>
+          </select>
+        </div>
+        <div class="field full"><label for="a-why">Why this role? <span class="req" aria-hidden="true">*</span></label><textarea id="a-why" name="why_this_role" rows="4" required minlength="20" maxlength="3000" data-label="This answer"></textarea></div>
+        <div class="field full"><label for="a-bg">Relevant background <span class="muted">(optional)</span></label><textarea id="a-bg" name="relevant_background" rows="4" maxlength="3000"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="a-web">Website</label><input id="a-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+        <label class="consent full" for="a-consent">
+          <input type="checkbox" id="a-consent" name="_consent" required data-consent data-label="Consent" />
+          <span>I agree that SaaSNova may store and process my details to review this application, as described in the <a href="/privacy">privacy policy</a>.</span>
+        </label>
+        <div class="full"><button type="submit" class="btn">Submit application</button></div>
+        <p class="form-status full" data-status role="status" tabindex="-1"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { margin-top: 0.75rem; }
+  .roles { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .roles li { padding-block: 1.75rem; border-bottom: 1px solid var(--line); display: grid; gap: 0.6rem; }
+  .rh { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  .rh h3 { font-size: 1.25rem; }
+  .where { font-weight: 600; color: var(--ink); font-size: 0.9688rem; }
+  .roles p:not(.where):not(.acts) { color: var(--muted); }
+  .acts { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; margin-top: 0.4rem; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-role]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const sel = document.getElementById('a-role') as HTMLSelectElement;
+      sel.value = a.dataset.role || '';
+      setTimeout(() => (document.getElementById('a-fn') as HTMLInputElement).focus({ preventScroll: true }), 350);
+    }),
+  );
+</script>

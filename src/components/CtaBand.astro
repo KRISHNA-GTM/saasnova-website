@@ -1,0 +1,47 @@
+---
+import { primaryCta } from '../data/site';
+
+interface Props {
+  title?: string;
+  body?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  track?: string;
+}
+const {
+  title = 'Ready to turn your listing into pipeline?',
+  body = 'Book a 30-minute execution strategy session. Jen reviews your listing, your clouds and your co-sell activity, tells you what she would do first, and scopes a custom program around your targets.',
+  primaryLabel = primaryCta.label,
+  primaryHref = primaryCta.href,
+  secondaryLabel = 'Find your program',
+  secondaryHref = '/#program-finder',
+  track = 'cta_strategy_band',
+} = Astro.props;
+const external = (h: string) => /^https?:/.test(h);
+---
+<section class="cta-band on-ink" aria-labelledby="cta-title">
+  <div class="container inner">
+    <div>
+      <h2 id="cta-title">{title}</h2>
+      <p>{body}</p>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-lg" href={primaryHref} target={external(primaryHref) ? '_blank' : undefined} rel={external(primaryHref) ? 'noopener' : undefined} data-track={track}>{primaryLabel}</a>
+      {secondaryLabel && <a class="btn btn-secondary btn-lg" href={secondaryHref} target={external(secondaryHref) ? '_blank' : undefined} rel={external(secondaryHref) ? 'noopener' : undefined}>{secondaryLabel}</a>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band { position: relative; overflow: hidden; padding-block: clamp(4rem, 3rem + 4vw, 6.5rem); }
+  .cta-band::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--nova);
+  }
+  h2 { font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem); }
+  .inner { display: grid; gap: 2rem; align-items: end; }
+  @media (min-width: 60rem) { .inner { grid-template-columns: 1.4fr 1fr; } .btn-row { justify-content: flex-end; } }
+  h2 { max-width: 20ch; }
+  p { margin-top: 1rem; max-width: 40rem; }
+</style>

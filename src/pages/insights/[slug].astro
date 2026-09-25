@@ -1,0 +1,11 @@
+---
+import { getCollection } from 'astro:content';
+import ArticlePage from '../../components/ArticlePage.astro';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('insights', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry, related: all.filter((e) => e.id !== entry.id).slice(0, 3) } }));
+}
+const { entry, related } = Astro.props;
+---
+<ArticlePage entry={entry} collection="insights" related={related} />

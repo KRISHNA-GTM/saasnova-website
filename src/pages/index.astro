@@ -1,0 +1,763 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import TestimonialWall from '../components/TestimonialWall.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import ProgramCards from '../components/ProgramCards.astro';
+import ProgramFinder from '../components/ProgramFinder.astro';
+import CtaBand from '../components/CtaBand.astro';
+import YouTube from '../components/YouTube.astro';
+import advancedBadge from '../assets/images/SaaSNova-AWS-Advanced-Tier-badge.png';
+import aiBadge from '../assets/images/SaaSNova-AWS-AI-Service-Competency-partner-badge.png';
+import awsLogo from '../assets/images/aws-logo.png';
+import azureLogo from '../assets/images/azure-logo.png';
+import gcpLogo from '../assets/images/gcp-logo.png';
+import jenStage from '../assets/images/jen-stage.png';
+import jenPhoto from '../assets/images/jen-dp.jpg';
+import rsac from '../assets/images/rsac-ss.jpeg';
+import reinvent from '../assets/images/jen-dawson.jpg';
+import speaking from '../assets/images/jen-speaking.png';
+import storefrontBanner from '../assets/images/fq-storefront.jpg';
+import { customerLogos, storefrontLogos } from '../data/logos';
+import { services, offeringPath } from '../data/offerings';
+import { trackRecord } from '../data/track-record';
+import { primaryCta, site } from '../data/site';
+import { g2ReviewUrl } from '../data/testimonials';
+
+const heroVideo = 'x75hrIBKPj8';
+const insights = (await getCollection('insights', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+
+const moves = [
+  { verb: 'Activate', title: 'Cloud field relationships', body: 'We build the AE, PDM and partner manager relationships at AWS, Microsoft and Google Cloud that make co-sell work: human trust, not just portal registrations.', outcome: 'Named field contacts who respond', color: 'var(--blue)' },
+  { verb: 'Drive', title: 'Co-sell to actual deals', body: 'We run the co-sell motion end to end: opportunity identification, field engagement, deal validation and revenue attribution. Not just filed. Followed through.', outcome: 'Attributable cloud-sourced deals', color: '#7a4dff' },
+  { verb: 'Convert', title: 'Marketplace presence to revenue', body: 'Co-marketing alignment, MDF, field enablement sessions and private offers, coordinated to turn marketplace activity into closed-won deals.', outcome: 'Repeatable deal flow', color: 'var(--pink)' },
+  { verb: 'Prove', title: 'Revenue evidence for your board', body: 'Co-sell logs, field-validated deal evidence, revenue attribution and field relationship maps your board and investors can use directly.', outcome: 'A board-ready GTM ROI story', color: 'var(--orange)' },
+];
+
+const clouds = [
+  { name: 'AWS', logo: awsLogo, items: ['AWS Marketplace listings and storefronts', 'ACE co-sell and ISV Accelerate', 'Partner Central, PRM and BOX funding'] },
+  { name: 'Microsoft Azure', logo: azureLogo, items: ['Azure Marketplace transactable offers', 'Partner Center co-sell', 'Microsoft field alignment and MACC'] },
+  { name: 'Google Cloud', logo: gcpLogo, items: ['Google Cloud Marketplace listings', 'Partner Advantage co-sell', 'Google Cloud field engagement'] },
+];
+
+const compare = [
+  'Executes GTM alongside your team, every week',
+  'Activates hyperscaler field relationships',
+  'Identifies and advances real co-sell opportunities',
+  'Produces field-validated deal evidence',
+  'Runs field enablement sessions with cloud teams',
+  'Delivers a board-ready, attributable pipeline report',
+  'Aligns MDF, co-marketing and cloud GTM into measurable ROI',
+];
+
+const solutionIcons: Record<string, string> = {
+  'aws-marketplace-listing': 'M4 5h16v4H4zM4 11h10v8H4zM16 11h4v8h-4z',
+  storefront: 'M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 20v-6h6v6',
+  'co-sell-execution': 'M7 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm10 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8ZM2 20c0-3 2.5-5 5-5s5 2 5 5m0 0c0-3 2.5-5 5-5s5 2 5 5',
+  'alliance-leadership': 'M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z',
+  'co-marketing': 'M3 11v2l13 5V6L3 11Zm13-5 5-2v16l-5-2M6 14l1.5 5h3L9 15',
+  'box-funding-readiness': 'M12 3v18M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6',
+  'genai-competency-readiness': 'M12 2l2 5 5 2-5 2-2 5-2-5-5-2 5-2zM18 15l1 2.5 2.5 1-2.5 1L18 22l-1-2.5-2.5-1 2.5-1z',
+  'partner-revenue-measurement': 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  'partner-central-migration': 'M4 7h13l-3-3M20 17H7l3 3',
+};
+
+const faqs = [
+  { q: 'What is SaaSNova?', a: 'SaaSNova helps SaaS ISVs and channel partners turn cloud marketplaces (AWS, Microsoft Azure and Google Cloud) into a predictable revenue channel. We work alongside software companies to execute their Marketplace GTM, strengthen co-sell with hyperscaler field teams, and create measurable pipeline and revenue through the cloud marketplace ecosystem.' },
+  { q: 'What does operator-led GTM execution mean?', a: 'Our operators do the work. We build and optimize listings, run co-sell in ACE and Partner Center, build relationships with cloud field teams, deliver enablement sessions, package private offers and report attributable pipeline. You do not get a playbook to run yourself.' },
+  { q: 'Which cloud marketplaces do you work with?', a: 'AWS Marketplace, Microsoft Azure Marketplace and Google Cloud Marketplace. Ignite can start on any one of them. SuperNova and NovaX run co-sell across AWS, Microsoft and Google Cloud.' },
+  { q: 'Which program is right for us?', a: 'Ignite (1 month) is for Pre-Series A to Series A ISVs that need a listing or have one with little traction. SuperNova (4 months) is for Series A to Series B ISVs entering the US market. NovaX (6 months) is for Series A to Series C ISVs scaling repeatable multi-cloud revenue. Use the program finder above, or book a 30-minute session and Jen will tell you which fits.' },
+  { q: 'How much does a program cost?', a: 'Every SaaSNova program is custom. On a 30-minute scoping call we look at your listing, your clouds and your targets, then send a proposal with the scope, timeline and investment.' },
+  { q: 'How do we buy?', a: 'After the scoping call you receive a proposal. You can contract with SaaSNova directly, or procure through your cloud marketplace if your procurement team prefers. We walk you through either path.' },
+  { q: 'How fast will we see results?', a: 'Ignite runs for one month. GuardDog launched its first SaaS listing on AWS Marketplace in one week with SaaSNova, after nearly two years of trying alone. Simplesense unlocked more than $40K in credits and funding through Ignite.' },
+];
+const faqLd = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const jsonLd = [
+  { '@type': 'WebSite', '@id': `${site.url}/#website`, url: site.url, name: 'SaaSNova', publisher: { '@id': `${site.url}/#organization` } },
+  faqLd,
+];
+---
+<Base
+  title="SaaSNova | The first operator-led GTM execution engine for cloud marketplaces"
+  description="SaaSNova helps SaaS ISVs and channel partners turn AWS, Microsoft Azure and Google Cloud marketplaces into a predictable revenue channel. Flagship programs: Ignite, SuperNova and NovaX."
+  jsonLd={jsonLd}
+  brandSuffix={false}
+>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero bg-glow">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <svg class="star" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#008BF8"/><stop offset="1" stop-color="#FA0F9C"/></linearGradient></defs><path d="M100 0l12 88 88 12-88 12-12 88-12-88L0 100l88-12z" fill="url(#sg)"/></svg>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <p class="kicker">GTM execution across AWS, Microsoft Azure and Google Cloud</p>
+        <h1 class="hero-h"><span class="l">The first</span> <span class="l grad">operator-led GTM</span> <span class="l grad">execution engine.</span></h1>
+        <p class="lead hero-lead">
+          SaaSNova helps SaaS ISVs and channel partners turn cloud marketplaces into a <strong>predictable revenue channel</strong>.
+          We work alongside your team to execute your Marketplace GTM, strengthen co-sell with hyperscaler field teams, and create
+          measurable pipeline and revenue.
+        </p>
+        <ul class="clouds" role="list" aria-label="Hyperscalers we execute on">
+          <li><Image src={awsLogo} alt="" height={40} /><span>AWS</span></li>
+          <li><Image src={azureLogo} alt="" height={40} /><span>Microsoft Azure</span></li>
+          <li><Image src={gcpLogo} alt="" height={40} /><span>Google Cloud</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-lg" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_hero">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            {primaryCta.label}
+          </a>
+          <a class="btn btn-secondary btn-lg" href="#programs">Explore programs</a>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div class="video-frame">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${heroVideo}?rel=0&modestbranding=1&playsinline=1`}
+            title="Why SaaSNova exists: execution-led GTM for ISVs, with founder Jen Dawson"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="eager"
+          ></iframe>
+        </div>
+        <div class="float f1"><Image src={advancedBadge} alt="" width={44} height={44} /><span><strong>AWS Advanced Tier</strong>Services Partner</span></div>
+        <div class="float f2"><span class="big num">100+</span><span>ISVs activated<br />across 3 clouds</span></div>
+        <div class="float f3"><span class="dot" aria-hidden="true"></span><span><strong>Official launch partner</strong>AWS Marketplace Storefront</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TRUST ═══ -->
+  <section class="trust" aria-labelledby="trust-h">
+    <div class="container">
+      <div class="badges">
+        <div class="badge-imgs">
+          <Image src={advancedBadge} alt="AWS Partner, Advanced Tier Services" width={92} height={92} />
+          <Image src={aiBadge} alt="AWS Partner, AI Services Competency" width={92} height={92} />
+        </div>
+        <ul role="list" class="creds">
+          <li><strong>AWS Advanced Tier</strong><span>Services Partner</span></li>
+          <li><strong>AWS AI Services</strong><span>Competency Partner</span></li>
+          <li><strong>Storefront launch partner</strong><span>AWS Marketplace</span></li>
+          <li><strong>Women-owned</strong><span>Founder-led business</span></li>
+        </ul>
+      </div>
+      <p id="trust-h" class="trust-title">Trusted by <strong>100+ SaaS ISVs</strong> scaling with hyperscalers</p>
+      <LogoMarquee logos={customerLogos} label="Customers" duration={55} />
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIALS ═══ -->
+  <section class="section bg-grid" aria-labelledby="love-h" id="customers">
+    <div class="container">
+      <div class="section-head split-head">
+        <div>
+          <p class="kicker pink">What ISV leaders and field teams say</p>
+          <h2 id="love-h">Don’t take our word for it. <span class="grad">Take theirs.</span></h2>
+        </div>
+        <p>Founders, CEOs, alliance leaders and AWS partner teams on what changed once SaaSNova started executing.</p>
+      </div>
+      <TestimonialWall />
+      <div class="g2 reveal">
+        <div class="stars" aria-hidden="true">★★★★★</div>
+        <p><strong>Worked with SaaSNova?</strong> Share your experience on G2. It helps other ISVs choose with confidence.</p>
+        <a class="btn btn-secondary btn-sm" href={g2ReviewUrl} target="_blank" rel="noopener" data-track="g2_review">Review us on G2</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROBLEM → TRANSFORMATION ═══ -->
+  <section class="section bg-mist" aria-labelledby="gap-h">
+    <div class="container split problem">
+      <div class="reveal">
+        <p class="kicker orange">The resource gap</p>
+        <h2 id="gap-h">So your marketplace listing is live. <span class="grad">But no pipeline means no revenue.</span></h2>
+        <p class="lead">
+          Most ISVs get listed and then stall. Cloud field teams don’t engage, co-sell submissions go unanswered, and MDF sits
+          unclaimed because nobody inside owns the motion. We step in as your dedicated cloud GTM operators and fill that gap.
+        </p>
+        <a class="link-arrow" href="#programs">See how we fix it</a>
+      </div>
+      <div class="transform reveal" aria-label="Pipeline transformation">
+        <div class="state before">
+          <p class="state-h">Before</p>
+          <ul role="list">
+            <li>Listing live, zero co-sell</li>
+            <li>No field relationships</li>
+            <li>MDF sitting unclaimed</li>
+          </ul>
+          <p class="status">Status: Dormant</p>
+        </div>
+        <div class="arrow" aria-hidden="true"><span class="arrow-ic">→</span><span class="arrow-l">SaaSNova<br />execution</span></div>
+        <div class="state after">
+          <p class="state-h">After</p>
+          <ul role="list">
+            <li>Active pipeline</li>
+            <li>Field relationships active</li>
+            <li>MDF unlocked and used</li>
+          </ul>
+          <p class="status">Status: Operational</p>
+        </div>
+        <dl class="stats">
+          <div><dt><span class="num" data-count="2000" data-suffix="+">2K+</span></dt><dd>PSQLs · Arctic Wolf</dd></div>
+          <div><dt><span class="num" data-count="300" data-prefix="$" data-suffix="K">$300K</span></dt><dd>MDF secured · Dataminr</dd></div>
+          <div><dt><span class="num" data-count="9" data-suffix="X">9X</span></dt><dd>ROI · Arctic Wolf</dd></div>
+          <div><dt><span class="num" data-count="100" data-suffix="+">100+</span></dt><dd>ISVs activated</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW WE EXECUTE ═══ -->
+  <section class="section" aria-labelledby="exec-h">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker">What execution means at SaaSNova</p>
+        <h2 id="exec-h">We don’t hand you a playbook. <span class="grad">We execute it.</span></h2>
+        <p>Every engagement is shaped to your GTM stage, your cloud mix and your revenue goals. Then our operators go and do the work.</p>
+      </div>
+      <ol class="moves" role="list">
+        {moves.map((m, i) => (
+          <li class="move reveal" style={`--c:${m.color};transition-delay:${i * 80}ms`}>
+            <span class="move-n" aria-hidden="true">0{i + 1}</span>
+            <p class="verb">{m.verb}</p>
+            <h3>{m.title}</h3>
+            <p>{m.body}</p>
+            <p class="outcome"><span aria-hidden="true">✓</span> {m.outcome}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="cloud-grid">
+        {clouds.map((c) => (
+          <div class="cloud reveal">
+            <div class="cloud-top"><Image src={c.logo} alt="" height={56} /><h3>{c.name}</h3></div>
+            <ul role="list" class="checks">{c.items.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FLAGSHIP PROGRAMS ═══ -->
+  <section class="section on-ink" id="programs" aria-labelledby="prog-h">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker pink">Flagship programs</p>
+        <h2 id="prog-h">Pick your stage. <span class="grad">We customize the execution.</span></h2>
+        <p>Three programs, from first listing to global multi-cloud scale. Each one is scoped to your clouds, your listing and your revenue targets.</p>
+      </div>
+      <ProgramCards />
+
+      <div class="finder-wrap" id="program-finder">
+        <div class="finder-copy reveal">
+          <p class="kicker">60-second program finder</p>
+          <h3>Not sure which program fits?</h3>
+          <p>Answer four questions and we’ll point you to the right starting program. Then confirm it with Jen on a 30-minute call.</p>
+          <ul role="list" class="checks">
+            <li>No forms, no email required</li>
+            <li>Based on how we scope real engagements</li>
+          </ul>
+        </div>
+        <ProgramFinder />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MORE SOLUTIONS ═══ -->
+  <section class="section" aria-labelledby="sol-h">
+    <div class="container">
+      <div class="section-head split-head">
+        <div>
+          <p class="kicker">Execution solutions</p>
+          <h2 id="sol-h">Need one motion, not a full program?</h2>
+        </div>
+        <p>Embedded execution for ISVs that already have a motion and need operators to close a specific gap, month over month.</p>
+      </div>
+      <ul role="list" class="sol-grid">
+        {services.map((s) => (
+          <li>
+            <a class="sol reveal" href={offeringPath(s)}>
+              <span class="sol-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={solutionIcons[s.slug] ?? 'M4 12h16'} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+              <span class="sol-t">{s.short}{s.noCost && <span class="tag tag-ok">No cost</span>}</span>
+              <span class="sol-d">{s.summary.split('. ')[0].replace(/\.$/, '')}.</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="center-link"><a class="link-arrow" href="/solutions">Compare every solution</a></p>
+    </div>
+  </section>
+
+  <!-- ═══ STOREFRONT ═══ -->
+  <section class="section storefront bg-mist" aria-labelledby="sf-h">
+    <div class="container split even sf">
+      <div class="reveal">
+        <p class="kicker pink">Official launch partner · AWS Marketplace Storefront</p>
+        <h2 id="sf-h">We launched with AWS Marketplace Storefront. <span class="grad">Now we build storefronts for ISVs.</span></h2>
+        <p class="lead">
+          SaaSNova was selected as an official launch partner for AWS Marketplace Storefront. We deploy and operate branded
+          storefronts, including the Women-Owned Cloud Innovation Storefront with AWS and The Female Quotient.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-secondary" href="/storefront">Explore our storefront work</a>
+          <a class="link-arrow" href={offeringPath(services.find((s) => s.slug === 'storefront')!)}>Storefront as a Service</a>
+        </div>
+      </div>
+      <figure class="sf-img reveal">
+        <Image src={storefrontBanner} alt="The Women-Owned Cloud Innovation Storefront on AWS Marketplace, deployed by SaaSNova" widths={[480, 800, 1100]} sizes="(min-width: 60rem) 45vw, 100vw" />
+      </figure>
+    </div>
+    <div class="sf-logos">
+      <p class="container sf-cap">Companies on AWS Marketplace Storefront with SaaSNova</p>
+      <LogoMarquee logos={storefrontLogos.slice(0, 16)} label="Storefront companies, row one" duration={70} height={30} />
+      <LogoMarquee logos={storefrontLogos.slice(16)} label="Storefront companies, row two" duration={70} height={30} reverse />
+    </div>
+  </section>
+
+  <!-- ═══ CASE STUDIES ═══ -->
+  <section class="section" aria-labelledby="cs-h">
+    <div class="container">
+      <div class="section-head split-head">
+        <div>
+          <p class="kicker orange">Case studies</p>
+          <h2 id="cs-h">Results that show up in <span class="grad">the pipeline report.</span></h2>
+        </div>
+        <p>How our operating model took two security ISVs from unmanaged to field priority inside AWS.</p>
+      </div>
+      <div class="cases">
+        {trackRecord.map((t, i) => (
+          <a class="case reveal" href={`/case-studies/${t.slug}`} style={`transition-delay:${i * 90}ms`}>
+            <div class="case-top">
+              <Image src={t.logo} alt={`${t.company} logo`} height={34} />
+              <span class="tag tag-pink">Case study</span>
+            </div>
+            <h3>{t.title}</h3>
+            <dl class="case-stats">
+              {t.results.slice(0, 3).map((r) => (<div><dt class="num">{r.n}</dt><dd>{r.l}</dd></div>))}
+            </dl>
+            <span class="link-arrow">Read the {t.company} story</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ COMPARISON ═══ -->
+  <section class="section bg-mist" aria-labelledby="cmp-h">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker">Why SaaSNova</p>
+        <h2 id="cmp-h">Not advice. Not theory. <span class="grad">Execution.</span></h2>
+        <p>Playbooks tell you what to do. Software gives you a dashboard. We embed as your cloud GTM operators and do the work.</p>
+      </div>
+      <div class="cmp-wrap reveal">
+        <table class="cmp">
+          <caption class="visually-hidden">How SaaSNova compares with playbooks, fractional hires and software-only platforms</caption>
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              <th scope="col" class="us">SaaSNova</th>
+              <th scope="col">Playbooks and fractional hires</th>
+              <th scope="col">Software-only platforms</th>
+            </tr>
+          </thead>
+          <tbody>
+            {compare.map((c, i) => (
+              <tr>
+                <th scope="row">{c}</th>
+                <td class="us"><span class="yes" aria-label="Yes">✓</span></td>
+                <td>{i === 0 || i === 4 ? <span class="part">Partly</span> : <span class="no" aria-label="No">—</span>}</td>
+                <td>{i === 5 ? <span class="part">Dashboards only</span> : <span class="no" aria-label="No">—</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOUNDER ═══ -->
+  <section class="section founder-sec" aria-labelledby="founder-h">
+    <div class="container split founder">
+      <div class="photo reveal">
+        <Image src={jenStage} alt="Jen Dawson, founder and CEO of SaaSNova, speaking on stage" widths={[480, 800, 1100]} sizes="(min-width: 60rem) 42vw, 100vw" />
+        <div class="photo-tag"><Image src={jenPhoto} alt="" width={52} height={52} /><span><strong>Jen Dawson</strong>Founder and CEO</span></div>
+      </div>
+      <div class="reveal">
+        <p class="kicker">Founder-led, on purpose</p>
+        <h2 id="founder-h">Built by an operator who ran GTM <span class="grad">inside AWS.</span></h2>
+        <p class="lead">
+          Jen Dawson, SaaSNova’s founder and CEO, is a former Global GTM Lead at AWS with more than 25 years in cloud go-to-market.
+          She has activated more than 100 ISVs across AWS, Microsoft Azure and Google Cloud.
+        </p>
+        <blockquote class="jen-q">
+          “We built SaaSNova to close the execution gap for SaaS companies. Our customers need the Marketplace, partner, and co-sell work done.”
+        </blockquote>
+        <dl class="mini-stats">
+          <div><dt class="num">25+</dt><dd>years in cloud GTM</dd></div>
+          <div><dt class="num">100+</dt><dd>ISVs activated</dd></div>
+          <div><dt class="num">3</dt><dd>hyperscalers</dd></div>
+        </dl>
+        <div class="btn-row"><a class="btn btn-secondary" href="/about">Meet the team</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SHOW + EVENTS ═══ -->
+  <section class="section on-ink" aria-labelledby="show-h">
+    <div class="container split even show">
+      <div class="reveal">
+        <p class="kicker pink">The Jen GTM Show</p>
+        <h2 id="show-h">Why execution produces pipeline <span class="grad">that advice never will.</span></h2>
+        <p class="lead">Jen on the exact execution gap that keeps ISVs from generating co-sell pipeline on AWS, Azure and Google Cloud. No frameworks. No theory. What actually works.</p>
+        <div class="btn-row"><a class="btn btn-light" href="/show">Watch all episodes</a></div>
+      </div>
+      <div class="reveal"><YouTube id="EN63uxhcn08" title="Cloud GTM execution: why most ISVs stall on Marketplace" /></div>
+    </div>
+    <div class="container ground">
+      <p class="ground-h">On the ground, where field relationships start</p>
+      <ul role="list" class="ground-grid">
+        <li class="reveal"><Image src={rsac} alt="Jen Dawson at RSA Conference 2026 in San Francisco" widths={[400, 700]} sizes="(min-width: 60rem) 30vw, 90vw" /><p><strong>RSA Conference 2026</strong>San Francisco · meeting security ISV leaders and cloud field teams</p></li>
+        <li class="reveal"><Image src={reinvent} alt="Jen Dawson at AWS re:Invent in Las Vegas" widths={[400, 700]} sizes="(min-width: 60rem) 30vw, 90vw" /><p><strong>AWS re:Invent</strong>Las Vegas · every year, with ISV leaders, AWS field teams and PDMs</p></li>
+        <li class="reveal"><Image src={speaking} alt="Jen Dawson delivering a keynote on cloud co-sell execution" widths={[400, 700]} sizes="(min-width: 60rem) 30vw, 90vw" /><p><strong>GTM School of Thoughts</strong>Keynote · the field dynamics that decide whether co-sell gets answered</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ HOW TO START ═══ -->
+  <section class="section" aria-labelledby="start-h">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker">How to start</p>
+        <h2 id="start-h">Three steps from first call <span class="grad">to execution.</span></h2>
+        <p>Every SaaSNova program is custom. We scope yours on a 30-minute call, then send a proposal with the scope, timeline and investment.</p>
+      </div>
+      <ol class="steps" role="list">
+        <li class="reveal"><span class="n">1</span><h3>30-minute strategy session</h3><p>Jen reviews your listing, clouds, co-sell activity and targets with you, and tells you what she would do first.</p></li>
+        <li class="reveal"><span class="n">2</span><h3>Custom program proposal</h3><p>You get a proposal for the program that fits: deliverables, cadence, owners, timeline and investment.</p></li>
+        <li class="reveal"><span class="n">3</span><h3>Operators start executing</h3><p>Our team starts work on an agreed cadence, and you review progress against agreed KPIs every month.</p></li>
+      </ol>
+      <div class="start-cta reveal">
+        <a class="btn btn-lg" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_steps">{primaryCta.label}</a>
+        <p class="small muted">Jen reviews every booking personally.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ INSIGHTS ═══ -->
+  {insights.length > 0 && (
+    <section class="section bg-mist" aria-labelledby="ins-h">
+      <div class="container">
+        <div class="section-head split-head">
+          <div>
+            <p class="kicker">Insights</p>
+            <h2 id="ins-h">Practitioner-grade GTM intelligence.</h2>
+          </div>
+          <a class="link-arrow" href="/insights">All insights</a>
+        </div>
+        <ul role="list" class="posts">
+          {insights.map((e) => (
+            <li class="reveal">
+              <a href={`/insights/${e.id}`} class="post">
+                {e.data.heroImage && <img src={e.data.heroImage} alt="" width="800" height="450" loading="lazy" decoding="async" />}
+                <span class="post-body">
+                  {e.data.tags[0] && <span class="tag">{e.data.tags[0]}</span>}
+                  <span class="post-t">{e.data.title}</span>
+                  <span class="post-m">{fmt(e.data.date)}{e.data.readingTime && ` · ${e.data.readingTime} min read`}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="section" aria-labelledby="faq-h">
+    <div class="container split faq-split">
+      <div>
+        <p class="kicker">Questions buyers ask</p>
+        <h2 id="faq-h">Everything you need to know <span class="grad">before the call.</span></h2>
+        <p class="lead">Still have a question? Ask our assistant (bottom right), or <a href="/contact">send us a message</a>.</p>
+      </div>
+      <div class="faq">
+        {faqs.map((f, i) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  /* Hero */
+  .hero { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(3.5rem, 2rem + 4vw, 6rem); margin-top: -5.25rem; padding-top: calc(5.25rem + clamp(2.5rem, 1.5rem + 4vw, 5rem)); background: linear-gradient(180deg, #f2f8ff 0%, #fff 75%); }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background-image: linear-gradient(to right, rgba(10, 17, 40, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(10, 17, 40, 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 75% 80% at 60% 30%, #000 25%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 80% at 60% 30%, #000 25%, transparent 75%);
+  }
+  .star { position: absolute; width: 22rem; right: -6rem; top: 3rem; opacity: 0.07; z-index: -1; animation: spin 90s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hero-inner { display: grid; gap: clamp(2.5rem, 1.5rem + 3vw, 4rem); align-items: center; }
+  @media (min-width: 64rem) { .hero-inner { grid-template-columns: 1.15fr 1fr; } }
+  .hero-h { font-size: clamp(2.5rem, 1.2rem + 4.4vw, 4.45rem); line-height: 1.04; letter-spacing: -0.045em; font-weight: 850; }
+  .hero-h .l { display: block; }
+  .hero-h .grad { font-weight: 900; }
+  .hero-lead { margin-top: 1.5rem; max-width: 36rem; }
+  .hero-lead strong { color: var(--ink); font-weight: 650; }
+  .clouds { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.75rem; }
+  .clouds li { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.5rem 0.95rem 0.5rem 0.6rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); font-weight: 650; font-size: 0.9375rem; color: var(--ink); }
+  .clouds :global(img) { height: 22px; width: auto; }
+  .hero .btn-row { margin-top: 2rem; }
+
+  .hero-media { position: relative; }
+  .video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-lg); overflow: hidden; background: var(--night); box-shadow: 0 40px 80px -30px rgba(0, 60, 140, 0.45), 0 0 0 1px rgba(10, 17, 40, 0.06); }
+  .video-frame::before { content: ''; position: absolute; inset: -2px; border-radius: inherit; padding: 2px; background: var(--nova); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; z-index: 2; }
+  .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .hero-media::before { content: ''; position: absolute; inset: 8% -6% -10% 6%; z-index: -1; border-radius: 40px; background: radial-gradient(60% 60% at 30% 40%, rgba(0, 139, 248, 0.35), transparent 70%), radial-gradient(50% 50% at 80% 70%, rgba(250, 15, 156, 0.3), transparent 70%); filter: blur(30px); }
+  .float { position: absolute; display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1rem; border-radius: var(--r-md); background: rgba(255, 255, 255, 0.95); box-shadow: var(--shadow-lg); border: 1px solid var(--line); font-size: 0.8125rem; line-height: 1.3; color: var(--muted); animation: bob 6s ease-in-out infinite; }
+  .float strong { display: block; color: var(--ink); font-size: 0.875rem; }
+  .float :global(img) { width: 44px; height: 44px; }
+  .f1 { left: -1.5rem; bottom: -2rem; }
+  .f2 { right: -1rem; top: -1.75rem; animation-delay: -2s; }
+  .f2 .big { font-size: 1.6rem; font-weight: 850; letter-spacing: -0.03em; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .f3 { right: 1.5rem; bottom: -2.25rem; animation-delay: -4s; }
+  .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 4px rgba(250, 15, 156, 0.18); flex: none; }
+  @keyframes bob { 50% { transform: translateY(-6px); } }
+  @media (max-width: 63.99rem) { .f1 { left: 0.5rem; } .f2 { right: 0.5rem; } .f3 { display: none; } }
+  @media (max-width: 40rem) { .f2 { display: none; } .f1 { bottom: -1.5rem; } }
+  .hero-inner > * { min-width: 0; }
+  @media (max-width: 30rem) { .float { font-size: 0.75rem; padding: 0.5rem 0.7rem; } .f2 .big { font-size: 1.25rem; } .f1 :global(img) { width: 34px; height: 34px; } }
+
+  /* Trust */
+  .trust { padding-block: 3.25rem 2.75rem; border-bottom: 1px solid var(--line); }
+  .badges { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.5rem 2.5rem; padding: 1.25rem 1.5rem; border-radius: var(--r-lg); background: var(--mist); margin-bottom: 2.5rem; }
+  .badge-imgs { display: flex; gap: 1rem; }
+  .badge-imgs :global(img) { width: 92px; height: 92px; object-fit: contain; }
+  .creds { display: flex; flex-wrap: wrap; gap: 1rem 2.25rem; }
+  .creds li { display: grid; padding-left: 0.9rem; border-left: 3px solid; border-image: var(--nova) 1; line-height: 1.35; }
+  .creds strong { color: var(--ink); font-size: 1rem; }
+  .creds span { color: var(--muted); font-size: 0.875rem; }
+  .trust-title { text-align: center; color: var(--muted); font-weight: 550; margin-bottom: 1.75rem; }
+  .trust-title strong { color: var(--ink); }
+
+  .split-head { max-width: none; grid-template-columns: 1fr; align-items: end; }
+  @media (min-width: 60rem) { .split-head { grid-template-columns: 1.3fr 1fr; gap: 3rem; } }
+  .split-head h2 { margin-top: 0; }
+  .split-head .kicker { margin-bottom: 1rem; }
+
+  .g2 { margin-top: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); background: #fff; border: 1px solid var(--line); }
+  .g2 .stars { color: var(--orange); letter-spacing: 0.15em; font-size: 1.1rem; }
+  .g2 p { flex: 1; min-width: 16rem; color: var(--muted); }
+  .g2 strong { color: var(--ink); }
+
+  /* Problem */
+  .problem { align-items: center; }
+  @media (min-width: 60rem) { .problem { grid-template-columns: 1fr 1.1fr; } }
+  .problem .lead { margin-block: 1.25rem 1.5rem; }
+  .transform { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: clamp(1.25rem, 1rem + 1.5vw, 2rem); background: #fff; border-radius: var(--r-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
+  @media (min-width: 40rem) { .transform { grid-template-columns: 1fr auto 1fr; align-items: center; } }
+  .state { padding: 1.25rem; border-radius: var(--r-md); border: 1.5px solid; }
+  .before { border-color: #ffc9e5; background: #fff7fb; }
+  .after { border-color: #b9e0ff; background: #f5fbff; }
+  .state-h { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .before .state-h { color: var(--pink-ink); }
+  .after .state-h { color: var(--blue-ink); }
+  .state ul { display: grid; gap: 0.5rem; font-size: 0.9375rem; color: var(--ink); font-weight: 550; }
+  .before li::before { content: '●'; color: var(--pink); margin-right: 0.5rem; font-size: 0.7rem; vertical-align: 0.1em; }
+  .after li::before { content: '✓'; color: var(--blue-ink); margin-right: 0.5rem; font-weight: 800; }
+  .status { margin-top: 1rem; font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 0.8125rem; font-weight: 600; padding: 0.4rem 0.65rem; border-radius: 6px; display: inline-block; }
+  .before .status { background: #ffe3f1; color: var(--pink-ink); }
+  .after .status { background: #dcf0ff; color: var(--blue-deep); }
+  .arrow { display: grid; justify-items: center; gap: 0.4rem; }
+  .arrow-ic { width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--nova-btn); color: #fff; font-size: 1.25rem; font-weight: 800; box-shadow: var(--glow-pink); }
+  .arrow-l { font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); text-align: center; line-height: 1.3; }
+  @media (max-width: 39.99rem) { .arrow-ic { transform: rotate(90deg); } }
+  .stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 0.5rem; }
+  @media (min-width: 40rem) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stats div { padding: 1rem 0.75rem; border-radius: var(--r-md); background: var(--mist); text-align: center; }
+  .stats dt { font-size: 1.75rem; font-weight: 850; letter-spacing: -0.03em; line-height: 1.1; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stats dd { margin: 0.25rem 0 0; font-size: 0.8125rem; color: var(--muted); font-weight: 550; }
+
+  /* Moves */
+  .moves { display: grid; gap: 1.25rem; }
+  @media (min-width: 48rem) { .moves { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 72rem) { .moves { grid-template-columns: repeat(4, 1fr); } }
+  .move { position: relative; display: flex; flex-direction: column; gap: 0.6rem; padding: 1.75rem 1.5rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .move::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--c); transform: scaleX(0.25); transform-origin: left; transition: transform 400ms var(--ease); }
+  .move:hover::after { transform: scaleX(1); }
+  .move-n { position: absolute; right: 1.25rem; top: 1rem; font-size: 3.5rem; font-weight: 900; letter-spacing: -0.05em; color: var(--mist-2); line-height: 1; }
+  .verb { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c); filter: brightness(0.85); }
+  .move h3 { font-size: 1.25rem; }
+  .move > p:not(.verb):not(.outcome) { color: var(--muted); font-size: 0.975rem; }
+  .outcome { margin-top: auto; padding-top: 0.75rem; font-weight: 650; font-size: 0.9375rem; color: var(--ink); }
+  .outcome span { color: var(--c); font-weight: 900; }
+
+  .cloud-grid { display: grid; gap: 1.25rem; margin-top: 1.25rem; }
+  @media (min-width: 56rem) { .cloud-grid { grid-template-columns: repeat(3, 1fr); } }
+  .cloud { padding: 1.5rem; border-radius: var(--r-lg); background: linear-gradient(160deg, var(--mist), #fff); border: 1px solid var(--line); }
+  .cloud-top { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; }
+  .cloud-top :global(img) { height: 40px; width: auto; max-width: 64px; object-fit: contain; }
+  .cloud h3 { font-size: 1.2rem; }
+  .cloud .checks { font-size: 0.95rem; }
+
+  /* Finder */
+  .finder-wrap { display: grid; gap: 2rem; margin-top: clamp(3rem, 2rem + 3vw, 5rem); align-items: center; }
+  @media (min-width: 60rem) { .finder-wrap { grid-template-columns: 1fr 1.25fr; gap: 4rem; } }
+  .finder-copy h3 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.4rem); font-weight: 850; letter-spacing: -0.035em; margin-bottom: 1rem; }
+  .finder-copy .checks { margin-top: 1.25rem; }
+
+  /* Solutions */
+  .sol-grid { display: grid; gap: 1rem; }
+  @media (min-width: 40rem) { .sol-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 64rem) { .sol-grid { grid-template-columns: repeat(3, 1fr); } }
+  .sol-grid li { display: flex; }
+  .sol { display: grid; gap: 0.5rem; align-content: start; width: 100%; padding: 1.4rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); text-decoration: none; color: inherit; transition: border-color 200ms, box-shadow 200ms, transform 200ms; }
+  .sol:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateY(-3px); }
+  .sol-ic { width: 2.6rem; height: 2.6rem; border-radius: 12px; display: grid; place-items: center; background: var(--nova-soft); color: var(--blue-ink); margin-bottom: 0.35rem; }
+  .sol-ic svg { width: 1.3rem; height: 1.3rem; }
+  .sol-t { font-weight: 750; color: var(--ink); font-size: 1.05rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; letter-spacing: -0.01em; }
+  .sol-d { color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
+  .center-link { text-align: center; margin-top: 2rem; }
+
+  /* Storefront */
+  .sf { align-items: center; }
+  .sf .lead { margin-block: 1.25rem 1.75rem; }
+  .sf-img { margin: 0; border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-lg); border: 6px solid #fff; }
+  .sf-img :global(img) { width: 100%; height: auto; }
+  .sf-logos { margin-top: clamp(3rem, 2rem + 2vw, 4rem); display: grid; gap: 1.5rem; }
+  .sf-cap { text-align: center; color: var(--muted); font-weight: 600; font-size: 0.9375rem; }
+
+  /* Cases */
+  .cases { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+  .case { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+  .case :global(img) { max-width: 100%; justify-self: start; }
+  @media (max-width: 40rem) { .case .case-stats { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 56rem) { .cases { grid-template-columns: 1fr 1fr; } }
+  .case { display: grid; gap: 1.1rem; padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem); border-radius: var(--r-xl); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+  .case:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .case-top { display: flex; justify-content: space-between; align-items: center; }
+  .case-top :global(img) { height: 34px; width: auto; }
+  .case h3 { font-size: 1.35rem; }
+  .case-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .case-stats div { padding: 0.9rem 0.75rem; border-radius: var(--r-md); background: var(--mist); }
+  .case-stats dt { font-size: 1.5rem; font-weight: 850; letter-spacing: -0.03em; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1.15; }
+  .case-stats dd { margin: 0.2rem 0 0; font-size: 0.8125rem; color: var(--muted); line-height: 1.35; }
+
+  /* Comparison */
+  .cmp-wrap { overflow-x: auto; border-radius: var(--r-xl); background: #fff; box-shadow: var(--shadow); border: 1px solid var(--line); }
+  .cmp { width: 100%; border-collapse: collapse; min-width: 44rem; }
+  .cmp th, .cmp td { padding: 1rem 1.25rem; text-align: center; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+  .cmp thead th { font-size: 0.8125rem; font-weight: 750; color: var(--muted); letter-spacing: 0.02em; background: #fff; }
+  .cmp tbody th { text-align: left; font-weight: 600; color: var(--ink); }
+  .cmp tr:last-child th, .cmp tr:last-child td { border-bottom: 0; }
+  .cmp .us { background: linear-gradient(180deg, rgba(0, 139, 248, 0.07), rgba(250, 15, 156, 0.07)); }
+  .cmp thead .us { color: var(--ink); font-size: 1rem; font-weight: 850; }
+  .yes { display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--nova-btn); color: #fff; font-weight: 800; }
+  .no { color: var(--line-strong); font-weight: 700; }
+  .part { font-size: 0.8125rem; font-weight: 600; color: var(--subtle); }
+
+  /* Founder */
+  .founder { align-items: center; }
+  @media (min-width: 60rem) { .founder { grid-template-columns: 1fr 1.1fr; } }
+  .photo { position: relative; }
+  .photo > :global(img) { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; object-position: 55% 30%; border-radius: var(--r-xl); box-shadow: var(--shadow-lg); }
+  .photo-tag { position: absolute; left: 1.25rem; bottom: 1.25rem; display: flex; gap: 0.75rem; align-items: center; padding: 0.55rem 1rem 0.55rem 0.55rem; border-radius: 999px; background: rgba(255, 255, 255, 0.95); box-shadow: var(--shadow); font-size: 0.8125rem; color: var(--muted); line-height: 1.3; }
+  .photo-tag strong { display: block; color: var(--ink); font-size: 0.95rem; }
+  .photo-tag :global(img) { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+  .founder .lead { margin-block: 1.25rem; }
+  .jen-q { margin: 0 0 1.5rem; padding: 0.25rem 0 0.25rem 1.25rem; border-left: 4px solid; border-image: var(--nova) 1; font-style: italic; font-size: 1.125rem; line-height: 1.6; color: var(--ink); }
+  .mini-stats { display: flex; gap: 2rem; margin-bottom: 1.75rem; }
+  .mini-stats dt { font-size: 2rem; font-weight: 850; letter-spacing: -0.04em; color: var(--ink); line-height: 1; }
+  .mini-stats dd { margin: 0.3rem 0 0; font-size: 0.875rem; color: var(--muted); }
+
+  /* Show + ground */
+  .show { align-items: center; }
+  .show .lead { margin-block: 1.25rem 1.75rem; }
+  .ground { margin-top: clamp(3.5rem, 2rem + 4vw, 5.5rem); }
+  .ground-h { font-weight: 700; color: #fff !important; font-size: 1.125rem; margin-bottom: 1.25rem; }
+  .ground-grid { display: grid; gap: 1.25rem; }
+  @media (min-width: 56rem) { .ground-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ground-grid li { border-radius: var(--r-lg); overflow: hidden; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--on-ink-line); }
+  .ground-grid :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; transition: transform 600ms var(--ease); }
+  .ground-grid li:hover :global(img) { transform: scale(1.04); }
+  .ground-grid p { padding: 1rem 1.15rem 1.2rem; font-size: 0.9rem; line-height: 1.5; }
+  .ground-grid strong { display: block; color: #fff; font-size: 1.05rem; margin-bottom: 0.2rem; }
+
+  /* Steps */
+  .steps { display: grid; gap: 1.25rem; counter-reset: s; }
+  @media (min-width: 56rem) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .steps li { position: relative; padding: 1.75rem 1.5rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); display: grid; gap: 0.6rem; align-content: start; }
+  .steps .n { width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--nova-btn); color: #fff; font-weight: 800; box-shadow: var(--glow-pink); }
+  .steps h3 { font-size: 1.2rem; margin-top: 0.4rem; }
+  .steps p { color: var(--muted); font-size: 0.975rem; }
+  .start-cta { display: grid; justify-items: center; gap: 0.75rem; margin-top: 2.5rem; text-align: center; }
+
+  /* Posts */
+  .posts { display: grid; gap: 1.25rem; }
+  @media (min-width: 56rem) { .posts { grid-template-columns: repeat(3, 1fr); } }
+  .post { display: grid; height: 100%; border-radius: var(--r-lg); overflow: hidden; background: #fff; border: 1px solid var(--line); text-decoration: none; color: inherit; transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+  .post:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .post img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--mist-2); }
+  .post-body { display: grid; gap: 0.65rem; padding: 1.25rem 1.35rem 1.5rem; align-content: start; }
+  .post-body .tag { justify-self: start; }
+  .post-t { font-weight: 750; font-size: 1.15rem; line-height: 1.35; color: var(--ink); letter-spacing: -0.015em; }
+  .post:hover .post-t { color: var(--blue-ink); }
+  .post-m { font-size: 0.875rem; color: var(--subtle); }
+
+  /* FAQ */
+  .faq-split { align-items: start; }
+  .faq-split .lead { margin-top: 1.25rem; }
+  .faq { display: grid; gap: 0.75rem; }
+  .faq details { border: 1px solid var(--line); border-radius: var(--r-md); background: #fff; padding: 0 1.25rem; transition: box-shadow 200ms, border-color 200ms; }
+  .faq details[open] { box-shadow: var(--shadow); border-color: var(--blue-100); }
+  .faq summary { cursor: pointer; list-style: none; padding: 1.1rem 2rem 1.1rem 0; font-weight: 700; color: var(--ink); position: relative; font-size: 1.0625rem; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; position: absolute; right: 0; top: 50%; translate: 0 -50%; width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--blue-50); color: var(--blue-ink); font-weight: 600; transition: transform 200ms; }
+  .faq details[open] summary::after { content: '–'; background: var(--nova-btn); color: #fff; }
+  .faq details p { padding-bottom: 1.25rem; color: var(--muted); }
+</style>
+
+<script>
+  // Count-up numbers (2K+, $300K, 9X, 100+) when the stats scroll into view.
+  const nums = document.querySelectorAll<HTMLElement>('[data-count]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = (n: number, el: HTMLElement) => {
+    const target = Number(el.dataset.count);
+    const text = target >= 1000 ? `${Math.round(n / 100) / 10}K` : String(Math.round(n));
+    return `${el.dataset.prefix ?? ''}${text}${el.dataset.suffix ?? ''}`;
+  };
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const el = en.target as HTMLElement;
+      io.unobserve(el);
+      const target = Number(el.dataset.count);
+      const t0 = performance.now();
+      const tick = (t: number) => {
+        const p = Math.min(1, (t - t0) / 1400);
+        el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)), el);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }), { threshold: 0.6 });
+    nums.forEach((n) => io.observe(n));
+  }
+</script>

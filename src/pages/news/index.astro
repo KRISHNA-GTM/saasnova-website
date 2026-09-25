@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { site } from '../../data/site';
+
+const items = (await getCollection('news', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="News and press" description="SaaSNova announcements: AWS Advanced Tier Services Partner status, launch partner for AWS Marketplace Storefront, and partnerships with Carahsoft and SaaSify.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'News' }]} />
+      <h1>News and press</h1>
+      <p class="lead">Announcements from SaaSNova. Media inquiries: <a href={`mailto:${site.emails.marketing}`}>{site.emails.marketing}</a>.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <ArticleList entries={items} collection="news" layout="list" />
+      <p class="ext"><a href="https://www.einpresswire.com/article/908400568/saasify-and-saasnova-launch-the-first-aws-partner-starter-bundle-to-help-isvs-go-marketplace-co-sell-ready-in-weeks" target="_blank" rel="noopener">May 10, 2026: SaaSify and SaaSNova launch the AWS Partner Starter Bundle (EIN Presswire)</a></p>
+    </div>
+  </section>
+</Base>
+<style>.ext { margin-top: 2rem; }</style>

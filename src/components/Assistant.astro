@@ -1,0 +1,90 @@
+---
+// "Ask SaaSNova" assistant.
+// Guided mode (default): answers from /assistant-kb.json, generated at build time from site data.
+// Live mode: when PUBLIC_CHAT_ENDPOINT is set at build time, questions stream from the
+// SaaSNova chat API (api/chat, Amazon Bedrock). No credentials ever reach the browser.
+import { integrations, primaryCta } from '../data/site';
+const endpoint = integrations.chatEndpoint;
+---
+<div class="assistant" data-assistant data-endpoint={endpoint} data-book={primaryCta.href}>
+  <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="assistant-panel" data-open>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 13.6 9l6.4 1.6-6.4 1.6L12 18.7l-1.6-6.5L4 10.6 10.4 9z" fill="currentColor"/></svg>
+    <span>Ask SaaSNova</span>
+  </button>
+
+  <section id="assistant-panel" class="chat-panel" role="dialog" aria-modal="false" aria-labelledby="assistant-title" hidden data-panel>
+    <header>
+      <div>
+        <h2 id="assistant-title">Ask SaaSNova</h2>
+        <p>{endpoint ? 'AI answers about our programs and services. Verify important details with our team.' : 'Quick answers about our programs, services and how to buy.'}</p>
+      </div>
+      <button type="button" class="x" aria-label="Close assistant" data-close>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <div class="log" data-log aria-live="polite" aria-relevant="additions" tabindex="0" role="log" aria-label="Conversation">
+      <div class="msg bot">
+        <p>Hi. Ask about a program, a service, AWS Partner Central, PRM or how buying through AWS Marketplace works.</p>
+      </div>
+      <div class="chips" data-chips>
+        <button type="button">Which program fits us?</button>
+        <button type="button">How is pricing handled?</button>
+        <button type="button">Help with AWS co-sell</button>
+        <button type="button">Is PRM help free?</button>
+      </div>
+    </div>
+    <form class="compose" data-form>
+      <label for="assistant-input" class="visually-hidden">Your question</label>
+      <input id="assistant-input" name="q" autocomplete="off" maxlength="500" placeholder="Type your question" required />
+      <button type="submit" class="btn btn-sm">Send</button>
+    </form>
+    <p class="foot"><a href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_assistant">{primaryCta.label}</a><a href="/contact">Contact the team</a></p>
+  </section>
+</div>
+
+<style>
+  .assistant { position: fixed; right: 1rem; bottom: 1rem; z-index: 60; }
+  :global(body.menu-open) .assistant { display: none; }
+  .chat-launcher {
+    display: inline-flex; align-items: center; gap: 0.5rem; min-height: 3rem; padding: 0.7rem 1.1rem;
+    border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 600;
+    box-shadow: 0 10px 30px -10px rgba(11, 26, 58, 0.6);
+  }
+  .chat-launcher svg { width: 1.1rem; height: 1.1rem; color: #9db6ff; }
+  .chat-launcher:hover { background: var(--ink-3); }
+  .chat-panel {
+    position: absolute; right: 0; bottom: 3.75rem; width: min(24rem, calc(100vw - 2rem));
+    height: min(34rem, calc(100dvh - 7rem)); display: flex; flex-direction: column;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .chat-panel[hidden] { display: none; }
+  header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 1.1rem; background: var(--ink); color: #fff; }
+  header h2 { font-family: var(--font-sans); font-size: 1.0625rem; font-weight: 650; color: #fff; letter-spacing: 0; }
+  header p { font-size: 0.8125rem; color: var(--on-ink-muted); margin-top: 0.2rem; line-height: 1.4; }
+  .x { background: none; border: 0; color: #fff; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border-radius: var(--r-sm); flex: none; }
+  .x:hover { background: rgba(255,255,255,.1); }
+  .x svg { width: 1rem; height: 1rem; }
+  .log { flex: 1; overflow-y: auto; padding: 1rem; display: grid; align-content: start; gap: 0.75rem; background: var(--mist); }
+  .log :global(.msg) { max-width: 88%; padding: 0.65rem 0.85rem; border-radius: 12px; font-size: 0.9375rem; line-height: 1.5; }
+  .log :global(.bot) { background: #fff; border: 1px solid var(--line); justify-self: start; border-bottom-left-radius: 4px; }
+  .log :global(.me) { background: var(--blue); color: #fff; justify-self: end; border-bottom-right-radius: 4px; }
+  .log :global(.msg p + p) { margin-top: 0.5rem; }
+  .log :global(.msg a) { font-weight: 600; }
+  .log :global(.typing) { color: var(--muted); font-style: italic; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chips button, .log :global(.chips button) {
+    border: 1px solid var(--line-strong); background: #fff; border-radius: 999px; padding: 0.4rem 0.75rem; font-size: 0.8438rem; color: var(--ink);
+  }
+  .chips button:hover { border-color: var(--blue); color: var(--blue); }
+  .compose { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--line); }
+  .compose input { flex: 1; min-width: 0; min-height: 2.5rem; padding: 0.5rem 0.75rem; border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); }
+  .compose input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(33,82,232,.2); }
+  .foot { display: flex; gap: 1.25rem; font-size: 0.8125rem; padding: 0 0.9rem 0.75rem; color: var(--muted); }
+  @media (max-width: 30rem) { .chat-launcher span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } .chat-launcher { padding: 0; width: 3.25rem; justify-content: center; } }
+</style>
+
+<script>
+  import { initAssistant } from '../scripts/assistant';
+  initAssistant();
+</script>

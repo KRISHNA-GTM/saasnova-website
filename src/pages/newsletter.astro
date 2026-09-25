@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { integrations } from '../data/site';
+---
+<Base title="The Nova Brief newsletter" description="The Nova Brief: SaaSNova's newsletter on AWS Marketplace, co-sell, Partner Central and PRM changes that affect ISV revenue.">
+  <section class="page-hero">
+    <div class="container split">
+      <div>
+        <Breadcrumbs items={[{ label: 'Resources', href: '/insights' }, { label: 'The Nova Brief' }]} />
+        <h1>The Nova Brief</h1>
+        <p class="lead">Changes to AWS Marketplace, co-sell, Partner Central and partner programs that affect your revenue, and what to do about them. Written by the operators who run these motions.</p>
+        <ul role="list" class="checks topics">
+          <li>AWS program and policy changes, explained</li>
+          <li>Co-sell and ACE practices that AWS sellers respond to</li>
+          <li>New insights, episodes and events from SaaSNova</li>
+        </ul>
+      </div>
+      <form class="panel form-grid" data-hs-form={integrations.hubspot.forms.newsletter} data-form-name="newsletter_page" data-success="You are subscribed. The next issue will arrive in your inbox." novalidate>
+        <h2 class="ft">Subscribe</h2>
+        <div class="field"><label for="n-em">Work email <span class="req" aria-hidden="true">*</span></label><input id="n-em" name="email" type="email" required autocomplete="email" data-label="Work email" /></div>
+        <div class="hp" aria-hidden="true"><label for="n-web">Website</label><input id="n-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
+        <p class="small muted">Unsubscribe at any time. See our <a href="/privacy">privacy policy</a>.</p>
+        <div><button type="submit" class="btn">Subscribe</button></div>
+        <p class="form-status" data-status role="status" tabindex="-1"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+<style>
+  .topics { margin-top: 2rem; }
+  .ft { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 650; letter-spacing: 0; }
+</style>

@@ -1,0 +1,170 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import CtaBand from './CtaBand.astro';
+import ArticleList from './ArticleList.astro';
+import { Image } from 'astro:assets';
+import jen from '../assets/images/jen-dp.jpg';
+import { site, primaryCta } from '../data/site';
+
+interface Props {
+  entry: CollectionEntry<'insights'> | CollectionEntry<'news'>;
+  collection: 'insights' | 'news';
+  related: CollectionEntry<'insights'>[] | CollectionEntry<'news'>[];
+}
+const { entry, collection, related } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const url = `${site.url}/${collection}/${entry.id}`;
+const fmt = (x: Date) => x.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const isPerson = d.author !== 'SaaSNova';
+const ld = {
+  '@type': collection === 'news' ? 'NewsArticle' : 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.date.toISOString(),
+  dateModified: (d.updated ?? d.date).toISOString(),
+  author: isPerson ? { '@type': 'Person', name: d.author.split(',')[0] } : { '@id': `${site.url}/#organization` },
+  publisher: { '@id': `${site.url}/#organization` },
+  mainEntityOfPage: url,
+  ...(d.heroImage ? { image: `${site.url}${d.heroImage}` } : {}),
+  keywords: d.tags.join(', '),
+};
+const section = collection === 'news' ? { label: 'News', href: '/news' } : { label: 'Insights', href: '/insights' };
+---
+<Base title={d.title} description={d.description} type="article" image={d.heroImage} published={d.date.toISOString()} modified={(d.updated ?? d.date).toISOString()} jsonLd={[ld]}>
+  <div class="progress" aria-hidden="true"><span data-progress></span></div>
+  <article>
+    <header class="a-head">
+      <div class="container-narrow">
+        <Breadcrumbs items={[section, { label: d.title.length > 48 ? d.title.slice(0, 46).trimEnd() + '…' : d.title }]} />
+        {d.tags.length > 0 && <p class="tags">{d.tags.map((t) => <span class="tag tag-neutral">{t}</span>)}</p>}
+        <h1>{d.title}</h1>
+        <p class="lede">{d.description}</p>
+        <p class="meta">
+          {d.author.startsWith('Jen') && <Image class="av" src={jen} alt="" width={40} height={40} />}
+          <span>{d.author}</span>
+          <time datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
+          {d.readingTime && <span>{d.readingTime} min read</span>}
+        </p>
+      </div>
+    </header>
+
+    <div class="container a-grid">
+      <div class="body">
+        {d.updateNote && <p class="note" role="note">{d.updateNote}</p>}
+        {d.heroImage && <img class="hero-img" src={d.heroImage} alt={d.heroAlt ?? ''} width="1600" height="900" decoding="async" fetchpriority="high" />}
+        <div class="prose article-prose" data-article>
+          <Content />
+        </div>
+        <aside class="author">
+          <Image src={jen} alt="Jen Dawson" width={72} height={72} />
+          <div>
+            <p class="au-n">Written by the SaaSNova operators</p>
+            <p class="au-d">SaaSNova is the first operator-led GTM execution engine for AWS, Microsoft Azure and Google Cloud marketplaces, founded by Jen Dawson, former Global GTM Lead at AWS.</p>
+          </div>
+        </aside>
+      </div>
+      <aside class="rail" aria-label="In this article">
+        <nav class="toc" data-toc hidden>
+          <p class="toc-h">In this article</p>
+          <ol role="list"></ol>
+        </nav>
+        <div class="rail-cta">
+          <p class="rc-h">Want this executed for you?</p>
+          <p>Our operators run this work inside your cloud marketplace motion.</p>
+          <a class="btn btn-sm" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_article_${entry.id}`}>Book a 30-min session</a>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section bg-mist" aria-labelledby="more-h">
+      <div class="container">
+        <div class="section-head"><h2 id="more-h">More {collection === 'news' ? 'news' : 'insights'}</h2></div>
+        <ArticleList entries={related} collection={collection} />
+      </div>
+    </section>
+  )}
+
+  <CtaBand />
+</Base>
+
+<style>
+  .progress { position: fixed; left: 0; right: 0; top: 0; height: 4px; z-index: 60; background: transparent; }
+  .progress span { display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(0); background: var(--nova); }
+  .a-head { padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem) 2rem; background: linear-gradient(180deg, #f2f8ff, #fff); }
+  .lede { margin-top: 1.25rem; font-size: 1.25rem; line-height: 1.55; color: var(--muted); max-width: 44rem; }
+  .meta :global(.av) { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+  .meta { align-items: center; }
+  .a-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem; padding-top: 1rem; }
+  @media (min-width: 72rem) { .a-grid { grid-template-columns: minmax(0, 46rem) 17rem; justify-content: center; gap: 5rem; } }
+  .rail { display: none; }
+  @media (min-width: 72rem) { .rail { display: grid; gap: 1.5rem; align-content: start; position: sticky; top: 7rem; height: max-content; } }
+  .toc-h, .rc-h { font-size: 0.75rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); margin-bottom: 0.75rem; }
+  .toc ol { display: grid; gap: 0.15rem; border-left: 2px solid var(--line); }
+  .toc a { display: block; padding: 0.35rem 0 0.35rem 1rem; margin-left: -2px; border-left: 2px solid transparent; text-decoration: none; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+  .toc a:hover { color: var(--ink); }
+  .toc a.on { color: var(--blue-ink); border-left-color: var(--blue); font-weight: 650; }
+  .rail-cta { padding: 1.25rem; border-radius: var(--r-lg); background: var(--night); color: var(--on-ink); display: grid; gap: 0.6rem; }
+  .rail-cta .rc-h { color: #ff9fd6; margin: 0; }
+  .rail-cta p:not(.rc-h) { color: var(--on-ink-muted); font-size: 0.9rem; }
+  .rail-cta .btn { justify-self: start; }
+  .author { display: flex; gap: 1rem; align-items: flex-start; margin-top: 3rem; padding: 1.5rem; border-radius: var(--r-lg); background: var(--mist); }
+  .author :global(img) { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; }
+  .au-n { font-weight: 750; color: var(--ink); }
+  .au-d { color: var(--muted); font-size: 0.9375rem; margin-top: 0.25rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+  .a-head h1 { font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem); line-height: 1.08; margin-top: 1rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; margin-top: 1.25rem; color: var(--muted); font-size: 0.9375rem; }
+  .meta span:first-child { color: var(--ink); font-weight: 600; }
+  .body { padding-bottom: var(--section); }
+  .note { background: var(--orange-50); border-left: 4px solid var(--orange); padding: 1rem 1.25rem; border-radius: 0 var(--r-md) var(--r-md) 0; margin-bottom: 2rem; font-size: 0.9688rem; }
+  .hero-img { width: 100%; height: auto; border-radius: var(--r-lg); border: 1px solid var(--line); margin-bottom: 2.5rem; }
+  .article-prose { max-width: 44rem; font-size: 1.125rem; line-height: 1.8; color: #243049; }
+  .article-prose > :global(* + *) { margin-top: 1.3em; }
+  .article-prose :global(.lead-para) { font-size: 1.375rem; color: var(--ink); font-weight: 600; line-height: 1.5; letter-spacing: -0.01em; }
+  .article-prose :global(h2) { scroll-margin-top: 7rem; padding-top: 0.5rem; }
+  .article-prose :global(strong) { color: var(--ink); }
+  .article-prose :global(figure) { margin: 2rem 0; }
+  .article-prose :global(img) { width: 100%; height: auto; }
+  .article-prose :global(h2) { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.9rem); }
+  .article-prose :global(h3) { font-size: 1.3rem; }
+  .article-prose :global(code) { font-size: 0.9em; background: var(--mist); padding: 0.1em 0.35em; border-radius: 4px; }
+  .article-prose :global(a) { word-break: break-word; }
+</style>
+
+<script>
+  // Reading progress bar and table-of-contents highlight.
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  const art = document.querySelector<HTMLElement>('[data-article]');
+  // Build the table of contents from the article's H2s (articles are stored as HTML).
+  const heads = Array.from(art?.querySelectorAll<HTMLElement>('h2') ?? []);
+  const toc = document.querySelector<HTMLElement>('[data-toc]');
+  heads.forEach((h, i) => {
+    if (!h.id) h.id = `section-${i + 1}`;
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `#${h.id}`;
+    a.textContent = h.textContent?.trim() ?? '';
+    li.append(a);
+    toc?.querySelector('ol')?.append(li);
+  });
+  if (toc && heads.length > 1) toc.hidden = false;
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc a'));
+  const onScroll = () => {
+    if (art && bar) {
+      const r = art.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.3 - r.top) / r.height));
+      bar.style.transform = `scaleX(${p})`;
+    }
+    let cur = -1;
+    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < 160) cur = i; });
+    links.forEach((a, i) => a.classList.toggle('on', i === cur));
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

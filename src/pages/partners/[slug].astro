@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import YouTube from '../../components/YouTube.astro';
+import { partners } from '../../data/partners';
+
+export function getStaticPaths() {
+  return partners.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props;
+const ext = (u?: string) => !!u && /^https?:/.test(u);
+---
+<Base title={`SaaSNova and ${p.name}`} description={p.summary}>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Partners', href: '/partners' }, { label: p.name }]} />
+      <div class="logo"><Image src={p.logo} alt={`${p.name} logo`} height={48} /></div>
+      <p class="kicker">{p.type} partner</p>
+      <h1>{p.headline}</h1>
+      <p class="lead">{p.summary}</p>
+      <div class="btn-row">
+        <a class="btn" href={p.cta.href} target="_blank" rel="noopener" data-track={`cta_partner_${p.slug}`}>{p.cta.label}</a>
+        {p.url && <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener">Visit {p.name}</a>}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>How we work together</h2></div>
+      <dl class="points">
+        {p.points.map((x) => <div><dt>{x.t}</dt><dd>{x.b}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  {p.video && (
+    <section class="section bg-mist">
+      <div class="container narrow-video">
+        <h2>SaaSNova and {p.name} on the partnership</h2>
+        <YouTube id={p.video} title={`SaaSNova and ${p.name} partnership`} />
+      </div>
+    </section>
+  )}
+
+  {p.news && (
+    <section class="section-tight">
+      <div class="container">
+        <a class="link-arrow" href={p.news} target={ext(p.news) ? '_blank' : undefined} rel={ext(p.news) ? 'noopener' : undefined}>Read the announcement</a>
+      </div>
+    </section>
+  )}
+
+  <CtaBand
+    title={`Explore what SaaSNova and ${p.name} can do for your AWS motion.`}
+    primaryLabel={p.cta.label}
+    primaryHref={p.cta.href}
+    secondaryLabel="All partners"
+    secondaryHref="/partners"
+  />
+</Base>
+
+<style>
+  .logo { margin-block: 1.75rem 1.25rem; }
+  .logo :global(img) { height: 48px; width: auto; }
+  .page-hero h1 { max-width: 26ch; }
+  .points { display: grid; gap: 2rem 3rem; }
+  @media (min-width: 48rem) { .points { grid-template-columns: 1fr 1fr; } }
+  .points div { border-top: 2px solid var(--ink); padding-top: 1rem; }
+  .points dt { font-weight: 650; color: var(--ink); font-size: 1.125rem; margin-bottom: 0.35rem; }
+  .points dd { margin: 0; color: var(--muted); }
+  .narrow-video { max-width: 56rem; display: grid; gap: 1.5rem; }
+</style>

@@ -1,0 +1,185 @@
+---
+// Interactive testimonial wall: pick a company, read what its leaders said, see the outcome.
+// All quotes are in the HTML (crawlable); JS only switches which one is visible.
+import { Image } from 'astro:assets';
+import { voicesFor } from '../data/testimonials';
+
+const voices = voicesFor('home');
+const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
+---
+<div class="wall" data-wall>
+  <div class="companies" role="tablist" aria-label="Choose a company">
+    {voices.map((v, i) => (
+      <button
+        type="button" role="tab" class="co" id={`tw-tab-${v.id}`}
+        aria-selected={i === 0 ? 'true' : 'false'} aria-controls={`tw-panel-${v.id}`} tabindex={i === 0 ? 0 : -1}
+        data-co={i}
+      >
+        <span class="co-logo"><Image src={v.logo} alt="" height={28} /></span>
+        <span class="co-name">{v.company}</span>
+        <span class="co-count">{v.quotes.length > 1 ? `${v.quotes.length} voices` : '1 voice'}</span>
+        <span class="bar" aria-hidden="true"><span></span></span>
+      </button>
+    ))}
+  </div>
+
+  <div class="stage">
+    {voices.map((v, i) => (
+      <section class="panel-q" id={`tw-panel-${v.id}`} role="tabpanel" aria-labelledby={`tw-tab-${v.id}`} hidden={i !== 0} data-panel={i}>
+        <div class="stage-top">
+          <Image class="stage-logo" src={v.logo} alt={`${v.company} logo`} height={36} />
+          {v.highlight && <p class="highlight"><span aria-hidden="true">★</span> {v.highlight}</p>}
+        </div>
+        {v.quotes.map((q, j) => (
+          <figure class="q" data-q={j} hidden={j !== 0}>
+            <blockquote><p>{q.quote}</p></blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">{initials(q.name)}</span>
+              <span class="who"><strong>{q.name}</strong><span>{q.title}</span></span>
+            </figcaption>
+          </figure>
+        ))}
+        {v.quotes.length > 1 && (
+          <div class="people" role="group" aria-label={`More from ${v.company}`}>
+            {v.quotes.map((q, j) => (
+              <button type="button" class="person" aria-pressed={j === 0 ? 'true' : 'false'} data-person={j}>
+                <span class="avatar sm" aria-hidden="true">{initials(q.name)}</span>{q.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+    ))}
+    <svg class="mark" viewBox="0 0 48 36" aria-hidden="true"><path d="M0 36V21.6C0 9.9 6.2 2.7 18.6 0l2.1 4.6C14 6.9 10.8 11 10.5 17h9.3v19H0Zm27.2 0V21.6C27.2 9.9 33.4 2.7 45.8 0L48 4.6c-6.7 2.3-9.9 6.4-10.2 12.4h9.3v19H27.2Z" fill="currentColor"/></svg>
+  </div>
+</div>
+
+<style>
+  .wall { display: grid; gap: 1.25rem; }
+  @media (min-width: 62rem) { .wall { grid-template-columns: 20rem 1fr; gap: 1.75rem; align-items: stretch; } }
+
+  .companies { display: flex; gap: 0.6rem; overflow-x: auto; padding: 0.25rem; scrollbar-width: thin; scroll-snap-type: x mandatory; }
+  @media (min-width: 62rem) { .companies { flex-direction: column; overflow: visible; padding: 0; } }
+  .co {
+    position: relative; overflow: hidden; flex: none; scroll-snap-align: start;
+    display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 0.85rem; align-items: center;
+    text-align: left; padding: 0.8rem 1rem; min-width: 14rem;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md);
+    transition: border-color 180ms, box-shadow 180ms, transform 180ms;
+  }
+  .co:hover { border-color: var(--line-strong); transform: translateX(2px); }
+  .co[aria-selected='true'] { border-color: transparent; box-shadow: var(--shadow); background: linear-gradient(#fff, #fff) padding-box, var(--nova) border-box; border: 1.5px solid transparent; }
+  .co-logo { grid-row: 1 / 3; width: 4.75rem; height: 2.75rem; display: grid; place-items: center; background: var(--mist); border-radius: var(--r-sm); padding: 0.35rem; }
+  .co-logo :global(img) { max-height: 1.9rem; width: auto; max-width: 100%; object-fit: contain; }
+  .co-name { font-weight: 700; color: var(--ink); font-size: 0.975rem; line-height: 1.2; }
+  .co-count { font-size: 0.8125rem; color: var(--subtle); }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: transparent; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--nova); }
+  .co[aria-selected='true'] .bar span { animation: fill var(--tw-dur, 9s) linear forwards; }
+  .wall.paused .co[aria-selected='true'] .bar span, .wall.stopped .co[aria-selected='true'] .bar span { animation-play-state: paused; }
+  .wall.stopped .co[aria-selected='true'] .bar span { animation: none; width: 100%; }
+  @keyframes fill { to { width: 100%; } }
+
+  .stage {
+    position: relative; overflow: hidden; isolation: isolate;
+    border-radius: var(--r-xl); padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+    background: var(--night); color: #fff; min-height: 26rem;
+    box-shadow: var(--shadow-lg);
+  }
+  .stage::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(50% 60% at 100% 0%, rgba(250, 15, 156, 0.28), transparent 70%), radial-gradient(50% 60% at 0% 100%, rgba(0, 139, 248, 0.3), transparent 70%);
+  }
+  .mark { position: absolute; right: clamp(1.5rem, 1rem + 2vw, 3rem); bottom: clamp(1.25rem, 1rem + 1vw, 2rem); width: 5.5rem; color: rgba(255, 255, 255, 0.08); z-index: -1; }
+  .panel-q { display: grid; gap: 1.75rem; animation: rise 520ms var(--ease); }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+  .stage-top { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.25rem; justify-content: space-between; }
+  .stage-top :global(.stage-logo) { height: 36px; width: auto; max-width: 170px; object-fit: contain; background: #fff; padding: 0.5rem 0.8rem; border-radius: var(--r-sm); box-sizing: content-box; }
+  .highlight {
+    display: inline-flex; align-items: center; gap: 0.5rem; margin: 0;
+    padding: 0.5rem 0.95rem; border-radius: 999px; font-weight: 650; font-size: 0.9375rem; color: #fff;
+    background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .highlight span { color: var(--orange); }
+  .q { margin: 0; display: grid; gap: 1.75rem; animation: rise 420ms var(--ease); }
+  .q blockquote p {
+    color: #fff; font-size: clamp(1.15rem, 0.95rem + 0.7vw, 1.45rem); line-height: 1.55; font-weight: 450; letter-spacing: -0.012em;
+  }
+  .q figcaption { display: flex; align-items: center; gap: 0.9rem; }
+  .avatar { width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center; background: var(--nova); color: #fff; font-weight: 750; flex: none; }
+  .avatar.sm { width: 1.75rem; height: 1.75rem; font-size: 0.7rem; }
+  .who { display: grid; line-height: 1.35; }
+  .who strong { color: #fff; font-size: 1.0625rem; }
+  .who span { color: var(--on-ink-muted); font-size: 0.9375rem; }
+  .people { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-top: 1.25rem; border-top: 1px solid var(--on-ink-line); }
+  .person {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem 0.35rem 0.35rem; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.16); color: var(--on-ink); font-size: 0.875rem; font-weight: 600;
+  }
+  .person:hover { background: rgba(255, 255, 255, 0.12); }
+  .person[aria-pressed='true'] { background: #fff; color: var(--ink); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wall]').forEach((wall) => {
+    const tabs = Array.from(wall.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(wall.querySelectorAll<HTMLElement>('[data-panel]'));
+    const DUR = 9000;
+    wall.style.setProperty('--tw-dur', `${DUR}ms`);
+    let current = 0;
+    let timer: number | undefined;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const showPerson = (panel: HTMLElement, j: number) => {
+      panel.querySelectorAll<HTMLElement>('[data-q]').forEach((f) => (f.hidden = Number(f.dataset.q) !== j));
+      panel.querySelectorAll<HTMLButtonElement>('[data-person]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.person) === j)));
+    };
+    const select = (i: number, focus = false) => {
+      current = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => {
+        const on = k === current;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        // restart the progress bar animation
+        const bar = t.querySelector<HTMLElement>('.bar span');
+        if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
+      });
+      panels.forEach((p, k) => (p.hidden = k !== current));
+      showPerson(panels[current], 0);
+      if (focus) tabs[current].focus();
+      if (window.matchMedia('(max-width: 61.99rem)').matches && !focus) {
+        tabs[current].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+      }
+    };
+    const stop = () => { window.clearInterval(timer); wall.classList.add('stopped'); };
+    const start = () => {
+      if (reduce) { wall.classList.add('stopped'); return; }
+      timer = window.setInterval(() => { if (!wall.classList.contains('paused')) select(current + 1); }, DUR);
+    };
+
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => { stop(); select(i); });
+      t.addEventListener('keydown', (e) => {
+        const k = (e as KeyboardEvent).key;
+        const map: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+        if (k in map) { e.preventDefault(); stop(); select(current + map[k], true); }
+        if (k === 'Home') { e.preventDefault(); stop(); select(0, true); }
+        if (k === 'End') { e.preventDefault(); stop(); select(tabs.length - 1, true); }
+      });
+    });
+    panels.forEach((p) => p.querySelectorAll<HTMLButtonElement>('[data-person]').forEach((b) =>
+      b.addEventListener('click', () => { stop(); showPerson(p, Number(b.dataset.person)); })));
+
+    wall.addEventListener('mouseenter', () => wall.classList.add('paused'));
+    wall.addEventListener('mouseleave', () => wall.classList.remove('paused'));
+    wall.addEventListener('focusin', () => wall.classList.add('paused'));
+    wall.addEventListener('focusout', () => wall.classList.remove('paused'));
+
+    // Only rotate while the wall is on screen.
+    const io = new IntersectionObserver(([en]) => {
+      window.clearInterval(timer);
+      if (en.isIntersecting && !wall.classList.contains('stopped')) start();
+    }, { threshold: 0.3 });
+    io.observe(wall);
+  });
+</script>

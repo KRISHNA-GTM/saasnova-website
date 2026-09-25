@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { partners } from '../../data/partners';
+---
+<Base title="Partners" description="SaaSNova works with Carahsoft, SaaSify, WorkSpan and Pronix to give ISVs distribution, marketplace infrastructure, co-sell tracking and SI delivery alongside operator-led AWS GTM execution.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Partners' }]} />
+      <h1>Partners that fill the rest of the stack.</h1>
+      <p class="lead">
+        We are the execution layer. Our partners bring distribution, marketplace infrastructure, co-sell tracking and systems
+        integration, so ISVs get a complete path to revenue on AWS without stitching vendors together themselves.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <ul role="list" class="plist">
+        {partners.map((p) => (
+          <li>
+            <a href={`/partners/${p.slug}`}>
+              <span class="logo"><Image src={p.logo} alt={`${p.name} logo`} height={40} /></span>
+              <span class="type">{p.type}</span>
+              <span class="h">{p.name}</span>
+              <span class="s">{p.summary}</span>
+              <span class="link-arrow">How we work together</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="hc-h">
+    <div class="container split">
+      <div><h2 id="hc-h">Work at AWS, Microsoft or Google Cloud?</h2></div>
+      <div class="prose">
+        <p>
+          We invite hyperscaler leaders and partner teams to speak at our sessions, join ISV expert panels and take part in
+          co-sell enablement and ecosystem events. Register once and we will send invitations that match your role.
+        </p>
+        <p class="btn-row">
+          <a class="btn btn-secondary" href="/community/aws">AWS</a>
+          <a class="btn btn-secondary" href="/community/azure">Microsoft Azure</a>
+          <a class="btn btn-secondary" href="/community/gcp">Google Cloud</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Interested in partnering with SaaSNova?"
+    body="Distributors, marketplace platforms and SIs: tell us about your ISV customers and where execution breaks down. We will explore how we can work together."
+    primaryLabel="Start a partnership conversation"
+    primaryHref="/contact?type=partnership"
+    secondaryLabel=""
+  />
+</Base>
+
+<style>
+  .plist { display: grid; gap: 1.5rem; }
+  @media (min-width: 56rem) { .plist { grid-template-columns: 1fr 1fr; } }
+  .plist a { display: grid; gap: 0.6rem; padding: 2rem; border: 1px solid var(--line); border-radius: var(--r-lg); text-decoration: none; color: inherit; height: 100%; align-content: start; }
+  .plist a:hover { border-color: var(--blue); }
+  .logo { height: 48px; display: flex; align-items: center; margin-bottom: 0.5rem; }
+  .logo :global(img) { height: 40px; width: auto; }
+  .type { font-size: 0.875rem; font-weight: 600; color: var(--blue); }
+  .h { font-family: var(--font-display); font-size: 1.75rem; color: var(--ink); line-height: 1.15; }
+  .s { color: var(--muted); }
+  .plist .link-arrow { margin-top: 0.5rem; color: var(--blue); }
+</style>

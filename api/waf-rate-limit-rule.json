@@ -1,0 +1,21 @@
+{
+  "Name": "saasnova-chat-rate-limit",
+  "Priority": 1,
+  "Action": { "Block": { "CustomResponse": { "ResponseCode": 429 } } },
+  "VisibilityConfig": { "SampledRequestsEnabled": true, "CloudWatchMetricsEnabled": true, "MetricName": "saasnova-chat-rate-limit" },
+  "Statement": {
+    "RateBasedStatement": {
+      "Limit": 20,
+      "EvaluationWindowSec": 60,
+      "AggregateKeyType": "IP",
+      "ScopeDownStatement": {
+        "ByteMatchStatement": {
+          "SearchString": "/api/",
+          "FieldToMatch": { "UriPath": {} },
+          "TextTransformations": [{ "Priority": 0, "Type": "NONE" }],
+          "PositionalConstraint": "STARTS_WITH"
+        }
+      }
+    }
+  }
+}

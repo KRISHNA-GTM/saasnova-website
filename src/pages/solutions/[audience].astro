@@ -1,0 +1,108 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getOffering, offeringPath } from '../../data/offerings';
+
+type Row = { need: string; slug: string; note: string };
+const audiences = {
+  isvs: {
+    title: 'For SaaS ISVs',
+    h1: 'Turn AWS from a listing into a revenue channel.',
+    lead: 'Founders, revenue leaders and alliance teams at SaaS ISVs use SaaSNova to get listed, get AWS sellers engaged and get private offers closing, without hiring a full partner team first.',
+    description: 'How SaaSNova helps SaaS ISVs launch on AWS Marketplace, run co-sell with AWS field teams, close private offers and qualify for AWS programs and funding.',
+    roles: [
+      { r: 'Founders and CEOs', b: 'A new route to enterprise buyers, and a plan your board and investors can follow.' },
+      { r: 'CROs and sales leaders', b: 'AWS-sourced pipeline and private offers that shorten procurement.' },
+      { r: 'Heads of alliances', b: 'Operator capacity for ACE, Partner Central, programs and QBRs, so nothing slips.' },
+      { r: 'Marketing leaders', b: 'Better Together messaging and campaigns AWS sellers will actually use.' },
+    ],
+    rows: [
+      { need: 'Get on AWS Marketplace', slug: 'aws-marketplace-listing', note: 'Listing built, approved and positioned.' },
+      { need: 'Activate a listing that is not producing', slug: 'ignite', note: 'One-month cloud GTM activation.' },
+      { need: 'Run co-sell every week', slug: 'co-sell-execution', note: 'A PDM as a service.' },
+      { need: 'Give AWS sellers something to say', slug: 'co-marketing', note: 'A PMM as a service.' },
+      { need: 'Expand into the US', slug: 'supernova', note: 'Four-month US market entry program.' },
+      { need: 'Scale across AWS, Azure and Google Cloud', slug: 'novax', note: 'Six-month global multi-cloud program.' },
+      { need: 'Unlock AWS funding', slug: 'box-funding-readiness', note: 'BOX Milestone 1 and 2 execution.' },
+      { need: 'Stay compliant as AWS changes', slug: 'partner-revenue-measurement', note: 'PRM at no cost for eligible partners.' },
+    ] as Row[],
+  },
+  'channel-partners': {
+    title: 'For channel partners',
+    h1: 'Marketplace execution for distributors, resellers and SIs.',
+    lead: 'Channel partners sell more through AWS Marketplace when the ISVs they carry are listed correctly, co-sell ready and able to transact by Channel Partner Private Offer. We run that execution layer.',
+    description: 'How SaaSNova supports distributors, resellers and systems integrators on AWS Marketplace: storefronts, CPPO readiness, Partner Central readiness and multi-cloud alliance coordination.',
+    roles: [
+      { r: 'Distributors', b: 'ISVs ready for CPPO transactions, with clean listing and offer operations behind every deal.' },
+      { r: 'Resellers and VARs', b: 'A storefront that puts your catalog and private offers in front of buyers.' },
+      { r: 'Systems integrators', b: 'Delivery aligned with the ISV’s co-sell and Marketplace motion.' },
+      { r: 'Partner Central users', b: 'Teams prepared for Partner Central in the AWS Management Console.' },
+    ],
+    rows: [
+      { need: 'Launch a branded storefront', slug: 'storefront', note: 'Built and operated for you.' },
+      { need: 'Prepare ISVs for private offers and CPPO', slug: 'aws-marketplace-listing', note: 'Listing, co-sell and private offer readiness.' },
+      { need: 'Get teams ready for Partner Central', slug: 'partner-central-migration', note: 'No cost for eligible partners.' },
+      { need: 'Coordinate AWS, Azure and Google Cloud', slug: 'alliance-leadership', note: 'Alliance leadership as a service.' },
+    ] as Row[],
+  },
+};
+
+export function getStaticPaths() {
+  return [{ params: { audience: 'isvs' } }, { params: { audience: 'channel-partners' } }];
+}
+const a = audiences[Astro.params.audience as keyof typeof audiences];
+---
+<Base title={a.title} description={a.description}>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Solutions', href: '/solutions' }, { label: a.title }]} />
+      <p class="kicker">{a.title}</p>
+      <h1>{a.h1}</h1>
+      <p class="lead">{a.lead}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>Who we work with</h2></div>
+      <dl class="roles">
+        {a.roles.map((r) => <div><dt>{r.r}</dt><dd>{r.b}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section bg-mist">
+    <div class="container">
+      <div class="section-head"><h2>What you need, and where to start</h2></div>
+      <div class="index-list">
+        {a.rows.map((row) => {
+          const o = getOffering(row.slug);
+          return (
+            <a class="index-row" href={offeringPath(o)}>
+              <h3>{row.need}</h3>
+              <p>{row.note} {o.summary}</p>
+              <span class="go">{o.short}</span>
+            </a>
+          );
+        })}
+      </div>
+      {Astro.params.audience === 'channel-partners' && (
+        <p class="also">See how we work with <a href="/partners/carahsoft">Carahsoft</a> on Channel Partner Private Offers and AWS Marketplace Storefront.</p>
+      )}
+    </div>
+  </section>
+
+
+  <CtaBand />
+</Base>
+
+<style>
+  .page-hero h1 { max-width: 22ch; }
+  .roles { display: grid; gap: 2rem 3rem; }
+  @media (min-width: 48rem) { .roles { grid-template-columns: 1fr 1fr; } }
+  .roles div { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; border-top: 4px solid var(--pink); }
+  .roles dt { font-weight: 650; font-size: 1.125rem; color: var(--ink); margin-bottom: 0.3rem; }
+  .roles dd { margin: 0; color: var(--muted); }
+  .also { margin-top: 2rem; }
+</style>

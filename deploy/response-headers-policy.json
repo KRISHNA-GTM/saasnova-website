@@ -1,0 +1,19 @@
+{
+  "Name": "saasnova-security-headers",
+  "Comment": "Security headers for www.saasnova.ai. Start with the CSP in report-only mode (see docs/HOSTING-AND-DEPLOYMENT.md), then enforce.",
+  "SecurityHeadersConfig": {
+    "StrictTransportSecurity": { "Override": true, "AccessControlMaxAgeSec": 63072000, "IncludeSubdomains": true, "Preload": false },
+    "ContentTypeOptions": { "Override": true },
+    "FrameOptions": { "Override": true, "FrameOption": "SAMEORIGIN" },
+    "ReferrerPolicy": { "Override": true, "ReferrerPolicy": "strict-origin-when-cross-origin" },
+    "ContentSecurityPolicy": {
+      "Override": true,
+      "ContentSecurityPolicy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://js.hs-scripts.com https://js.hs-analytics.net https://js.hs-banner.com https://js.hscollectedforms.net; connect-src 'self' https://api.hsforms.com https://forms.hubspot.com https://www.google-analytics.com https://region1.google-analytics.com https://*.analytics.google.com https://api.hubspot.com; img-src 'self' data: https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com https://track.hubspot.com https://forms.hsforms.com; frame-src https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self' https://api.hsforms.com; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
+    }
+  },
+  "CustomHeadersConfig": {
+    "Items": [
+      { "Header": "Permissions-Policy", "Value": "camera=(), microphone=(), geolocation=(), payment=()", "Override": true }
+    ]
+  }
+}

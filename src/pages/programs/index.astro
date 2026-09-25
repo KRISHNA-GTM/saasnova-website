@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import ProgramCards from '../../components/ProgramCards.astro';
+import ProgramFinder from '../../components/ProgramFinder.astro';
+import { programs, offeringPath } from '../../data/offerings';
+import { primaryCta } from '../../data/site';
+
+const rows: { label: string; values: string[] }[] = [
+  { label: 'Focus', values: programs.map((p) => p.flagship!.tagline) },
+  { label: 'Duration', values: programs.map((p) => p.duration!) },
+  { label: 'Ideal stage', values: programs.map((p) => p.flagship!.stageRange) },
+  { label: 'Clouds', values: programs.map((p) => p.flagship!.clouds) },
+  { label: 'Starting point', values: ['Need a listing, or listed with little to no traction', 'Cloud traction, expanding into the US', 'Multi-cloud, scaling repeatable global revenue'] },
+  { label: 'Headline impact', values: programs.map((p) => p.flagship!.impact[0]) },
+  { label: 'Founder involvement', values: ['Founder-led support through the program', 'Dedicated GTM operator, with founder oversight', 'Founder-led onboarding and quarterly executive reviews'] },
+];
+
+const faqs = [
+  { q: 'How much does a program cost?', a: 'Every program is custom. Two ISVs at the same stage can need very different work: one has a clean listing and no field relationships, another has sellers engaged but a broken partner portal setup. We scope yours on a 30-minute call, then send a proposal with scope, timeline and investment.' },
+  { q: 'Can we start with SuperNova or NovaX without Ignite?', a: 'Yes, if you already have the fundamentals Ignite puts in place: a clean listing, partner portal readiness and early co-sell signals. We confirm that on the first call and start where you are.' },
+  { q: 'We are not listed on a cloud marketplace yet. Where do we start?', a: 'Ignite. It covers ISVs that need a cloud marketplace listing as well as those already listed with little to no traction.' },
+  { q: 'Do programs cover Microsoft Azure and Google Cloud?', a: 'Yes. Ignite can run on AWS, Microsoft Azure or Google Cloud. SuperNova and NovaX run co-sell across AWS, Microsoft and Google Cloud, and NovaX adds three-hyperscaler Marketplace hygiene and SI/GSI motions.' },
+];
+---
+<Base
+  title="Flagship programs: Ignite, SuperNova and NovaX"
+  description="SaaSNova's flagship cloud GTM programs: Ignite (1 month, cloud GTM activation), SuperNova (4 months, US market entry) and NovaX (6 months, global multi-cloud scale). Custom, scoped on a 30-minute call."
+  jsonLd={[{ '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Programs' }]} />
+      <p class="kicker pink">Flagship programs</p>
+      <h1>Pick your stage. <span class="grad">We customize the execution.</span></h1>
+      <p class="lead">
+        Ignite, SuperNova and NovaX take an ISV from first listing to global multi-cloud scale on AWS, Microsoft Azure and Google
+        Cloud. Every program is custom: we scope yours on a 30-minute call with Jen.
+      </p>
+      <div class="btn-row">
+        <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_programs">{primaryCta.label}</a>
+        <a class="btn btn-secondary" href="#finder">Find your program</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container"><ProgramCards dark={false} /></div>
+  </section>
+
+  <section class="section on-ink" id="finder" aria-labelledby="fi-h">
+    <div class="container split even finder-split">
+      <div>
+        <p class="kicker">60-second program finder</p>
+        <h2 id="fi-h">Not sure where to start? <span class="grad">Answer four questions.</span></h2>
+        <p class="lead">We’ll point you to the right starting program. Then confirm it with Jen on a 30-minute call.</p>
+      </div>
+      <ProgramFinder />
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="cmp-h">
+    <div class="container">
+      <div class="section-head"><p class="kicker">Side by side</p><h2 id="cmp-h">Compare the programs</h2></div>
+      <div class="table-wrap" role="region" aria-labelledby="cmp-h" tabindex="0">
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Attribute</span></th>
+              {programs.map((p) => <th scope="col"><a href={offeringPath(p)}>{p.short}</a></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr><th scope="row">{r.label}</th>{r.values.map((v) => <td>{v}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how-buying-works" aria-labelledby="buy-h">
+    <div class="container split">
+      <div><p class="kicker">How to start</p><h2 id="buy-h">Custom programs, scoped on one call</h2></div>
+      <div class="prose">
+        <p>
+          Every program starts with a 30-minute execution strategy session. Jen reviews your listing, your partner portal setup,
+          your co-sell activity and the targets your leadership has set, and tells you what she would do first.
+        </p>
+        <p>
+          Then you receive a proposal: which program, which deliverables, what cadence, who owns what on your side, the timeline
+          and the investment. You can contract with SaaSNova directly, or procure through your cloud marketplace if your
+          procurement team prefers.
+        </p>
+        <p><a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_programs_buy">{primaryCta.label}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="pfaq-h">
+    <div class="container split">
+      <div><h2 id="pfaq-h">Questions about programs</h2></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .finder-split { align-items: center; }
+  .finder-split .lead { margin-top: 1.25rem; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; box-shadow: var(--shadow); }
+  .cmp { width: 100%; border-collapse: collapse; min-width: 46rem; font-size: 0.9688rem; }
+  .cmp th, .cmp td { text-align: left; vertical-align: top; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); }
+  .cmp thead th { font-size: 1.5rem; font-weight: 850; letter-spacing: -0.03em; border-bottom: 3px solid; border-image: var(--nova) 1; }
+  .cmp thead a { color: var(--ink); text-decoration: none; }
+  .cmp thead a:hover { color: var(--blue-ink); }
+  .cmp tbody th { font-weight: 650; color: var(--ink); width: 12rem; }
+  .cmp td { color: var(--muted); }
+  .cmp tr:last-child th, .cmp tr:last-child td { border-bottom: 0; }
+</style>

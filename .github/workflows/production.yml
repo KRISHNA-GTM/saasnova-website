@@ -1,0 +1,48 @@
+# LIVE SITE (www.saasnova.ai). Runs ONLY when you press "Run workflow" on GitHub and type GO-LIVE.
+# It builds the website from the main branch and uploads it to the AWS S3 bucket behind CloudFront,
+# then clears the CloudFront cache so visitors see the new version within a few minutes.
+#
+# One-time setup (see docs/UPDATE-PLAYBOOK.md, step B). In the GitHub repo:
+#   Settings → Secrets and variables → Actions →
+#     Secrets:   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY   (an IAM user limited to this bucket + invalidation)
+#     Variables: S3_BUCKET, CLOUDFRONT_DISTRIBUTION_ID, AWS_REGION (for example us-east-1)
+name: Go live (AWS S3 + CloudFront)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type GO-LIVE to publish the main branch to www.saasnova.ai'
+        required: true
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ github.event.inputs.confirm == 'GO-LIVE' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build the website (also checks every internal link)
+        run: npm run build
+      - name: Test the URL redirect rules
+        run: npm run test:edge
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Upload to S3 and refresh CloudFront
+        run: bash deploy/deploy.sh
+        env:
+          SKIP_BUILD: '1'
+          BUCKET: ${{ vars.S3_BUCKET }}
+          DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}

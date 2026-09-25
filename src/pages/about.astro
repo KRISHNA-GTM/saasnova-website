@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import headshot from '../assets/images/jen-headshot.png';
+import badge from '../assets/images/SaaSNova-AWS-Advanced-Tier-badge.png';
+import { site } from '../data/site';
+
+const team = [
+  { name: 'Silas', role: 'Chief Growth Officer', body: 'Designs and runs co-sell and Marketplace pipeline systems that turn listings into qualified pipeline.' },
+  { name: 'Jocelyn', role: 'Business Development Manager', body: 'Activates ISVs’ hyperscaler field relationships and drives partner engagement into pipeline.' },
+  { name: 'Ram', role: 'Global Partner Development Manager', body: 'Leads global hyperscaler partner motions across co-sell pipeline and Marketplace adoption.' },
+  { name: 'Jeni', role: 'Cloud Marketplace Operations', body: 'Owns listing execution, submissions and field coordination.' },
+  { name: 'Gino', role: 'Partner Pipeline Executive, United States', body: 'Leads U.S. partner pipeline for our Marketplace GTM services.' },
+  { name: 'Avadhoot', role: 'Partner Pipeline Executive, India and Southeast Asia', body: 'Leads partner pipeline across India and Southeast Asia.' },
+  { name: 'Colleen', role: 'Partner Pipeline Executive, Latin America', body: 'Leads partner pipeline across Latin America.' },
+  { name: 'Megha', role: 'Partner Pipeline Executive, Middle East and Africa', body: 'Leads partner pipeline across the Middle East and Africa.' },
+  { name: 'Krishna', role: 'Digital Marketing Manager', body: 'Builds positioning and demand programs for Marketplace GTM.' },
+  { name: 'Rohith', role: 'Video Editor and Videographer', body: 'Produces GTM content from field activity and events.' },
+];
+
+const personLd = {
+  '@type': 'Person',
+  name: 'Jen Dawson',
+  jobTitle: 'Founder and CEO',
+  worksFor: { '@id': `${site.url}/#organization` },
+  sameAs: [site.social.founderLinkedin],
+  description: 'Founder and CEO of SaaSNova. Previously a Global GTM Lead at AWS, with more than 25 years in cloud go-to-market.',
+};
+---
+<Base title="About SaaSNova" description="SaaSNova is a women-owned, operator-led GTM execution company for AWS, Microsoft Azure and Google Cloud marketplaces, founded by Jen Dawson, former Global GTM Lead at AWS." jsonLd={[personLd]}>
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'About' }]} />
+      <h1>Built by operators, for the part of cloud GTM <span class="grad">nobody else runs.</span></h1>
+      <p class="lead">
+        SaaSNova helps SaaS ISVs and channel partners turn cloud marketplaces (AWS, Microsoft Azure and Google Cloud) into a
+        predictable revenue channel. We are a women-owned business, founded by Jen Dawson, former Global GTM Lead at AWS.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split founder">
+      <figure class="portrait">
+        <Image src={headshot} alt="Jen Dawson, founder and CEO of SaaSNova" widths={[360, 560]} sizes="(min-width: 60rem) 28rem, 100vw" />
+      </figure>
+      <div>
+        <blockquote class="jq">
+          <p>“Every ISV I worked with faced the same pattern: listed on AWS, Azure, or GCP; submissions filed; cloud field teams unresponsive; and nothing attributable showing up at the board level. I fell in love with this problem because it was universal and absolutely solvable. SaaSNova exists because this isn’t a marketplace problem. It’s an execution problem across the entire cloud GTM motion.”</p>
+          <footer>Jen Dawson, Founder and CEO</footer>
+        </blockquote>
+        <div class="prose bio">
+          <p>
+            Jen previously served as a Global GTM Lead at AWS, where she built Marketplace programs, managed ISV Accelerate motions
+            and ran the six-month GTM sprint that later became the basis of SaaSNova’s programs. She has more than 25 years in cloud
+            go-to-market and has led more than 100 ISV marketplace activations across AWS, Azure and Google Cloud.
+          </p>
+          <p>
+            She founded SaaSNova to fill a gap nobody was filling. Platforms give ISVs listing infrastructure. Playbooks give them
+            frameworks. Neither sits with cloud sellers, activates partner programs or carries the co-sell motion week after week.
+            SaaSNova does, as an embedded operator with named deliverables.
+          </p>
+          <p><a class="link-arrow" href={site.social.founderLinkedin} target="_blank" rel="noopener">Jen Dawson on LinkedIn</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="pr-h">
+    <div class="container">
+      <div class="section-head"><h2 id="pr-h">How we work</h2></div>
+      <dl class="principles">
+        <div><dt>Execution, not theory</dt><dd>Every program has named, documented deliverables. We do the work inside AWS Marketplace, Partner Central, ACE and Partner Center rather than hand over a playbook.</dd></div>
+        <div><dt>AWS-first, multi-cloud aware</dt><dd>Our programs are built around AWS. Where ISVs also run Microsoft and Google Cloud partnerships, we coordinate those motions alongside the AWS plan.</dd></div>
+        <div><dt>Evidence leadership can use</dt><dd>Programs end with documented roadmaps, messaging and metrics that executives, boards and investors can review.</dd></div>
+        <div><dt>Founder-led</dt><dd>Jen oversees execution across every program and leads onboarding on premium engagements.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cred-h">
+    <div class="container cred">
+      <Image src={badge} alt="AWS Partner, Advanced Tier Services" width={120} height={120} />
+      <div>
+        <h2 id="cred-h">Credentials</h2>
+        <ul role="list" class="checks">
+          <li>AWS Advanced Tier Services Partner (<a href="/news/aws-advanced-tier-partner">announced September 2026</a>)</li>
+          <li>Launch partner for AWS Marketplace Storefront (<a href="/news/feenix-aws-marketplace-storefront">June 2026</a>)</li>
+          <li>Twelve programs and services listed on <a href={site.awsSellerProfile} target="_blank" rel="noopener">AWS Marketplace</a></li>
+          <li>Women-owned business</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist" aria-labelledby="team-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="team-h">The team</h2>
+        <p>Practitioners with hyperscaler experience, covering partner development, Marketplace operations and pipeline across regions.</p>
+      </div>
+      <ul role="list" class="team">
+        {team.map((m) => (
+          <li>
+            <span class="av" aria-hidden="true">{m.name[0]}</span>
+            <div>
+              <p class="nm">{m.name}</p>
+              <p class="rl">{m.role}</p>
+              <p class="bd">{m.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="join">Want to join us? <a href="/careers">See open roles</a>.</p>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .page-hero h1 { max-width: 24ch; }
+  .founder { align-items: start; }
+  @media (min-width: 60rem) { .founder { grid-template-columns: 4fr 7fr; } }
+  .portrait { margin: 0; }
+  .portrait :global(img) { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top; border-radius: var(--r-lg); }
+  .jq p { font-family: var(--font-display); font-size: clamp(1.3rem, 1.05rem + 0.9vw, 1.75rem); line-height: 1.45; color: var(--ink); }
+  .jq footer { margin-top: 1rem; font-weight: 650; color: var(--ink); }
+  .bio { margin-top: 2rem; }
+  .principles { display: grid; gap: 2rem 3rem; }
+  @media (min-width: 48rem) { .principles { grid-template-columns: 1fr 1fr; } }
+  .principles div { border-top: 2px solid var(--ink); padding-top: 1rem; }
+  .principles dt { font-weight: 650; font-size: 1.125rem; color: var(--ink); margin-bottom: 0.35rem; }
+  .principles dd { margin: 0; color: var(--muted); }
+  .cred { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 48rem) { .cred { grid-template-columns: 120px 1fr; gap: 3rem; } }
+  .cred h2 { margin-bottom: 1.25rem; }
+  .team { display: grid; gap: 1.5rem 2rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+  .team li { display: flex; gap: 1rem; align-items: flex-start; }
+  .av { flex: none; width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; font-weight: 650; }
+  .nm { font-weight: 650; color: var(--ink); }
+  .rl { font-size: 0.9375rem; color: var(--blue-600); font-weight: 550; }
+  .bd { font-size: 0.9375rem; color: var(--muted); margin-top: 0.25rem; }
+  .join { margin-top: 2.5rem; }
+</style>

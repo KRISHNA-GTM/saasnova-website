@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getOffering, offeringPath } from '../data/offerings';
+import { integrations } from '../data/site';
+import Testimonial from '../components/Testimonial.astro';
+import { quotesFor, storefrontLaunchQuote } from '../data/testimonials';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import { storefrontLogos } from '../data/logos';
+const sfQuotes = quotesFor('storefront');
+
+const sfaas = getOffering('storefront');
+const storefrontUrl = 'https://solutions.storefront.saasnova.ai/';
+const fqStorefront = 'https://thefemalequotient.storefront.marketplace.aws.com/';
+---
+<Base title="SaaSNova on AWS Marketplace Storefront" description="Buy SaaSNova programs and services through our AWS Marketplace storefront. SaaSNova was selected as a launch partner for AWS Marketplace Storefront and builds storefronts for ISVs and channel partners.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Solutions', href: '/solutions' }, { label: 'AWS Marketplace Storefront' }]} />
+      <p class="kicker pink">Official launch partner · AWS Marketplace Storefront</p>
+      <h1>Buy SaaSNova the way you <span class="grad">already buy AWS.</span></h1>
+      <p class="lead">
+        Our storefront on AWS Marketplace lists Ignite, SuperNova, NovaX and our services in one place. Buyers find what they
+        need and transact through AWS Marketplace, by public listing or private offer, using the vendor onboarding, billing and
+        governance they already have with AWS.
+      </p>
+      <div class="btn-row">
+        <a class="btn" href={storefrontUrl} target="_blank" rel="noopener" data-track="cta_storefront_visit">Explore the storefront</a>
+        <a class="btn btn-secondary" href={integrations.calendly.storefront} target="_blank" rel="noopener" data-track="cta_storefront_meeting_hero">Book a storefront session</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight sf-logos" aria-labelledby="sfl-h">
+    <p id="sfl-h" class="container cap">Companies on AWS Marketplace Storefront with SaaSNova</p>
+    <LogoMarquee logos={storefrontLogos.slice(0, 16)} label="Storefront companies, row one" duration={70} height={30} />
+    <LogoMarquee logos={storefrontLogos.slice(16)} label="Storefront companies, row two" duration={70} height={30} reverse />
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div><h2>Why buy through the storefront</h2></div>
+      <dl class="why">
+        <div><dt>A procurement path you already use</dt><dd>Contract review and approvals run through AWS Marketplace, a channel your finance and procurement teams already know.</dd></div>
+        <div><dt>Clear and auditable</dt><dd>Every SaaSNova program and service available to buy, in one place, with AWS Marketplace terms.</dd></div>
+        <div><dt>Scoped to you</dt><dd>We agree scope on a 30-minute call first, so what you buy matches what you need.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section bg-mist">
+    <div class="container narrow">
+      <blockquote class="aws-q">
+        <p>“{storefrontLaunchQuote.quote}”</p>
+        <footer>{storefrontLaunchQuote.name}, {storefrontLaunchQuote.title}</footer>
+      </blockquote>
+      {sfQuotes.map((q) => <Testimonial q={q} />)}
+      <p><a class="link-arrow" href="/news/feenix-aws-marketplace-storefront">Read the launch partner announcement</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-h">
+    <div class="container">
+      <div class="section-head"><h2 id="how-h">From storefront to execution</h2></div>
+      <ol class="steps" role="list">
+        <li><span class="n" aria-hidden="true">1</span><h3>Explore and transact</h3><p>Browse our programs and services in the storefront, then buy through standard AWS Marketplace purchasing: public listing or private offer, whichever fits your procurement path.</p></li>
+        <li><span class="n" aria-hidden="true">2</span><h3>We start delivery</h3><p>Once procured, our team engages you directly, with operator-led execution and a single point of contact across the engagement.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section on-ink" aria-labelledby="fq-h">
+    <div class="container split">
+      <div>
+        <p class="kicker">With AWS and The Female Quotient</p>
+        <h2 id="fq-h">We build storefronts for others, too.</h2>
+      </div>
+      <div class="prose">
+        <p>
+          SaaSNova deployed and operates the Women-Owned Cloud Innovation Storefront with AWS and The Female Quotient, giving
+          women-owned technology companies visibility across the AWS Marketplace ecosystem.
+        </p>
+        <p>
+          That work now extends into FQ Source, a joint initiative with AWS and The Female Quotient that takes women-owned
+          technology companies from no listing to a live listing, a deployed storefront, registered co-sell opportunities and
+          buyer-ready private offers.
+        </p>
+        <p class="btn-row">
+          <a class="btn btn-light" href="/fq-source">Explore FQ Source</a>
+          <a class="btn btn-secondary" href={fqStorefront} target="_blank" rel="noopener">See the storefront</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Need your own storefront on AWS Marketplace?"
+    body={sfaas.summary}
+    primaryLabel="Book a storefront strategy meeting"
+    primaryHref={integrations.calendly.storefront}
+    secondaryLabel="Storefront as a Service"
+    secondaryHref={offeringPath(sfaas)}
+    track="cta_storefront_meeting"
+  />
+</Base>
+
+<style>
+  .page-hero h1 { max-width: 18ch; }
+  .why { display: grid; gap: 2rem; }
+  .why dt { font-weight: 650; font-size: 1.125rem; color: var(--ink); margin-bottom: 0.3rem; }
+  .why dd { margin: 0; color: var(--muted); }
+  .narrow { max-width: 58rem; display: grid; gap: 1.5rem; }
+  .aws-q { padding-left: 1.5rem; border-left: 4px solid; border-image: var(--nova) 1; }
+  .aws-q p { font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.65rem); line-height: 1.5; color: var(--ink); font-weight: 500; letter-spacing: -0.01em; }
+  .sf-logos { display: grid; gap: 1.25rem; border-bottom: 1px solid var(--line); }
+  .cap { text-align: center; color: var(--muted); font-weight: 600; font-size: 0.9375rem; }
+  .aws-q footer { margin-top: 1rem; color: var(--muted); font-weight: 550; }
+  .steps { display: grid; gap: 2rem; max-width: 56rem; }
+  @media (min-width: 48rem) { .steps { grid-template-columns: 1fr 1fr; } }
+  .steps li { display: grid; gap: 0.6rem; }
+  .steps .n { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--nova-btn); color: #fff; font-weight: 800; }
+  .steps p { color: var(--muted); }
+</style>

@@ -1,0 +1,60 @@
+# TEST SITE (staging). Runs automatically every time a change is saved (committed) to the main branch.
+# It builds the website and publishes it to GitHub Pages so you can check it before going live.
+# The test site is marked "noindex" so Google never lists it.
+#
+# One-time setup (see docs/UPDATE-PLAYBOOK.md, step A):
+#   GitHub repo → Settings → Pages → Source: "GitHub Actions".
+#   Optional: repo Settings → Secrets and variables → Actions → Variables → STAGING_DOMAIN = test.saasnova.ai
+name: Test site (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build the website
+        run: npm run build
+        env:
+          PUBLIC_STAGING: 'true'
+      - name: Fit links to the GitHub Pages address
+        run: node scripts/rebase-for-pages.mjs
+        env:
+          # Empty when a custom test domain is set; otherwise "/<repository-name>".
+          BASE_PATH: ${{ vars.STAGING_DOMAIN == '' && format('/{0}', github.event.repository.name) || '' }}
+      - name: Custom test domain (optional)
+        if: ${{ vars.STAGING_DOMAIN != '' }}
+        run: echo "${{ vars.STAGING_DOMAIN }}" > dist/CNAME
+      - name: Keep search engines off the test site
+        run: printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

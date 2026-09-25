@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+const posts = (await getCollection('insights', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="Insights" description="Operator analysis on AWS Marketplace listings, co-sell, Partner Revenue Measurement, Partner Central and storefronts, from the SaaSNova team.">
+  <section class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Insights' }]} />
+      <h1>Insights from the operators.</h1>
+      <p class="lead">What we see running AWS Marketplace and co-sell motions every week, and what to do about it.</p>
+      <p class="small muted rss"><a href="/insights/rss.xml">Subscribe by RSS</a> or get <a href="/newsletter">The Nova Brief</a> by email.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      {posts.length ? <ArticleList entries={posts} collection="insights" /> : <p>No articles are published yet. <a href="/newsletter">Subscribe to The Nova Brief</a> to hear when the first one goes live.</p>}
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>.rss { margin-top: 1rem; }</style>
