@@ -246,7 +246,9 @@ const isActive = (href: string, groups?: { links: { href: string }[] }[]) =>
     const y = window.scrollY;
     header?.classList.toggle('scrolled', y > 8);
     const menuOpen = nav?.classList.contains('open') || triggers.some((t) => t.getAttribute('aria-expanded') === 'true');
-    if (!menuOpen && Math.abs(y - lastY) > 6) header?.classList.toggle('hide', y > lastY && y > 160);
+    if (y < 160) { header?.classList.remove('hide'); lastY = y; return; }
+    if (menuOpen || Math.abs(y - lastY) < 12) return;
+    header?.classList.toggle('hide', y > lastY);
     lastY = y;
   };
   onScroll();
