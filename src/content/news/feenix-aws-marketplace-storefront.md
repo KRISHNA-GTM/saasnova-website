@@ -47,3 +47,4 @@ legacyPath: "/saasnova-feenix-pr-aws-marketplace-storefront"
 <h4>Media Contact</h4>
 <a href="mailto:marketing@saasnova.ai">marketing@saasnova.ai</a>
 </div>
+

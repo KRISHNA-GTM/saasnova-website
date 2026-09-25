@@ -127,3 +127,4 @@ legacyPath: "/blog-cloud-marketplace-listing-silent-fix"
 </ul>
 
 <p>We activate your listings across AWS, Azure, and GCP with documented results. If you're ready to turn your zombie listing into a real pipeline, book a call with SaaSNova today.</p>
+

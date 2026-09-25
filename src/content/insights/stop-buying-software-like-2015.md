@@ -62,3 +62,4 @@ legacyPath: "/saasnova-hydrolix-blog-stop-buying-software-like-2015"
 <li><a href="https://docs.aws.amazon.com/marketplace/latest/storefrontguide/what-is-marketplace-storefront.html" target="_blank" rel="noopener">Learn more about AWS Marketplace Storefront</a>.</li>
 <li><a href="http://hydrolix.io/" target="_blank" rel="noopener">Meet Hydrolix</a>.</li>
 </ul>
+

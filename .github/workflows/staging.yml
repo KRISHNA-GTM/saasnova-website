@@ -44,7 +44,8 @@ jobs:
         if: ${{ vars.STAGING_DOMAIN != '' }}
         run: echo "${{ vars.STAGING_DOMAIN }}" > dist/CNAME
       - name: Keep search engines off the test site
-        run: printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+        run: |
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -72,3 +72,4 @@ legacyPath: "/blog-carahsoft-saasnova-accelerating-aws-marketplace-gtm-execution
 <p>It's making those listings more useful to the people who actually have to sell, buy, and transact.</p>
 <p>SaaSNova + Carahsoft + AWS Marketplace Storefront brings those pieces together.</p>
 <p>We'll be sharing what we learn as the first ISVs and channel partners move through this process.</p>
+
