@@ -1,4 +1,6 @@
 ---
+import HeroArt from '../components/HeroArt.astro';
+import { customerLogos as heroLogos } from '../data/logos';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
@@ -15,7 +17,8 @@ const highlights = voicesFor('home').filter((v) => v.highlight && v.id !== 'aws'
   description="Results SaaSNova has delivered for SaaS ISVs on AWS, Microsoft Azure and Google Cloud marketplaces: Arctic Wolf, Dataminr, Simplesense, GuardDog, SAFE Security, PharmacoEvidence, Nexla and more."
 >
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Customer stories' }]} />
       <p class="kicker pink">Customer stories</p>
       <h1>Results that show up <span class="grad">in the pipeline report.</span></h1>
@@ -26,6 +29,8 @@ const highlights = voicesFor('home').filter((v) => v.highlight && v.id !== 'aws'
         <div><dt class="num">9X</dt><dd>ROI, validated by AWS</dd></div>
         <div><dt class="num">$300K</dt><dd>MDF secured for Dataminr</dd></div>
       </dl>
+    </div>
+      <HeroArt logos={heroLogos.slice(0, 9)} />
     </div>
   </section>
 

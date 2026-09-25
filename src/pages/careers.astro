@@ -1,4 +1,6 @@
 ---
+import HeroArt from '../components/HeroArt.astro';
+import teamPic from '../assets/images/SaaSNova_Team-pic.jpg';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { site } from '../data/site';
@@ -30,10 +32,13 @@ const roles = [
 ---
 <Base title="Careers" description="Open roles at SaaSNova: Partner Pipeline Executives (US and London), HubSpot Associate for GTM operations, and Cloud Engineer. Remote-first operator roles in cloud GTM.">
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Careers' }]} />
       <h1>Build the GTM work that produces real pipeline.</h1>
       <p class="lead">We operate. We execute. Join a remote-first team running co-sell and Marketplace motions with AWS, Microsoft and Google Cloud partner teams.</p>
+    </div>
+      <HeroArt images={[{ src: teamPic, alt: 'The SaaSNova team', position: '50% 40%' }]} />
     </div>
   </section>
 

@@ -1,4 +1,6 @@
 ---
+import HeroArt from '../components/HeroArt.astro';
+import showPic from '../assets/images/jen-speaking.png';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import YouTube from '../components/YouTube.astro';
@@ -9,11 +11,14 @@ const [feature, ...rest] = episodes;
 ---
 <Base title="The Jen GTM Show" description="The Jen GTM Show: Jen Dawson and guests on AWS co-sell, Marketplace listings that produce pipeline, and what AWS field teams respond to.">
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Resources', href: '/insights' }, { label: 'The Jen GTM Show' }]} />
       <h1>The Jen GTM Show</h1>
       <p class="lead">Short episodes on the parts of cloud GTM that decide whether a listing produces pipeline: co-sell hygiene, field engagement and what AWS teams respond to.</p>
       <div class="btn-row"><a class="btn btn-secondary" href={site.social.youtube} target="_blank" rel="noopener">Subscribe on YouTube</a></div>
+    </div>
+      <HeroArt images={[{ src: showPic, alt: 'Jen Dawson recording The Jen GTM Show' }]} />
     </div>
   </section>
   <section class="section">

@@ -1,4 +1,7 @@
 ---
+import HeroArt from '../components/HeroArt.astro';
+import teamPic from '../assets/images/SaaSNova_Team-pic.jpg';
+import jenStage from '../assets/images/jen-stage.png';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
@@ -31,13 +34,16 @@ const personLd = {
 ---
 <Base title="About SaaSNova" description="SaaSNova is a women-owned, operator-led GTM execution company for AWS, Microsoft Azure and Google Cloud marketplaces, founded by Jen Dawson, former Global GTM Lead at AWS." jsonLd={[personLd]}>
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'About' }]} />
       <h1>Built by operators, for the part of cloud GTM <span class="grad">nobody else runs.</span></h1>
       <p class="lead">
         SaaSNova helps SaaS ISVs and channel partners turn cloud marketplaces (AWS, Microsoft Azure and Google Cloud) into a
         predictable revenue channel. We are a women-owned business, founded by Jen Dawson, former Global GTM Lead at AWS.
       </p>
+    </div>
+      <HeroArt images={[{ src: teamPic, alt: 'The SaaSNova team at an industry event', position: '50% 45%' }, { src: jenStage, alt: 'Jen Dawson, founder and CEO, speaking on stage', position: '55% 30%' }]} />
     </div>
   </section>
 

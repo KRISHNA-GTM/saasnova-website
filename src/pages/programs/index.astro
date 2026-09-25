@@ -1,4 +1,5 @@
 ---
+import HeroArt from '../../components/HeroArt.astro';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
@@ -31,7 +32,8 @@ const faqs = [
   jsonLd={[{ '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}
 >
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Programs' }]} />
       <p class="kicker pink">Programs</p>
       <h1>Pick your stage. <span class="grad">We customize the execution.</span></h1>
@@ -43,6 +45,8 @@ const faqs = [
         <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_programs">{primaryCta.label}</a>
         <a class="btn btn-secondary" href="#finder">Find your program</a>
       </div>
+    </div>
+      <HeroArt />
     </div>
   </section>
 

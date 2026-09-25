@@ -1,4 +1,6 @@
 ---
+import HeroArt from '../../components/HeroArt.astro';
+import { partners as heroPartners } from '../../data/partners';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -7,13 +9,16 @@ import { partners } from '../../data/partners';
 ---
 <Base title="Partners" description="SaaSNova works with Carahsoft, SaaSify, WorkSpan and Pronix to give ISVs distribution, marketplace infrastructure, co-sell tracking and SI delivery alongside operator-led AWS GTM execution.">
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Partners' }]} />
       <h1>Partners that fill the rest of the stack.</h1>
       <p class="lead">
         We are the execution layer. Our partners bring distribution, marketplace infrastructure, co-sell tracking and systems
         integration, so ISVs get a complete path to revenue on AWS without stitching vendors together themselves.
       </p>
+    </div>
+      <HeroArt logos={heroPartners.map((x) => ({ name: x.name, src: x.logo, scale: ({ Carahsoft: 1.3, SaaSify: 2.6, WorkSpan: 2.8, Pronix: 2.8 } as Record<string, number>)[x.name] ?? 1.6 }))} />
     </div>
   </section>
 

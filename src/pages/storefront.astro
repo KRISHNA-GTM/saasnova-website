@@ -1,4 +1,6 @@
 ---
+import HeroArt from '../components/HeroArt.astro';
+import sfPic from '../assets/images/fq-storefront.jpg';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CtaBand from '../components/CtaBand.astro';
@@ -16,7 +18,8 @@ const fqStorefront = 'https://thefemalequotient.storefront.marketplace.aws.com/'
 ---
 <Base title="SaaSNova on AWS Marketplace Storefront" description="Buy SaaSNova programs and services through our AWS Marketplace storefront. SaaSNova was selected as a launch partner for AWS Marketplace Storefront and builds storefronts for ISVs and channel partners.">
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Solutions', href: '/solutions' }, { label: 'AWS Marketplace Storefront' }]} />
       <p class="kicker pink">Official launch partner · AWS Marketplace Storefront</p>
       <h1>Buy SaaSNova the way you <span class="grad">already buy AWS.</span></h1>
@@ -29,6 +32,8 @@ const fqStorefront = 'https://thefemalequotient.storefront.marketplace.aws.com/'
         <a class="btn" href={storefrontUrl} target="_blank" rel="noopener" data-track="cta_storefront_visit">Explore the storefront</a>
         <a class="btn btn-secondary" href={integrations.calendly.storefront} target="_blank" rel="noopener" data-track="cta_storefront_meeting_hero">Book a storefront session</a>
       </div>
+    </div>
+      <HeroArt images={[{ src: sfPic, alt: 'The Women-Owned Cloud Innovation Storefront on AWS Marketplace, deployed by SaaSNova', position: '50% 0%' }]} />
     </div>
   </section>
 

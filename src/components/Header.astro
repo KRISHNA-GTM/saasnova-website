@@ -76,7 +76,10 @@ const isActive = (href: string, groups?: { links: { href: string }[] }[]) =>
 </header>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; padding-top: 0.75rem; transition: padding 220ms var(--ease); }
+  .site-header { position: sticky; top: 0; z-index: 50; padding-top: 0.75rem; transition: transform 320ms var(--ease), padding 220ms var(--ease); }
+  .site-header.hide { transform: translateY(-110%); }
+  .site-header.scrolled { padding-top: 0.4rem; }
+  .site-header.scrolled .bar { min-height: 3.75rem; }
   .shell { width: min(100% - 2 * var(--gutter), 84rem); margin-inline: auto; }
   .bar {
     display: flex; align-items: center; gap: 1.25rem; min-height: 4.5rem; padding: 0 0.75rem 0 1.5rem;
@@ -237,7 +240,16 @@ const isActive = (href: string, groups?: { links: { href: string }[] }[]) =>
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
   window.matchMedia('(min-width: 68rem)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
 
-  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  // Hide the header while scrolling down; bring it back on any scroll up (or near the top).
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header?.classList.toggle('scrolled', y > 8);
+    const menuOpen = nav?.classList.contains('open') || triggers.some((t) => t.getAttribute('aria-expanded') === 'true');
+    if (!menuOpen && Math.abs(y - lastY) > 6) header?.classList.toggle('hide', y > lastY && y > 160);
+    lastY = y;
+  };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  header?.addEventListener('focusin', () => header.classList.remove('hide'));
 </script>

@@ -1,4 +1,5 @@
 ---
+import HeroArt from '../../components/HeroArt.astro';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -9,10 +10,13 @@ const items = (await getCollection('news', ({ data }) => !data.draft)).sort((a, 
 ---
 <Base title="News and press" description="SaaSNova announcements: AWS Advanced Tier Services Partner status, launch partner for AWS Marketplace Storefront, and partnerships with Carahsoft and SaaSify.">
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'News' }]} />
       <h1>News and press</h1>
       <p class="lead">Announcements from SaaSNova. Media inquiries: <a href={`mailto:${site.emails.marketing}`}>{site.emails.marketing}</a>.</p>
+    </div>
+      <HeroArt images={[{ src: '/media/news/aws-advanced-tier-partner-0.webp', alt: 'SaaSNova achieves AWS Advanced Tier Services Partner status' }]} />
     </div>
   </section>
   <section class="section">

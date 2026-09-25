@@ -1,4 +1,5 @@
 ---
+import HeroArt from '../../components/HeroArt.astro';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -14,7 +15,8 @@ const ext = (u?: string) => !!u && /^https?:/.test(u);
 ---
 <Base title={`SaaSNova and ${p.name}`} description={p.summary}>
   <section class="page-hero">
-    <div class="container">
+    <div class="container hero-2col">
+      <div class="hero-text">
       <Breadcrumbs items={[{ label: 'Partners', href: '/partners' }, { label: p.name }]} />
       <div class="logo"><Image src={p.logo} alt={`${p.name} logo`} height={48} /></div>
       <p class="kicker">{p.type} partner</p>
@@ -24,6 +26,8 @@ const ext = (u?: string) => !!u && /^https?:/.test(u);
         <a class="btn" href={p.cta.href} target="_blank" rel="noopener" data-track={`cta_partner_${p.slug}`}>{p.cta.label}</a>
         {p.url && <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener">Visit {p.name}</a>}
       </div>
+    </div>
+      <HeroArt logos={[{ name: p.name, src: p.logo, scale: 1.6 }]} />
     </div>
   </section>
 
