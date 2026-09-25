@@ -212,9 +212,9 @@ export const voices: Voice[] = [
   },
   {
     id: 'aws',
-    company: 'AWS field teams',
+    company: 'AWS',
     logo: awsLogo,
-    highlight: 'What AWS partner teams say',
+    highlight: 'What AWS partner leaders say',
     quotes: [
       {
         id: 'aws-megha',

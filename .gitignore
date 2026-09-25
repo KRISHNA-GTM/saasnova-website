@@ -12,3 +12,4 @@ api/.aws-sam/
 # local-only
 .claude/
 src/assets/images/thefemalequotient-screencapture-*.png
+scripts/_*

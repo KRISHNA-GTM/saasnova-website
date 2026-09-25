@@ -35,7 +35,7 @@ const company: KbEntry[] = [
     id: 'pricing',
     title: 'Pricing and how to buy',
     answer:
-      'Every SaaSNova program is custom. We scope yours on a 30-minute execution strategy session with Jen, then send a proposal with scope, timeline and investment. You can contract directly, or procure through your cloud marketplace. PRMaaS and PCMaaS are delivered at no cost for eligible partners.',
+      'Every SaaSNova program is custom. We scope yours on a 30-minute execution strategy session, then send a proposal with scope, timeline and investment. You can contract directly, or procure through your cloud marketplace. PRMaaS and PCMaaS are delivered at no cost for eligible partners.',
     url: '/programs#how-buying-works',
     keywords: ['price', 'pricing', 'cost', 'costs', 'fee', 'fees', 'quote', 'budget', 'buy', 'purchase', 'private', 'offer', 'procure', 'procurement', 'contract', 'much'],
   },
@@ -43,7 +43,7 @@ const company: KbEntry[] = [
     id: 'book',
     title: 'Talk to the team',
     answer:
-      'The fastest route is a 30-minute execution strategy session with Jen Dawson. You can also send a message through the contact page, or email operations@saasnova.ai.',
+      'The fastest route is a 30-minute execution strategy session with our GTM team. You can also send a message through the contact page, or email operations@saasnova.ai.',
     url: integrations.calendly.strategy,
     keywords: ['book', 'meeting', 'call', 'talk', 'demo', 'contact', 'schedule', 'session', 'speak', 'email', 'reach'],
   },

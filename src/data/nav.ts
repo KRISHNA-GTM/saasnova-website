@@ -17,7 +17,7 @@ export const mainNav: NavItem[] = [
     wide: true,
     groups: [
       {
-        title: 'Flagship programs',
+        title: 'Programs',
         featured: true,
         links: flagship.map((o) => ({
           label: o.short,

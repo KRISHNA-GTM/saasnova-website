@@ -115,7 +115,12 @@ const isActive = (href: string, groups?: { links: { href: string }[] }[]) =>
   .wide .panel-drop { width: min(58rem, calc(100vw - 2rem)); left: 50%; transform: translateX(-30%); padding: 1.1rem; }
   .panel-grid { display: grid; gap: 1rem 1.25rem; }
   .wide .panel-grid { grid-template-columns: 1.15fr 1fr 1fr; }
-  .panel-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--subtle); margin: 0.35rem 0 0.5rem 0.7rem; }
+  .panel-title {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-size: 1rem; font-weight: 800; letter-spacing: -0.01em; color: var(--ink);
+    margin: 0.35rem 0 0.6rem 0.7rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--line);
+  }
+  .panel-title::before { content: ''; width: 0.6rem; height: 0.6rem; border-radius: 3px; background: var(--nova); transform: rotate(45deg); flex: none; }
   .panel-group a {
     display: grid; gap: 0.1rem; padding: 0.55rem 0.7rem; border-radius: var(--r-sm);
     text-decoration: none; color: var(--ink); transition: background 140ms;

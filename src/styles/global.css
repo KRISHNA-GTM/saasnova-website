@@ -410,7 +410,7 @@ a.index-row:hover h3 { color: var(--blue-ink); }
 }
 
 /* ── Reveal on scroll ──────────────────────────────────── */
-.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
+.js .reveal { opacity: 0; transform: translateY(10px); transition: opacity 450ms var(--ease), transform 450ms var(--ease); }
 .js .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; } }
 

@@ -71,7 +71,7 @@ const results = programs.map((p) => ({
       <p>{r.why}</p>
       <ul role="list" class="checks">{r.first.map((x) => <li>{x}</li>)}</ul>
       <div class="btn-row">
-        <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_finder_${r.slug}`}>Confirm the fit with Jen</a>
+        <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_finder_${r.slug}`}>Confirm your fit</a>
         <a class="link-arrow" href={r.href}>See what {r.name} includes</a>
       </div>
       <button type="button" class="back restart" data-restart>Start over</button>
@@ -80,7 +80,7 @@ const results = programs.map((p) => ({
 </div>
 
 <style>
-  .finder { background: #fff; border-radius: var(--r-xl); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); box-shadow: var(--shadow-lg); border: 1px solid var(--line); min-height: 25rem; }
+  .finder { color: var(--text); background: #fff; border-radius: var(--r-xl); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); box-shadow: var(--shadow-lg); border: 1px solid var(--line); min-height: 25rem; }
   .head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
   .step { font-size: 0.875rem; font-weight: 650; color: var(--subtle); white-space: nowrap; }
   .progress { flex: 1; height: 6px; border-radius: 999px; background: var(--mist-2); overflow: hidden; }
@@ -103,6 +103,10 @@ const results = programs.map((p) => ({
   .result h3 { font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem); font-weight: 850; letter-spacing: -0.035em; }
   .meta { font-weight: 650; color: var(--pink-ink); }
   .result > p:not(.kicker):not(.meta) { color: var(--muted); }
+  .result .checks li { color: var(--ink); }
+  .result .checks li::before { background-color: var(--blue-50); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.2 6.7 11 12 5' fill='none' stroke='%230077d6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .result a.link-arrow { color: var(--blue-ink); }
+  .finder .step { color: var(--subtle); }
   .result .btn-row { margin-top: 0.5rem; }
   .restart { justify-self: start; }
 </style>

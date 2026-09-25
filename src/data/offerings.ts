@@ -47,7 +47,7 @@ export const offeringPath = (o: Pick<Offering, 'kind' | 'slug'>) =>
 export const categories: { id: CategoryId; title: string; blurb: string }[] = [
   {
     id: 'programs',
-    title: 'Flagship programs',
+    title: 'Programs',
     blurb: 'Ignite, SuperNova and NovaX: custom programs that take an ISV from first listing to repeatable multi-cloud revenue.',
   },
   {

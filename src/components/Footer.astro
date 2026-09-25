@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
 
       <nav class="cols" aria-label="Footer">
         <div>
-          <p class="h">Flagship programs</p>
+          <p class="h">Programs</p>
           <ul role="list">
             {programs.map((p) => <li><a href={offeringPath(p)}>{p.short} <span class="d">{p.flagship?.tagline}</span></a></li>)}
             <li><a href="/#program-finder">Which program fits?</a></li>

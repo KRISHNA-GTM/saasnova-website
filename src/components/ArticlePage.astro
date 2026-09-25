@@ -105,10 +105,10 @@ const section = collection === 'news' ? { label: 'News', href: '/news' } : { lab
   .rail { display: none; }
   @media (min-width: 72rem) { .rail { display: grid; gap: 1.5rem; align-content: start; position: sticky; top: 7rem; height: max-content; } }
   .toc-h, .rc-h { font-size: 0.75rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); margin-bottom: 0.75rem; }
-  .toc ol { display: grid; gap: 0.15rem; border-left: 2px solid var(--line); }
-  .toc a { display: block; padding: 0.35rem 0 0.35rem 1rem; margin-left: -2px; border-left: 2px solid transparent; text-decoration: none; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
-  .toc a:hover { color: var(--ink); }
-  .toc a.on { color: var(--blue-ink); border-left-color: var(--blue); font-weight: 650; }
+  .toc :global(ol) { display: grid; gap: 0.15rem; border-left: 2px solid var(--line); }
+  .toc :global(a) { display: block; padding: 0.35rem 0 0.35rem 1rem; margin-left: -2px; border-left: 2px solid transparent; text-decoration: none; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+  .toc :global(a:hover) { color: var(--ink); }
+  .toc :global(a.on) { color: var(--blue-ink); border-left-color: var(--blue); font-weight: 650; }
   .rail-cta { padding: 1.25rem; border-radius: var(--r-lg); background: var(--night); color: var(--on-ink); display: grid; gap: 0.6rem; }
   .rail-cta .rc-h { color: #ff9fd6; margin: 0; }
   .rail-cta p:not(.rc-h) { color: var(--on-ink-muted); font-size: 0.9rem; }

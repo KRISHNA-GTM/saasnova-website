@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
-import ProgramCards from './ProgramCards.astro';
 import CtaBand from './CtaBand.astro';
 import Faq from './Faq.astro';
 import {
@@ -72,7 +71,7 @@ const jsonLd = [
       <div class="hero-grid">
         <div>
           <p class="kicker">
-            {isProgram ? `Flagship program · ${f?.tagline} · ${o.duration}` : cat.title}
+            {isProgram ? `${f?.tagline} · ${o.duration}` : cat.title}
           </p>
           <h1>{isProgram ? <><span class="grad">{o.short}</span><span class="h1-sub">{f?.tagline}</span></> : o.name}</h1>
           <p class="lead">{o.summary}</p>
@@ -101,7 +100,7 @@ const jsonLd = [
         <div class="fg">
           <div class="fg-card reveal"><p class="label">What you get</p><ul role="list" class="checks">{f.whatYouGet.map((x) => <li>{x}</li>)}</ul></div>
           <div class="fg-card impact reveal"><p class="label">Impact</p><ul role="list">{f.impact.map((x) => <li>{x}</li>)}</ul></div>
-          <div class="fg-card ideal reveal"><p class="label">Ideal stage</p><p class="stage">{f.stageRange}</p><p>{f.idealStage}</p><a class="btn btn-sm" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_fit_${o.slug}`}>Ask Jen if {o.short} fits</a></div>
+          <div class="fg-card ideal reveal"><p class="label">Ideal stage</p><p class="stage">{f.stageRange}</p><p>{f.idealStage}</p><a class="btn btn-sm" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_fit_${o.slug}`}>Check if {o.short} fits</a></div>
         </div>
       </div>
     </section>
@@ -156,14 +155,6 @@ const jsonLd = [
     </div>
   </section>
 
-  {isProgram && (
-    <section class="section on-ink" aria-labelledby="all-h">
-      <div class="container">
-        <div class="section-head center"><p class="kicker pink">Compare the flagship programs</p><h2 id="all-h">Ignite, SuperNova and NovaX, <span class="grad">side by side.</span></h2></div>
-        <ProgramCards />
-      </div>
-    </section>
-  )}
 
   <section class="section" aria-labelledby="sup-h">
     <div class="container split">
@@ -203,7 +194,7 @@ const jsonLd = [
     title={o.noCost ? `Check your eligibility for ${o.short}.` : `Scope ${o.short} for your team.`}
     body={o.noCost
       ? 'Book a 30-minute session and we will confirm eligibility, timing and what we need from your side.'
-      : 'Book a 30-minute session. Jen looks at where your cloud motion is today and scopes a custom program around your targets.'}
+      : 'Book a 30-minute session. Our GTM team looks at where your cloud motion is today and scopes a custom program around your targets.'}
     secondaryLabel={isProgram ? 'Find your program' : 'See all solutions'}
     secondaryHref={isProgram ? '/#program-finder' : '/solutions'}
     track={`cta_strategy_band_${o.slug}`}

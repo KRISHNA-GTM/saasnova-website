@@ -84,7 +84,7 @@ const roles = [
           </select>
         </div>
         <div class="field full"><label for="a-why">Why this role? <span class="req" aria-hidden="true">*</span></label><textarea id="a-why" name="why_this_role" rows="4" required minlength="20" maxlength="3000" data-label="This answer"></textarea></div>
-        <div class="field full"><label for="a-bg">Relevant background <span class="muted">(optional)</span></label><textarea id="a-bg" name="relevant_background" rows="4" maxlength="3000"></textarea></div>
+        <div class="field full"><label for="a-bg">Relevant background and resume link <span class="req" aria-hidden="true">*</span></label><p class="hint" id="a-bg-hint">Summarize your relevant experience, then paste a Google Drive (or similar) link to your resume. Set the link's sharing to "Anyone with the link can view" so we can open it.</p><textarea id="a-bg" name="relevant_background" rows="5" maxlength="3000" required aria-describedby="a-bg-hint" data-label="Relevant background and resume link" placeholder="Experience summary…&#10;Resume: https://drive.google.com/…"></textarea></div>
         <div class="hp" aria-hidden="true"><label for="a-web">Website</label><input id="a-web" name="website_url" tabindex="-1" autocomplete="off" /></div>
         <label class="consent full" for="a-consent">
           <input type="checkbox" id="a-consent" name="_consent" required data-consent data-label="Consent" />
