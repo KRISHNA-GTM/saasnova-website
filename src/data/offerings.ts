@@ -131,16 +131,11 @@ export const offerings: Offering[] = [
     ],
     support:
       'Founder-led support for the full sprint. Standard support includes phone access with a 24-hour response time on business days; Priority support adds scheduled working sessions and real-time guidance during early co-sell motions.',
-    notIncluded: 'Ignite starts once you are listed on AWS Marketplace. Listing creation is a separate service.',
     related: ['supernova', 'aws-marketplace-listing', 'co-sell-execution'],
     faq: [
       {
-        q: 'Do we need to be listed on AWS Marketplace before Ignite?',
-        a: 'Yes. Ignite begins once you are listed. If you are not listed yet, start with AWS Marketplace Listing and GTM Launch.',
-      },
-      {
-        q: 'How is Ignite priced?',
-        a: 'Ignite is scoped to your requirements in an initial strategy session and procured through an AWS Marketplace private offer.',
+        q: 'Do we need to be listed on a cloud marketplace before Ignite?',
+        a: 'No. Ignite covers ISVs that still need a listing on AWS, Microsoft Azure or Google Cloud Marketplace, as well as those already listed with little or no traction.',
       },
     ],
   },

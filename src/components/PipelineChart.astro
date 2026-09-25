@@ -1,0 +1,102 @@
+---
+// The homepage's one bold moment: what happens to pipeline after a listing goes live.
+// A flat "listed, no execution" line against the SaaSNova line climbing through the four motions.
+// Illustrative shape (not client data); the real numbers sit underneath.
+const W = 1200, H = 440;
+const milestones = [
+  { x: 340, y: 318, t: 'Activate', d: 'Field relationships that respond' },
+  { x: 600, y: 246, t: 'Drive', d: 'Co-sell worked to real deals' },
+  { x: 860, y: 150, t: 'Convert', d: 'Marketplace deals closed' },
+  { x: 1100, y: 70, t: 'Prove', d: 'Board-ready revenue evidence' },
+];
+const up = 'M60 362 C180 360 260 340 340 318 S500 272 600 246 S780 178 860 150 S1020 86 1100 70 L1160 62';
+const flat = 'M60 362 C300 361 500 357 700 359 S1000 354 1160 352';
+const ticks = ['Listing live', 'Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'];
+---
+<figure class="chart" data-chart>
+  <div class="plot">
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="pc-line" x1="0" x2="1"><stop offset="0" stop-color="#008BF8"/><stop offset=".55" stop-color="#8A5CFF"/><stop offset="1" stop-color="#FA0F9C"/></linearGradient>
+        <linearGradient id="pc-area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FA0F9C" stop-opacity=".28"/><stop offset=".6" stop-color="#008BF8" stop-opacity=".08"/><stop offset="1" stop-color="#008BF8" stop-opacity="0"/></linearGradient>
+      </defs>
+      {ticks.map((_, i) => <line x1={60 + i * (1100 / 6)} x2={60 + i * (1100 / 6)} y1="30" y2="380" class="grid" />)}
+      <line x1="60" x2="1160" y1="380" y2="380" class="axis" />
+      <path d={`${up} L1160 380 L60 380 Z`} fill="url(#pc-area)" class="area" />
+      <path d={flat} class="flat" pathLength="1" />
+      <path d={up} class="up" pathLength="1" />
+    </svg>
+    {milestones.map((m, i) => (
+      <div class="ms" style={`left:${(m.x / W) * 100}%;top:${(m.y / H) * 100}%;--i:${i}`}>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="ms-tag"><strong>{m.t}</strong><span>{m.d}</span></span>
+      </div>
+    ))}
+  </div>
+  <ol class="ticks" aria-hidden="true">{ticks.map((t) => <li>{t}</li>)}</ol>
+  <ol class="ms-list">
+    {milestones.map((m) => <li><strong>{m.t}</strong> {m.d}</li>)}
+  </ol>
+  <figcaption>
+    <span class="key"><span class="k-up"></span>With SaaSNova operators</span>
+    <span class="key"><span class="k-flat"></span>Listing live, no execution</span>
+    <span class="illus">Illustrative pipeline shape</span>
+  </figcaption>
+</figure>
+
+<style>
+  .chart { margin: 0; padding-top: 4.5rem; }
+  @media (max-width: 47.99rem) { .chart { padding-top: 1rem; } }
+  .plot { position: relative; aspect-ratio: 1200 / 440; }
+  svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .grid { stroke: rgba(255, 255, 255, 0.06); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .axis { stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .up { fill: none; stroke: url(#pc-line); stroke-width: 5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .flat { fill: none; stroke: #F19953; stroke-width: 3; stroke-dasharray: 0.012 0.012; vector-effect: non-scaling-stroke; opacity: 0.9; }
+  .area { opacity: 1; }
+
+  .ms { position: absolute; translate: -50% -50%; }
+  .dot { display: block; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 5px rgba(250, 15, 156, 0.35), 0 0 24px 4px rgba(250, 15, 156, 0.45); }
+  .ms-tag { position: absolute; left: 50%; bottom: calc(100% + 14px); translate: -50% 0; display: grid; gap: 0.1rem; width: max-content; max-width: 12rem; text-align: center; }
+  .ms-tag strong { color: #fff; font-size: clamp(1rem, 0.8rem + 0.6vw, 1.35rem); font-weight: 750; letter-spacing: -0.02em; }
+  .ms-tag span { color: var(--on-ink-muted); font-size: 0.875rem; line-height: 1.35; }
+  .end-note { position: absolute; right: 0; bottom: 6%; color: #F6B98A !important; font-size: 0.875rem; font-weight: 600; }
+
+  .ticks { list-style: none; padding: 0.75rem 0 0; margin: 0; display: flex; justify-content: space-between; color: var(--on-ink-muted); font-size: 0.8125rem; padding-inline: calc(60 / 1200 * 100%) calc(40 / 1200 * 100%); }
+  .ticks li { width: 0; display: flex; justify-content: center; white-space: nowrap; }
+  .ticks li:first-child { justify-content: flex-start; }
+  .ticks li:last-child { justify-content: flex-end; }
+  .ms-list { display: none; }
+
+  figcaption { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; margin-top: 1.75rem; color: var(--on-ink-muted); font-size: 0.875rem; align-items: center; }
+  .key { display: inline-flex; align-items: center; gap: 0.55rem; }
+  .k-up { width: 28px; height: 4px; border-radius: 4px; background: linear-gradient(90deg, #008BF8, #FA0F9C); }
+  .k-flat { width: 28px; height: 0; border-top: 3px dashed #F19953; }
+  .illus { margin-left: auto; opacity: 1; }
+
+  /* Draw once when scrolled into view */
+  .js .up { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .js .area, .js .ms { opacity: 0; }
+  .js .drawn .up { transition: stroke-dashoffset 2s cubic-bezier(.45, 0, .2, 1); stroke-dashoffset: 0; }
+  .js .drawn .area { transition: opacity 1.2s ease 0.9s; opacity: 1; }
+  .js .drawn .ms { transition: opacity 500ms ease calc(0.5s + var(--i) * 0.38s), translate 500ms ease calc(0.5s + var(--i) * 0.38s); opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .js .up { stroke-dashoffset: 0; } .js .area, .js .ms { opacity: 1; } }
+
+  @media (max-width: 47.99rem) {
+    .ms-tag { display: none; }
+    .dot { width: 12px; height: 12px; }
+    .ticks li:nth-child(even) { visibility: hidden; }
+    .end-note { display: none; }
+    .ms-list { display: grid; gap: 0.6rem; margin: 1.5rem 0 0; padding-left: 1.25rem; color: var(--on-ink-muted); }
+    .ms-list strong { color: #fff; }
+    .illus { margin-left: 0; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-chart]').forEach((el) => {
+    if (!('IntersectionObserver' in window)) { el.classList.add('drawn'); return; }
+    const io = new IntersectionObserver(([en]) => { if (en.isIntersecting) { el.classList.add('drawn'); io.disconnect(); } }, { threshold: 0.35 });
+    io.observe(el);
+  });
+</script>

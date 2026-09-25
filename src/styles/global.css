@@ -69,7 +69,7 @@
   --step-0: 1.0625rem;
   --step-1: 1.25rem;
   --step-2: 1.5rem;
-  --step-3: clamp(1.9rem, 1.35rem + 2vw, 3rem);
+  --step-3: clamp(2rem, 1.3rem + 2.6vw, 3.5rem);
   --step-4: clamp(2.4rem, 1.5rem + 3.4vw, 4.25rem);
   --step-5: clamp(2.6rem, 1.4rem + 4.6vw, 5.1rem);
 
@@ -77,13 +77,13 @@
   --gutter: clamp(1rem, 0.5rem + 2.4vw, 2rem);
   --max: 77rem;
   --measure: 40rem;
-  --section: clamp(4.5rem, 3rem + 5vw, 8rem);
+  --section: clamp(4rem, 2.5rem + 4.5vw, 7rem);
   --r-sm: 8px;
   --r-md: 14px;
   --r-lg: 22px;
   --r-xl: 30px;
   --shadow-sm: 0 1px 2px rgba(10, 17, 40, 0.05), 0 2px 8px -2px rgba(10, 17, 40, 0.06);
-  --shadow: 0 1px 2px rgba(10, 17, 40, 0.05), 0 12px 32px -12px rgba(10, 17, 40, 0.18);
+  --shadow: 0 1px 2px rgba(10, 17, 40, 0.04), 0 10px 30px -16px rgba(10, 17, 40, 0.16);
   --shadow-lg: 0 2px 4px rgba(10, 17, 40, 0.04), 0 30px 60px -20px rgba(10, 17, 40, 0.28);
   --glow-blue: 0 18px 50px -18px rgba(0, 139, 248, 0.55);
   --glow-pink: 0 18px 50px -18px rgba(250, 15, 156, 0.5);
@@ -140,7 +140,7 @@ em, i { font-style: italic; }
   letter-spacing: -0.035em;
 }
 h1 { font-size: var(--step-4); line-height: 1.04; }
-h2 { font-size: var(--step-3); line-height: 1.08; }
+h2 { font-size: var(--step-3); line-height: 1.06; }
 h3 { font-size: var(--step-2); line-height: 1.25; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
 h4 { font-size: var(--step-1); font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: -0.01em; }
 h1 em, h2 em, h3 em { font-style: italic; font-weight: 300; letter-spacing: -0.03em; }
@@ -160,25 +160,16 @@ h1 em, h2 em, h3 em { font-style: italic; font-weight: 300; letter-spacing: -0.0
 .small { font-size: var(--step--1); }
 .num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum', 'cv11'; }
 
-/* Eyebrow pill (sentence case, carries context) */
+/* Context label above a heading: plain colored text, sentence case (no pill, no dot). */
 .kicker {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.8125rem; font-weight: 650; letter-spacing: 0.01em;
-  color: var(--blue-ink);
-  padding: 0.4rem 0.8rem 0.4rem 0.65rem; border-radius: 999px;
-  background: var(--blue-50); border: 1px solid var(--blue-100);
-  margin-bottom: 1.1rem;
+  display: block; font-size: 1rem; font-weight: 650; letter-spacing: -0.005em;
+  color: var(--blue-ink); margin-bottom: 0.9rem;
 }
-.kicker::before {
-  content: ''; width: 0.45rem; height: 0.45rem; border-radius: 50%; flex: none;
-  background: var(--nova); box-shadow: 0 0 0 3px rgba(0, 139, 248, 0.15);
-}
-.kicker.pink { color: var(--pink-ink); background: var(--pink-50); border-color: #ffd0ea; }
-.kicker.orange { color: var(--orange-ink); background: var(--orange-50); border-color: #fbdcc3; }
-.kicker.plain { background: none; border: 0; padding: 0; }
-.kicker.plain::before { display: none; }
-.on-ink .kicker { color: #9fd3ff; background: rgba(0, 139, 248, 0.12); border-color: rgba(0, 139, 248, 0.3); }
-.on-ink .kicker.pink { color: #ff9fd6; background: rgba(250, 15, 156, 0.12); border-color: rgba(250, 15, 156, 0.3); }
+.kicker.pink { color: var(--pink-ink); }
+.kicker.orange { color: var(--orange-ink); }
+.on-ink .kicker { color: #7cc4ff; }
+.on-ink .kicker.pink { color: #ff8fcf; }
+.on-ink .kicker.orange { color: #f6b98a; }
 
 .prose { max-width: var(--measure); }
 .prose > * + * { margin-top: 1.15em; }
@@ -248,9 +239,9 @@ h1 em, h2 em, h3 em { font-style: italic; font-weight: 300; letter-spacing: -0.0
 .on-ink .grad { background: linear-gradient(95deg, #3fa9ff 0%, #a58bff 50%, #ff4fb5 100%); -webkit-background-clip: text; background-clip: text; }
 
 .section-head { display: grid; gap: 1rem; margin-bottom: clamp(2.25rem, 1.5rem + 2.5vw, 4rem); max-width: 50rem; }
-.section-head .kicker { justify-self: start; margin-bottom: 0; font-size: 0.8125rem; line-height: 1.3; }
+.section-head .kicker { justify-self: start; margin-bottom: 0; font-size: 1rem; line-height: 1.3; }
 .section-head p { color: var(--muted); font-size: var(--step-1); line-height: 1.6; }
-.section-head.center { margin-inline: auto; text-align: center; justify-items: center; }
+.section-head.center { margin-inline: auto; text-align: center; justify-items: center; max-width: 64rem; }
 .section-head.center .kicker { justify-self: center; }
 .on-ink .section-head p { color: var(--on-ink-muted); }
 
@@ -260,6 +251,8 @@ h1 em, h2 em, h3 em { font-style: italic; font-weight: 300; letter-spacing: -0.0
   .split.even { grid-template-columns: 1fr 1fr; }
   .split.reverse { grid-template-columns: 7fr 5fr; }
 }
+.split h2, .cat-head h2 { font-size: clamp(1.9rem, 1.3rem + 1.9vw, 2.9rem); }
+.page-hero .lead { font-size: clamp(1.15rem, 1rem + 0.4vw, 1.35rem); }
 .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 
 /* ── Buttons ───────────────────────────────────────────── */

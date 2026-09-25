@@ -6,7 +6,8 @@ import TestimonialWall from '../components/TestimonialWall.astro';
 import LogoMarquee from '../components/LogoMarquee.astro';
 import ProgramCards from '../components/ProgramCards.astro';
 import ProgramFinder from '../components/ProgramFinder.astro';
-import EngineGraphic from '../components/EngineGraphic.astro';
+import CinemaVideo from '../components/CinemaVideo.astro';
+import PipelineChart from '../components/PipelineChart.astro';
 import advancedBadge from '../assets/images/SaaSNova-AWS-Advanced-Tier-badge.png';
 import aiBadge from '../assets/images/SaaSNova-AWS-AI-Service-Competency-partner-badge.png';
 import awsLogo from '../assets/images/aws-logo.png';
@@ -26,12 +27,6 @@ const insights = (await getCollection('insights', ({ data }) => !data.draft))
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 
 // Solutions grouped by category (programs are shown separately above).
-const catIcons: Record<string, string> = {
-  marketplace: 'M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 20v-6h6v6',
-  cosell: 'M7 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm10 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8ZM2 20c0-3 2.5-5 5-5s5 2 5 5m0 0c0-3 2.5-5 5-5s5 2 5 5',
-  'programs-funding': 'M12 3v18M17 7H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6',
-  readiness: 'M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3Zm-3 9 2 2 4-4',
-};
 const solutionGroups = categories
   .filter((c) => c.id !== 'programs')
   .map((c) => ({ ...c, items: offerings.filter((o) => o.category === c.id) }));
@@ -70,70 +65,66 @@ const jsonLd = [
   brandSuffix={false}
 >
   <!-- ═══ HERO ═══ -->
-  <section class="hero bg-glow">
-    <div class="hero-grid" aria-hidden="true"></div>
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <p class="kicker">GTM execution across AWS, Microsoft Azure and Google Cloud</p>
-        <h1 class="hero-h"><span class="l">The first</span> <span class="l grad">operator-led GTM</span> <span class="l grad">execution engine.</span></h1>
-        <p class="hero-lead">We turn your cloud marketplace listing into a <strong>predictable revenue channel</strong>, and we do the work.</p>
-        <ul class="clouds" role="list" aria-label="Hyperscalers we execute on">
-          <li><Image src={awsLogo} alt="" height={40} /><span>AWS</span></li>
-          <li><Image src={azureLogo} alt="" height={40} /><span>Microsoft Azure</span></li>
-          <li><Image src={gcpLogo} alt="" height={40} /><span>Google Cloud</span></li>
-        </ul>
-        <div class="btn-row">
-          <a class="btn btn-lg" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_hero">{primaryCta.label}</a>
-          <a class="btn btn-secondary btn-lg" href="#programs">See programs</a>
-        </div>
-      </div>
-      <div class="hero-media">
-        <div class="video-frame">
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${heroVideo}?rel=0&modestbranding=1&playsinline=1`}
-            title="Why SaaSNova exists: execution-led GTM for ISVs"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-        </div>
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-top">
+      <h1 class="hero-h"><span class="l">The first operator-led</span> <span class="l grad">GTM execution engine.</span></h1>
+      <p class="hero-lead">We turn your AWS, Microsoft Azure and Google Cloud marketplace listing into a predictable revenue channel. Our operators do the work.</p>
+      <div class="btn-row hero-ctas">
+        <a class="btn btn-lg" href={primaryCta.href} target="_blank" rel="noopener" data-track="cta_strategy_hero">{primaryCta.label}</a>
+        <a class="btn btn-secondary btn-lg" href="#programs">See programs</a>
       </div>
     </div>
-
+    <div class="container hero-video">
+      <CinemaVideo id={heroVideo} title="Why SaaSNova exists: execution-led GTM for ISVs" />
+    </div>
     <div class="container trust">
-      <div class="badges">
-        <Image src={advancedBadge} alt="AWS Partner, Advanced Tier Services" width={76} height={76} />
-        <Image src={aiBadge} alt="AWS Partner, AI Services Competency" width={76} height={76} />
-        <span class="badge-txt"><strong>AWS Advanced Tier</strong> Services Partner</span>
-        <span class="badge-txt"><strong>AWS AI Services</strong> Competency Partner</span>
-        <span class="badge-txt"><strong>Launch partner</strong> AWS Marketplace Storefront</span>
+      <div class="trust-row">
+        <p class="on">Executing on</p>
+        <ul class="clouds" role="list" aria-label="Hyperscalers">
+          <li><Image src={awsLogo} alt="AWS" height={56} /></li>
+          <li><Image src={azureLogo} alt="Microsoft Azure" height={56} /><span>Microsoft Azure</span></li>
+          <li><Image src={gcpLogo} alt="Google Cloud" height={56} /><span>Google Cloud</span></li>
+        </ul>
+        <span class="sep" aria-hidden="true"></span>
+        <div class="badges">
+          <Image src={advancedBadge} alt="AWS Partner, Advanced Tier Services" width={64} height={64} />
+          <Image src={aiBadge} alt="AWS Partner, AI Services Competency" width={64} height={64} />
+          <p><strong>Official launch partner</strong><br />AWS Marketplace Storefront</p>
+        </div>
       </div>
-      <p class="trust-title">Trusted by <strong>100+ SaaS ISVs</strong> scaling with hyperscalers</p>
+      <p class="trust-title">Trusted by 100+ SaaS ISVs scaling with hyperscalers</p>
       <LogoMarquee logos={customerLogos} label="Customers" duration={55} />
     </div>
   </section>
 
-  <!-- ═══ THE ENGINE (infographic) ═══ -->
-  <section class="section bg-mist" aria-labelledby="eng-h">
+  <!-- ═══ THE STORY: pipeline chart ═══ -->
+  <section class="section on-ink story" aria-labelledby="story-h">
     <div class="container">
-      <div class="section-head center">
-        <p class="kicker orange">Your listing is live. Where is the pipeline?</p>
-        <h2 id="eng-h">We run the engine between <span class="grad">listed and revenue.</span></h2>
+      <div class="story-head">
+        <h2 id="story-h">Listed isn’t launched.</h2>
+        <p>Most marketplace listings flatline. Our operators run the four motions that move the line: Activate, Drive, Convert, Prove.</p>
       </div>
-      <EngineGraphic />
+      <PipelineChart />
+      <dl class="results">
+        <div><dt class="num">2K+</dt><dd>PSQLs generated for Arctic Wolf</dd></div>
+        <div><dt class="num">$300K</dt><dd>MDF secured for Dataminr</dd></div>
+        <div><dt class="num">9X</dt><dd>ROI validated by AWS</dd></div>
+        <div><dt class="num">100+</dt><dd>ISVs activated on 3 clouds</dd></div>
+      </dl>
     </div>
   </section>
 
   <!-- ═══ PROGRAMS ═══ -->
-  <section class="section on-ink" id="programs" aria-labelledby="prog-h">
+  <section class="section bg-mist" id="programs" aria-labelledby="prog-h">
     <div class="container">
       <div class="section-head center">
-        <p class="kicker pink">Programs</p>
-        <h2 id="prog-h">Pick your stage. <span class="grad">We customize the execution.</span></h2>
+        <h2 id="prog-h">Pick your stage.<br /><span class="grad">We customize the execution.</span></h2>
+        <p>Three programs, from first listing to global multi-cloud scale.</p>
       </div>
       <ProgramCards />
       <div class="finder-wrap" id="program-finder">
         <div class="finder-copy">
-          <p class="kicker">60-second program finder</p>
           <h3>Not sure which program fits?</h3>
           <p>Four questions. One recommendation. No email required.</p>
         </div>
@@ -146,8 +137,7 @@ const jsonLd = [
   <section class="section bg-grid" aria-labelledby="love-h" id="customers">
     <div class="container">
       <div class="section-head center">
-        <p class="kicker pink">What ISV leaders and AWS say</p>
-        <h2 id="love-h">Results, in <span class="grad">our customers’ words.</span></h2>
+        <h2 id="love-h">Results, in<br /><span class="grad">our customers’ words.</span></h2>
       </div>
       <TestimonialWall />
       <div class="g2">
@@ -162,16 +152,15 @@ const jsonLd = [
   <section class="section bg-mist" aria-labelledby="proof-h">
     <div class="container">
       <div class="section-head center">
-        <p class="kicker orange">Proof</p>
-        <h2 id="proof-h">Numbers that show up <span class="grad">in the pipeline report.</span></h2>
+        <h2 id="proof-h">Numbers that show up<br /><span class="grad">in the pipeline report.</span></h2>
       </div>
       <div class="bento">
         {trackRecord.map((t) => (
           <a class="tile case" href={`/case-studies/${t.slug}`}>
             <div class="case-top"><Image src={t.logo} alt={`${t.company} logo`} height={32} /><span class="tag tag-pink">Case study</span></div>
-            <p class="big num">{t.results[0].n}</p>
-            <p class="big-l">{t.results[0].l}</p>
-            <ul role="list" class="mini">{t.results.slice(1, 3).map((r) => <li><strong>{r.n}</strong> {r.l}</li>)}</ul>
+            <p class="big num">{t.results.find((r) => /^[$0-9]/.test(r.n))!.n}</p>
+            <p class="big-l">{t.results.find((r) => /^[$0-9]/.test(r.n))!.l}</p>
+            <ul role="list" class="mini">{t.results.filter((r) => r !== t.results.find((x) => /^[$0-9]/.test(x.n))).slice(0, 2).map((r) => <li><strong>{r.n}</strong> {r.l}</li>)}</ul>
             <span class="go">Read the story <span aria-hidden="true">→</span></span>
           </a>
         ))}
@@ -196,16 +185,14 @@ const jsonLd = [
   <section class="section" aria-labelledby="sol-h">
     <div class="container">
       <div class="section-head center">
-        <p class="kicker">Solutions</p>
-        <h2 id="sol-h">Need one motion, <span class="grad">not a full program?</span></h2>
+        <h2 id="sol-h">Need one motion,<br /><span class="grad">not a full program?</span></h2>
       </div>
       <div class="cats">
         {solutionGroups.map((g) => (
           <div class="cat">
-            <span class="cat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={catIcons[g.id]} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
             <h3>{g.title}</h3>
             <ul role="list">
-              {g.items.map((o) => <li><a href={offeringPath(o)}>{o.short}{o.noCost && <span class="free">Free</span>}<span aria-hidden="true" class="arr">→</span></a></li>)}
+              {g.items.map((o) => <li><a href={offeringPath(o)}>{o.short}</a>{o.noCost && <span class="free">No cost</span>}</li>)}
             </ul>
           </div>
         ))}
@@ -217,8 +204,7 @@ const jsonLd = [
   <section class="section bg-mist" aria-labelledby="cmp-h">
     <div class="container">
       <div class="section-head center">
-        <p class="kicker">Why SaaSNova</p>
-        <h2 id="cmp-h">Not advice. Not theory. <span class="grad">Execution.</span></h2>
+        <h2 id="cmp-h">Not advice. Not theory.<br /><span class="grad">Execution.</span></h2>
       </div>
       <div class="cmp-wrap">
         <table class="cmp">
@@ -244,8 +230,7 @@ const jsonLd = [
     <section class="section" aria-labelledby="ins-h">
       <div class="container">
         <div class="section-head center">
-          <p class="kicker">Insights</p>
-          <h2 id="ins-h">Practitioner-grade GTM intelligence.</h2>
+            <h2 id="ins-h">Practitioner-grade GTM intelligence.</h2>
         </div>
         <ul role="list" class="posts">
           {insights.map((e) => (
@@ -269,8 +254,7 @@ const jsonLd = [
   <section class="section bg-mist" aria-labelledby="faq-h">
     <div class="container faq-split">
       <div>
-        <p class="kicker">FAQ</p>
-        <h2 id="faq-h">Questions ISVs ask <span class="grad">before the call.</span></h2>
+        <h2 id="faq-h">Questions ISVs ask<br /><span class="grad">before the call.</span></h2>
       </div>
       <div class="faq">
         {faqs.map((f, i) => (
@@ -283,7 +267,7 @@ const jsonLd = [
   <!-- ═══ START (final CTA) ═══ -->
   <section class="start on-ink" aria-labelledby="start-h">
     <div class="container">
-      <h2 id="start-h">Ready to turn your listing <span class="grad">into pipeline?</span></h2>
+      <h2 id="start-h">Ready to turn your listing<br /><span class="grad">into pipeline?</span></h2>
       <ol role="list" class="steps">
         {steps.map((s, i) => (
           <li><span class="n">{i + 1}</span><span class="st">{s.t}</span><span class="sd">{s.d}</span></li>
@@ -296,44 +280,46 @@ const jsonLd = [
 
 <style>
   /* Hero */
-  .hero { margin-top: -5.25rem; padding: calc(5.25rem + clamp(2.5rem, 1.5rem + 4vw, 5rem)) 0 3rem; background: linear-gradient(180deg, #eef6ff 0%, #fff 80%); }
-  .hero-grid {
-    position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background-image: linear-gradient(to right, rgba(10, 17, 40, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(10, 17, 40, 0.05) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 75% 70% at 60% 25%, #000 25%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 75% 70% at 60% 25%, #000 25%, transparent 75%);
-  }
-  .hero-inner { display: grid; gap: clamp(2.5rem, 1.5rem + 3vw, 4rem); align-items: center; }
-  @media (min-width: 64rem) { .hero-inner { grid-template-columns: 1.1fr 1fr; } }
-  .hero-inner > * { min-width: 0; }
-  .hero-h { font-size: clamp(2.5rem, 1.2rem + 4.4vw, 4.6rem); line-height: 1.03; letter-spacing: -0.048em; font-weight: 850; }
+  .hero { position: relative; isolation: isolate; overflow: hidden; margin-top: -5.25rem; padding: calc(5.25rem + clamp(2.5rem, 1rem + 4vw, 4.5rem)) 0 clamp(3rem, 2rem + 3vw, 5rem); background: #fff; }
+  .hero-glow { position: absolute; inset: 0 0 auto; height: 80%; z-index: -1; pointer-events: none;
+    background: radial-gradient(40% 50% at 20% 10%, rgba(0, 139, 248, 0.16), transparent 70%), radial-gradient(40% 50% at 85% 20%, rgba(250, 15, 156, 0.13), transparent 70%), radial-gradient(30% 40% at 55% 60%, rgba(241, 153, 83, 0.10), transparent 70%); }
+  .hero-top { text-align: center; display: grid; justify-items: center; }
+  .hero-h { font-size: clamp(2.6rem, 0.9rem + 6.2vw, 6.25rem); line-height: 0.98; letter-spacing: -0.055em; font-weight: 800; max-width: 16ch; }
   .hero-h .l { display: block; }
-  .hero-h .grad { font-weight: 900; }
-  .hero-lead { margin-top: 1.4rem; font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem); line-height: 1.5; color: var(--muted); max-width: 32rem; }
-  .hero-lead strong { color: var(--ink); font-weight: 700; }
-  .clouds { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.75rem; }
-  .clouds li { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.5rem 0.95rem 0.5rem 0.6rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); font-weight: 650; font-size: 0.9375rem; color: var(--ink); }
-  .clouds :global(img) { height: 22px; width: auto; }
-  .hero .btn-row { margin-top: 2rem; }
-  .hero-media { position: relative; }
-  .hero-media::before { content: ''; position: absolute; inset: 6% -4% -8% 4%; z-index: -1; border-radius: 40px; background: radial-gradient(60% 60% at 30% 40%, rgba(0, 139, 248, 0.35), transparent 70%), radial-gradient(50% 50% at 80% 70%, rgba(250, 15, 156, 0.3), transparent 70%); filter: blur(34px); }
-  .video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-xl); overflow: hidden; background: var(--night); box-shadow: 0 40px 80px -30px rgba(0, 60, 140, 0.45); border: 6px solid #fff; }
-  .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .hero-h .grad { font-weight: 850; padding-bottom: 0.08em; }
+  .hero-lead { margin-top: 1.5rem; font-size: clamp(1.15rem, 1rem + 0.55vw, 1.45rem); line-height: 1.5; color: var(--muted); max-width: 40rem; }
+  .hero-ctas { justify-content: center; margin-top: 2.25rem; }
+  .hero-video { margin-top: clamp(2.75rem, 2rem + 3vw, 4.5rem); max-width: 72rem; }
 
   .trust { margin-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
-  .badges { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.75rem; padding: 1rem 1.5rem; border-radius: var(--r-lg); background: rgba(255, 255, 255, 0.8); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
-  .badges :global(img) { width: 76px; height: 76px; object-fit: contain; }
-  .badge-txt { font-size: 0.9rem; color: var(--muted); padding-left: 1rem; border-left: 3px solid; border-image: var(--nova) 1; line-height: 1.35; }
-  .badge-txt strong { display: block; color: var(--ink); font-size: 1rem; }
-  .trust-title { text-align: center; color: var(--muted); font-weight: 550; margin: 2.25rem 0 1.5rem; }
-  .trust-title strong { color: var(--ink); }
+  .trust-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.25rem 2rem; }
+  .trust-row .on { font-weight: 650; color: var(--muted); }
+  .clouds { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.75rem 1.75rem; }
+  .clouds li { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; font-weight: 700; color: var(--ink); font-size: 1.05rem; letter-spacing: -0.01em; }
+  .clouds :global(img) { height: 28px; width: auto; }
+  .sep { width: 1px; height: 2.5rem; background: var(--line-strong); }
+  .badges { display: flex; align-items: center; gap: 0.9rem; }
+  .badges :global(img) { width: 64px; height: 64px; object-fit: contain; }
+  .badges p { font-size: 0.9rem; color: var(--muted); line-height: 1.35; margin-left: 0.25rem; }
+  .badges strong { color: var(--ink); }
+  @media (max-width: 47.99rem) { .sep { display: none; } .trust-row .on { width: 100%; text-align: center; } }
+  .trust-title { text-align: center; color: var(--muted); font-weight: 600; margin: 2.75rem 0 1.5rem; }
+
+  /* Story */
+  .story-head { display: grid; gap: 1rem; margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem); }
+  @media (min-width: 60rem) { .story-head { grid-template-columns: 1fr 1fr; align-items: end; gap: 4rem; } }
+  .story-head h2 { font-size: clamp(2.6rem, 1.5rem + 4vw, 5rem); letter-spacing: -0.055em; line-height: 0.98; }
+  .story-head p { font-size: 1.2rem; line-height: 1.55; max-width: 32rem; }
+  .results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.5rem; margin-top: clamp(3rem, 2rem + 3vw, 5rem); padding-top: 2.5rem; border-top: 1px solid var(--on-ink-line); }
+  @media (min-width: 48rem) { .results { grid-template-columns: repeat(4, 1fr); } }
+  .results dt { font-size: clamp(2.6rem, 1.8rem + 2.6vw, 4.25rem); font-weight: 800; letter-spacing: -0.055em; line-height: 1; color: #fff; }
+  .results dd { margin: 0.6rem 0 0; color: var(--on-ink-muted); font-size: 0.975rem; }
 
   /* Finder */
   .finder-wrap { display: grid; gap: 2rem; margin-top: clamp(3rem, 2rem + 3vw, 5rem); align-items: center; }
   @media (min-width: 60rem) { .finder-wrap { grid-template-columns: 1fr 1.3fr; gap: 4rem; } }
-  .finder-copy h3 { font-size: clamp(1.9rem, 1.4rem + 1.4vw, 2.6rem); font-weight: 850; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
-  .finder-copy p:not(.kicker) { font-size: 1.15rem; }
+  .finder-copy h3 { font-size: clamp(1.9rem, 1.4rem + 1.4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
+  .finder-copy p { font-size: 1.15rem; color: var(--muted); }
 
   .g2 { margin-top: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); background: #fff; border: 1px solid var(--line); }
   .g2 .stars { color: var(--orange); letter-spacing: 0.15em; font-size: 1.1rem; }
@@ -365,15 +351,14 @@ const jsonLd = [
   .cats { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 48rem) { .cats { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 72rem) { .cats { grid-template-columns: repeat(4, 1fr); } }
-  .cat { padding: 1.5rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
-  .cat-ic { width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center; background: var(--nova-btn); color: #fff; margin-bottom: 1rem; box-shadow: var(--glow-pink); }
-  .cat-ic svg { width: 1.45rem; height: 1.45rem; }
-  .cat h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
-  .cat ul { display: grid; gap: 0.35rem; }
-  .cat a { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.7rem; border-radius: var(--r-sm); background: var(--mist); text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.925rem; transition: background 150ms, color 150ms; }
-  .cat a:hover { background: var(--blue-50); color: var(--blue-ink); }
-  .arr { margin-left: auto; color: var(--blue-ink); }
-  .free { font-size: 0.7rem; font-weight: 750; color: var(--ok); background: var(--ok-50); padding: 0.15rem 0.45rem; border-radius: 999px; }
+  .cats { gap: 2.5rem 3rem; }
+  .cat { padding-top: 1.25rem; border-top: 3px solid; border-image: var(--nova) 1; }
+  .cat h3 { font-size: 1.25rem; letter-spacing: -0.025em; margin-bottom: 1rem; }
+  .cat ul { display: grid; gap: 0.2rem; }
+  .cat li { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .cat a { padding: 0.35rem 0; text-decoration: none; color: var(--ink); font-weight: 550; font-size: 1.05rem; background-image: linear-gradient(currentColor, currentColor); background-size: 0 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size 250ms var(--ease), color 150ms; }
+  .cat a:hover { color: var(--blue-ink); background-size: 100% 1px; }
+  .free { font-size: 0.8rem; font-weight: 700; color: var(--ok); }
 
   /* Comparison */
   .cmp-wrap { overflow-x: auto; border-radius: var(--r-xl); background: #fff; box-shadow: var(--shadow); border: 1px solid var(--line); max-width: 60rem; margin-inline: auto; }

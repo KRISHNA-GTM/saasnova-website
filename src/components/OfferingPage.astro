@@ -36,6 +36,7 @@ const faqs = [
   ...(o.duration && !(o.faq ?? []).some((f) => /long/i.test(f.q))
     ? [{ q: `How long does ${o.short} take?`, a: `${o.name} runs for ${o.duration}. Your start date and working cadence are agreed during scoping.` }]
     : []),
+  { q: 'How do you work with our team?', a: `${o.support.replace(/Founder-led support/g, 'Dedicated operator support')} Existing customers can reach the team at ${site.emails.support}.` },
 ];
 
 const related = o.related.map(getOffering);
@@ -70,10 +71,8 @@ const jsonLd = [
       <Breadcrumbs items={[parent, { label: o.short }]} />
       <div class="hero-grid">
         <div>
-          <p class="kicker">
-            {isProgram ? `${f?.tagline} · ${o.duration}` : cat.title}
-          </p>
-          <h1>{isProgram ? <><span class="grad">{o.short}</span><span class="h1-sub">{f?.tagline}</span></> : o.name}</h1>
+          <p class="kicker">{isProgram ? f?.tagline : cat.title}</p>
+          <h1>{isProgram ? <span class="grad prog-name">{o.short}</span> : o.name}</h1>
           <p class="lead">{o.summary}</p>
           <div class="btn-row">
             <a class="btn" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_${o.slug}`}>{primaryCta.label}</a>
@@ -96,11 +95,11 @@ const jsonLd = [
   {f && (
     <section class="section flagship" id="included" aria-labelledby="fg-h">
       <div class="container">
-        <div class="section-head"><p class="kicker pink">{o.short} at a glance</p><h2 id="fg-h">What you get, and the impact it drives.</h2></div>
+        <h2 id="fg-h" class="visually-hidden">What you get with {o.short}</h2>
         <div class="fg">
-          <div class="fg-card reveal"><p class="label">What you get</p><ul role="list" class="checks">{f.whatYouGet.map((x) => <li>{x}</li>)}</ul></div>
-          <div class="fg-card impact reveal"><p class="label">Impact</p><ul role="list">{f.impact.map((x) => <li>{x}</li>)}</ul></div>
-          <div class="fg-card ideal reveal"><p class="label">Ideal stage</p><p class="stage">{f.stageRange}</p><p>{f.idealStage}</p><a class="btn btn-sm" href={primaryCta.href} target="_blank" rel="noopener" data-track={`cta_strategy_fit_${o.slug}`}>Check if {o.short} fits</a></div>
+          <div class="fg-col"><p class="label">What you get</p><ul role="list" class="get">{f.whatYouGet.map((x) => <li>{x}</li>)}</ul></div>
+          <div class="fg-col impact"><p class="label">Impact</p><ul role="list">{f.impact.map((x) => <li>{x}</li>)}</ul></div>
+          <div class="fg-col ideal"><p class="label">Ideal stage</p><p class="stage">{f.stageRange}</p><p>{f.idealStage}</p></div>
         </div>
       </div>
     </section>
@@ -110,61 +109,27 @@ const jsonLd = [
     <section class="proof-strip" aria-label="Results">
       <div class="container proof-row">
         {proof.map((p) => <div class="pr"><span class="pn">{p.n}</span><span class="pl">{p.l}</span></div>)}
-        <a class="link-arrow" href="/#customers">Read what customers say</a>
       </div>
     </section>
   )}
 
-  <section class="section">
-    <div class="container split">
-      <div>
-        <p class="kicker orange">The situation</p>
-        <h2>Why ISVs come to us for {o.short}</h2>
-      </div>
-      <p class="lead problem">{o.problem}</p>
-    </div>
-  </section>
-
-  <section class="section bg-mist" aria-labelledby="inc-h" id={f ? undefined : 'included'}>
+  <section class="section" aria-labelledby="inc-h" id={f ? undefined : 'included'}>
     <div class="container">
-      <div class="section-head"><p class="kicker">How we execute</p><h2 id="inc-h">What our operators do</h2></div>
-      <dl class="includes">
+      <div class="inc-head">
+        <h2 id="inc-h">What our operators do</h2>
+        <p>{o.problem}</p>
+      </div>
+      <ol class="includes" role="list">
         {o.includes.map((i) => (
-          <div><dt>{i.title}</dt><dd>{i.body}</dd></div>
+          <li><h3>{i.title}</h3><p>{i.body}</p></li>
         ))}
-      </dl>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="out-h">
-    <div class="container split">
-      <div>
-        <h2 id="out-h">What you have at the end</h2>
-      </div>
-      <div>
-        <ul role="list" class="checks outcomes">
-          {o.outcomes.map((x) => <li>{x}</li>)}
-        </ul>
-        {o.notIncluded && (
-          <div class="scope">
-            <h3>Scope</h3>
-            <p>{o.notIncluded}</p>
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
-
-
-  <section class="section" aria-labelledby="sup-h">
-    <div class="container split">
-      <div><h2 id="sup-h">Support and working model</h2></div>
-      <div class="prose">
-        <p>{o.support}</p>
-        <p>
-          Existing customers can reach the team at <a href={`mailto:${site.emails.support}`}>{site.emails.support}</a>.
-        </p>
-      </div>
+      </ol>
+      {!isProgram && (
+        <div class="outcomes-box">
+          <p class="label">What you have at the end</p>
+          <ul role="list" class="get">{o.outcomes.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      )}
     </div>
   </section>
 
@@ -175,7 +140,7 @@ const jsonLd = [
     </div>
   </section>
 
-  <section class="section" aria-labelledby="rel-h">
+  {!isProgram && <section class="section" aria-labelledby="rel-h">
     <div class="container">
       <div class="section-head"><h2 id="rel-h">Often paired with</h2></div>
       <div class="index-list">
@@ -188,7 +153,7 @@ const jsonLd = [
         ))}
       </div>
     </div>
-  </section>
+  </section>}
 
   <CtaBand
     title={o.noCost ? `Check your eligibility for ${o.short}.` : `Scope ${o.short} for your team.`}
@@ -205,32 +170,43 @@ const jsonLd = [
   .hero-grid { display: grid; gap: 2.5rem; margin-top: 1.5rem; }
   @media (min-width: 64rem) { .hero-grid { grid-template-columns: 1fr 22rem; gap: 4rem; align-items: start; } }
   .hero-grid h1 { margin-top: 0.25rem; }
-  .h1-sub { display: block; font-size: 0.42em; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); margin-top: 0.5rem; }
-  .fg { display: grid; gap: 1.25rem; }
-  @media (min-width: 60rem) { .fg { grid-template-columns: 1.1fr 1fr 1fr; } }
-  .fg-card { padding: 1.75rem; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: 0.9rem; align-content: start; }
-  .label { font-size: 0.75rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); }
-  .impact { background: var(--night); border-color: transparent; color: #fff; }
-  .impact .label { color: #ff9fd6; }
-  .impact ul { display: grid; gap: 0.85rem; }
-  .impact li { font-size: 1.125rem; font-weight: 750; letter-spacing: -0.01em; padding-left: 1.4rem; position: relative; }
-  .impact li::before { content: ''; position: absolute; left: 0; top: 0.45em; width: 0.65rem; height: 0.65rem; border-radius: 3px; background: var(--nova); transform: rotate(45deg); }
+  .prog-name { font-size: clamp(3.5rem, 2rem + 6vw, 7rem); letter-spacing: -0.06em; line-height: 0.95; display: inline-block; padding-bottom: 0.06em; }
+  .fg { display: grid; grid-template-columns: minmax(0, 1fr); border-radius: 32px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 40px 90px -50px rgba(0, 30, 80, 0.4); }
+  @media (min-width: 60rem) { .fg { grid-template-columns: 1.2fr 1fr 1fr; } }
+  .fg-col { padding: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem); display: grid; gap: 1rem; align-content: start; }
+  .fg-col + .fg-col { border-top: 1px solid var(--line); }
+  @media (min-width: 60rem) { .fg-col + .fg-col { border-top: 0; border-left: 1px solid var(--line); } }
+  .fg .label, .outcomes-box .label { font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+  .get { display: grid; gap: 0.7rem; }
+  .get li { position: relative; padding-left: 1.5rem; }
+  .get li::before { content: ''; position: absolute; left: 0.2rem; top: 0.3em; width: 0.4rem; height: 0.75rem; border-right: 2px solid var(--blue-ink); border-bottom: 2px solid var(--blue-ink); transform: rotate(40deg); }
+  .fg-col.impact { background: var(--night); color: #fff; }
+  .fg-col.impact .label { color: #ff8fcf; }
+  .impact ul { display: grid; gap: 0.9rem; }
+  .impact li { font-size: 1.2rem; font-weight: 750; letter-spacing: -0.015em; line-height: 1.3; }
   .ideal { background: linear-gradient(160deg, var(--blue-50), var(--pink-50)); }
-  .ideal .stage { font-size: 1.5rem; font-weight: 850; letter-spacing: -0.03em; color: var(--ink); }
-  .ideal .btn { justify-self: start; margin-top: 0.5rem; }
+  .ideal .stage { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+  .ideal p:last-child { color: var(--muted); }
+  .inc-head { display: grid; gap: 1rem; margin-bottom: 2.5rem; }
+  @media (min-width: 60rem) { .inc-head { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; } }
+  .inc-head p { font-size: 1.15rem; color: var(--muted); line-height: 1.6; }
+  .includes { display: grid; gap: 0; counter-reset: inc; }
+  @media (min-width: 48rem) { .includes { grid-template-columns: 1fr 1fr; column-gap: 4rem; } }
+  .includes li { padding: 1.75rem 0; border-top: 1px solid var(--line); display: grid; gap: 0.5rem; }
+  .includes h3 { font-size: 1.3rem; letter-spacing: -0.02em; }
+  .includes p { color: var(--muted); }
+  .outcomes-box { margin-top: 2.5rem; padding: 2rem; border-radius: 24px; background: var(--mist); display: grid; gap: 1rem; }
   .proof-strip { background: var(--mist); border-block: 1px solid var(--line); }
   .proof-row { display: flex; flex-wrap: wrap; gap: 1.25rem 3rem; align-items: center; padding-block: 1.75rem; }
   .pr { display: flex; align-items: baseline; gap: 0.75rem; max-width: 26rem; }
   .pn { font-size: 2rem; font-weight: 850; letter-spacing: -0.04em; background: var(--nova); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
   .pl { color: var(--muted); font-size: 0.95rem; line-height: 1.4; }
-  .proof-row .link-arrow { margin-left: auto; }
   .facts { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; background: #fff; }
   .facts dl { display: grid; gap: 1.1rem; }
   .facts dt { font-size: 0.8438rem; font-weight: 650; color: var(--subtle); }
   .facts dd { margin: 0.15rem 0 0; color: var(--ink); font-size: 0.9688rem; }
   .problem { color: var(--text); max-width: 44rem; }
-  .includes { display: grid; gap: 2.25rem 3rem; }
-  @media (min-width: 48rem) { .includes { grid-template-columns: 1fr 1fr; } }
+  
   .includes div { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; border-top: 4px solid var(--blue); }
   .includes dt { font-weight: 650; color: var(--ink); font-size: 1.125rem; margin-bottom: 0.4rem; }
   .includes dd { margin: 0; color: var(--muted); }
