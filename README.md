@@ -1,7 +1,9 @@
 # saasnova.ai (v2)
 
-The SaaSNova website: an operator-led Cloud GTM execution partner for ISVs and channel partners
-scaling revenue through AWS. Static site built with [Astro](https://astro.build), hosted on
+**Non-technical editors: start with [docs/UPDATE-PLAYBOOK.md](docs/UPDATE-PLAYBOOK.md).** Test site: https://krishna-gtm.github.io/saasnova-website/
+
+The SaaSNova website: the first operator-led GTM execution engine for AWS, Microsoft Azure and
+Google Cloud marketplaces. Static site built with [Astro](https://astro.build), hosted on
 Amazon S3 + CloudFront, with HubSpot forms, Calendly booking, GA4, and an AI assistant that is
 ready to switch from guided mode to live Claude-on-Bedrock answers.
 
@@ -31,7 +33,7 @@ Node 22.12+ is required (tested on Node 24).
 | `src/content/insights`, `src/content/news` | Articles (Markdown). Migrated from the legacy site. |
 | `src/content/campaigns` | Campaign, microsite, co-branded, event and syndication pages (YAML). See `_examples/`. |
 | `src/pages/` | Routes. Dynamic routes generate program, service, partner, community and article pages. |
-| `src/components/` | Header, Footer, MotionMap (hero), Testimonial, OfferingPage, CampaignPage, Assistant, etc. |
+| `src/components/` | Header, Footer, EngineGraphic, ProgramCards, ProgramFinder, TestimonialWall, LogoMarquee, OfferingPage, CampaignPage, Assistant, etc. |
 | `src/scripts/hubspot-forms.ts` | One accessible, validated HubSpot Forms API handler for every form. |
 | `src/scripts/assistant.ts` | Assistant client (guided mode + streaming live mode). |
 | `api/` | Chat API for the live assistant: Lambda (Node 22, streaming) + SAM template + WAF rule. |
